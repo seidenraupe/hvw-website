@@ -57,6 +57,18 @@
     return normText(a) === normText(b);
   }
 
+  function canonicalValue(id, value) {
+    const meta = fieldMeta(id);
+    const text = String(value || "");
+    if (meta.type === "image") return text.trim();
+    if (meta.rich && window.hvwCanonicalRich) return window.hvwCanonicalRich(text);
+    return normText(text);
+  }
+
+  function sameField(id, a, b) {
+    return canonicalValue(id, a) === canonicalValue(id, b);
+  }
+
   function draftViewFields() {
     return Object.assign({}, liveFields, draftFields);
   }
@@ -69,7 +81,7 @@
     const current = currentFields();
     const list = [];
     Object.keys(schema).forEach((id) => {
-      if (!sameText(current[id], liveFields[id])) {
+      if (!sameField(id, current[id], liveFields[id])) {
         list.push({
           id,
           label: fieldMeta(id).label,
@@ -151,7 +163,7 @@
 
   function markFieldState(el, id, currentValue) {
     const editing = view === "draft";
-    const changed = editing && !sameText(currentValue, liveFields[id]);
+    const changed = editing && !sameField(id, currentValue, liveFields[id]);
     const accepted = changed && acceptedIds.has(id);
     el.classList.toggle("hvw-changed", changed && !accepted);
     el.classList.toggle("hvw-accepted", accepted);

@@ -105,9 +105,9 @@ tour_remote = {
 }
 tour_live, _tour_stats = merge.merge_live_fields(tour_ids, tour_seed, tour_remote, {})
 opening = tour_live["moersburg.oeffnung"]
-if '<a href="dokumente/szenische-fuehrung-berta.pdf">öffentliche Führungen</a>' not in opening:
+if '<a href="dokumente/szenische-fuehrung-berta.pdf" target="_blank" rel="noopener noreferrer">öffentliche Führungen</a>' not in opening:
     raise SystemExit(f"öffentliche Führungen nicht verlinkt: {opening}")
-if '<a href="dokumente/historische-privat-fuehrungen.pdf">Private Führungen</a>' not in opening:
+if '<a href="dokumente/historische-privat-fuehrungen.pdf" target="_blank" rel="noopener noreferrer">Private Führungen</a>' not in opening:
     raise SystemExit(f"Private Führungen nicht verlinkt: {opening}")
 if opening.count("<a ") != 3 or '<a href="agenda.html">Programm</a>' not in opening:
     raise SystemExit(f"bestehender Programmlink verändert: {opening}")

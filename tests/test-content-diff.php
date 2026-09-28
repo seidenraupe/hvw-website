@@ -49,4 +49,35 @@ if (in_array('agenda.intro', $ids, true)) {
     exit(1);
 }
 
+$liveLinks = [
+    'moersburg.oeffnung' => 'Regelmässige <a href="dokumente/szenische-fuehrung-berta.pdf">öffentliche Führungen</a>.',
+];
+$draftLinks = [
+    'moersburg.oeffnung' => 'Regelmässige <a href="dokumente/szenische-fuehrung-berta.pdf" target="_blank" rel="noopener noreferrer">öffentliche Führungen</a>.',
+];
+$changes = hvw_diff($draftLinks, $liveLinks);
+$ids = array_column($changes, 'id');
+if (in_array('moersburg.oeffnung', $ids, true)) {
+    fwrite(STDERR, "Dieselbe Führungs-Verlinkung darf nicht erneut zur Freigabe erscheinen.\n");
+    exit(1);
+}
+
+$draftBold = ['ueber-uns.vorstand.person1' => '<b>Christian Huggenberg</b> — Präsident und Mitglied Leitungsteam Museum Schaffen'];
+$liveBold = ['ueber-uns.vorstand.person1' => '<strong>Christian Huggenberg</strong> — Präsident und Mitglied Leitungsteam Museum Schaffen'];
+$changes = hvw_diff($draftBold, $liveBold);
+$ids = array_column($changes, 'id');
+if (in_array('ueber-uns.vorstand.person1', $ids, true)) {
+    fwrite(STDERR, "Fett als b oder strong darf keine neue Freigabe auslösen.\n");
+    exit(1);
+}
+
+$draftReal = $draftLinks;
+$draftReal['moersburg.oeffnung'] = 'Regelmässige <a href="dokumente/szenische-fuehrung-berta.pdf">geänderte Führungen</a>.';
+$changes = hvw_diff($draftReal, $liveLinks);
+$ids = array_column($changes, 'id');
+if (!in_array('moersburg.oeffnung', $ids, true)) {
+    fwrite(STDERR, "Geänderter Linktext muss zur Freigabe bleiben.\n");
+    exit(1);
+}
+
 echo "content diff ok\n";

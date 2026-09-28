@@ -140,7 +140,9 @@ def link_tour_phrase(html: str, phrase: str, href: str) -> str:
     def repl(match: re.Match[str]) -> str:
         if match.group(1):
             return match.group(1)
-        return f'<a href="{href}">{match.group(2)}</a>'
+        return (
+            f'<a href="{href}" target="_blank" rel="noopener noreferrer">{match.group(2)}</a>'
+        )
 
     return pattern.sub(repl, html)
 
