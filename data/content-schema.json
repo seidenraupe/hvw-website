@@ -523,6 +523,46 @@
       "type": "image",
       "optional": true
     },
+    "partner.16.name": {
+      "label": "Partner · Gasthaus Schlosshalde · Name",
+      "page": "partner.html",
+      "max": 80,
+      "rich": false,
+      "multiline": false
+    },
+    "partner.16.body": {
+      "label": "Partner · Gasthaus Schlosshalde · Text",
+      "page": "partner.html",
+      "max": 360,
+      "rich": true,
+      "multiline": true
+    },
+    "partner.16.url": {
+      "label": "Partner · Gasthaus Schlosshalde · Link",
+      "page": "partner.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "url"
+    },
+    "partner.16.logo": {
+      "label": "Partner · Gasthaus Schlosshalde · Logo",
+      "page": "partner.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "image",
+      "optional": true
+    },
+    "partner.16.image": {
+      "label": "Partner · Gasthaus Schlosshalde · Bild",
+      "page": "partner.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "image",
+      "optional": true
+    },
     "partner.1.name": {
       "label": "Partner · Schloss Hegi · Name",
       "page": "partner.html",

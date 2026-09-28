@@ -11,6 +11,7 @@ if (ROOT / "publikationen.html").exists():
 page = (ROOT / "partner.html").read_text(encoding="utf-8")
 urls = [
     "https://www.geschichtsstadt-winterthur.ch/",
+    "https://www.moersburg-winterthur.ch/site/",
     "https://schlosshegi.ch/",
     "https://frauenrundgang.ch/",
     "https://www.winterthur-glossar.ch/",
@@ -35,8 +36,15 @@ if 'data-content-image="partner.14.logo"' not in page or 'data-content-href="1"'
     raise SystemExit("Logo-Upload oder Linkfeld fehlt")
 if page.find("IG Geschichtsstadt Winterthur") > page.find("Schloss Hegi"):
     raise SystemExit("Geschichtsstadt steht nicht zuoberst")
+if not (page.find("IG Geschichtsstadt Winterthur") < page.find("Gasthaus Schlosshalde") < page.find("Schloss Hegi")):
+    raise SystemExit("Schlosshalde muss an zweiter Stelle stehen")
 if "bild-geschichtsstadt.jpg" not in page or "logo-geschichtsstadt.png" not in page:
     raise SystemExit("Teaser oder Logo der Geschichtsstadt fehlt")
+if "bild-schlosshalde.jpg" not in page or "logo-schlosshalde.png" not in page:
+    raise SystemExit("Teaser oder Logo der Schlosshalde fehlt")
+for filename in ("logo-schlosshalde.png", "bild-schlosshalde.jpg"):
+    if not (ROOT / "images/partner" / filename).is_file():
+        raise SystemExit(f"Bilddatei fehlt: {filename}")
 
 for html in ROOT.glob("*.html"):
     if html.name == "programm.html":
