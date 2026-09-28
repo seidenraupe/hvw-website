@@ -38,6 +38,10 @@ assert_true(str_contains($extern, 'target="_blank"'), 'externer Link öffnet neu
 assert_true(str_contains($extern, 'rel="noopener noreferrer"'), 'externer Link ohne Referrer');
 assert_true(!str_contains($extern, 'onclick'), 'onclick am Link weg');
 
+$pdf = hvw_sanitize_rich('<a href="dokumente/szenische-fuehrung-berta.pdf">öffentliche Führungen</a>');
+assert_true(str_contains($pdf, 'href="dokumente/szenische-fuehrung-berta.pdf"'), 'PDF-Link bleibt');
+assert_true(str_contains($pdf, 'target="_blank"'), 'PDF-Link öffnet neu');
+
 $js = hvw_sanitize_rich('<a href="javascript:alert(1)">Klick</a>');
 assert_same($js, 'Klick', 'javascript-Link wird entpackt');
 

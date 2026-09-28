@@ -39,6 +39,15 @@ if [[ ! -f "${ROOT}/Sammlungskonzept.pdf" ]]; then
   exit 1
 fi
 cp "${ROOT}/Sammlungskonzept.pdf" "${OUT}/Sammlungskonzept.pdf"
+for pdf in historische-privat-fuehrungen.pdf szenische-fuehrung-berta.pdf; do
+  if [[ ! -f "${ROOT}/dokumente/${pdf}" ]]; then
+    echo "dokumente/${pdf} fehlt — Vorschau auf Hostpoint wäre unvollständig." >&2
+    exit 1
+  fi
+done
+mkdir -p "${OUT}/dokumente"
+cp "${ROOT}/dokumente/historische-privat-fuehrungen.pdf" "${OUT}/dokumente/historische-privat-fuehrungen.pdf"
+cp "${ROOT}/dokumente/szenische-fuehrung-berta.pdf" "${OUT}/dokumente/szenische-fuehrung-berta.pdf"
 copy_dir "${ROOT}/programm" "${OUT}/programm"
 copy_dir "${ROOT}/coucou" "${OUT}/coucou"
 copy_dir "${ROOT}/mus" "${OUT}/mus"

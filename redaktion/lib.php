@@ -308,7 +308,7 @@ function hvw_sanitize_rich_children(DOMNode $parent): void
                 continue;
             }
             $el->setAttribute('href', $href);
-            if (preg_match('#^https?://#i', $href)) {
+            if (preg_match('#^https?://#i', $href) || preg_match('@\.pdf(?:$|[?#])@i', $href)) {
                 $el->setAttribute('target', '_blank');
                 $el->setAttribute('rel', 'noopener noreferrer');
             }
