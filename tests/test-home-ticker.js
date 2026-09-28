@@ -66,7 +66,32 @@ assert.strictEqual(withOpeningHours.length, 1);
 assert.strictEqual(withOpeningHours[0].title, 'Käfele mit der Kuratorin der Ausstellung');
 
 const hero = html.slice(html.indexOf('data-hero-slider'), html.indexOf('hvw-hero__shade'));
-assert.strictEqual((hero.match(/<img/g) || []).length, 5, 'fünf Herobilder');
+assert.strictEqual((hero.match(/<img/g) || []).length, 25, 'fünfundzwanzig Herobilder');
+[
+  'hero-hochwasser.jpg',
+  'hero-velofahrer.jpg',
+  'hero-eislaufen-drei.jpg',
+  'hero-eisfeld-kirche.jpg',
+  'hero-tram-oerlikon.jpg',
+  'hero-textilarbeiterin.jpg',
+  'hero-frauengruppe.jpg',
+  'hero-bahnhof.jpg',
+  'hero-schichtwechsel.jpg',
+  'hero-auto-frauen.jpg',
+  'hero-fabrik-kamine.jpg',
+  'hero-fabrik-historisch.jpg',
+  'hero-fasnacht-toess.jpg',
+  'hero-technikumstrasse.jpg',
+  'hero-atelier-gruppe.jpg',
+  'hero-gasometer.jpg',
+  'hero-kinder-strasse.jpg',
+  'hero-eislaufen-kinder.jpg',
+  'hero-schulklasse.jpg',
+  'hero-schulstube.jpg',
+].forEach((name) => {
+  assert.ok(hero.includes(name), name);
+  assert.ok(fs.existsSync(path.join(__dirname, '../images', name)), name + ' Datei');
+});
 assert.ok(hero.includes('hero-textilfabrik.jpg'), 'Spinnerei');
 assert.ok(hero.includes('hero-schmiede.jpg'), 'Schmiede');
 assert.ok(hero.includes('hero-maschinenhalle.jpg'), 'Maschinenhalle');
@@ -79,7 +104,7 @@ assert.ok(hero.includes('Heinz Baumann, Januar 1967, Winterthur'), 'Nachweis Mas
 assert.ok(hero.includes('Com_L16-0078-0003-0001'), 'Signatur Maschinenhalle');
 assert.strictEqual(HERO_SLIDER_MS, 5000);
 assert.strictEqual(nextHeroIndex(0, 5), 1);
-assert.strictEqual(nextHeroIndex(4, 5), 0);
+assert.strictEqual(nextHeroIndex(24, 25), 0);
 
 const mainSrc = fs.readFileSync(path.join(__dirname, '../js/main.js'), 'utf8');
 const sliderConst = mainSrc.indexOf('const HERO_SLIDER_MS');
