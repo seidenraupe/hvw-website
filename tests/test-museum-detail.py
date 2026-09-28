@@ -17,14 +17,26 @@ if 'href="lindengut.html"' not in museen or 'href="moersburg.html"' not in musee
 
 for key, filename in (("lindengut", "lindengut.html"), ("moersburg", "moersburg.html")):
     html = (ROOT / filename).read_text(encoding="utf-8")
-    for part in ("kicker", "title", "lead", "body"):
+    for part in ("kicker", "title", "lead", "oeffnung", "body"):
         field = f"{key}.{part}"
         if field not in schema["fields"] or field not in live["fields"]:
             raise SystemExit(f"Feld fehlt: {field}")
         if f'data-content="{field}"' not in html:
             raise SystemExit(f"{filename} fehlt {field}")
+    if schema["fields"][f"{key}.lead"]["max"] != 1000:
+        raise SystemExit(f"{key}.lead muss 1000 Zeichen erlauben")
+    if schema["fields"][f"{key}.oeffnung"]["max"] != 600:
+        raise SystemExit(f"{key}.oeffnung muss 600 Zeichen erlauben")
     if schema["fields"][f"{key}.body"]["max"] != 4000:
         raise SystemExit(f"{key}.body muss 4000 Zeichen erlauben")
+    if html.find(f'id="{key}-bilder"') > html.find(f'id="{key}-text"'):
+        raise SystemExit(f"{filename}: Bilder müssen vor dem Erklärungstext stehen")
+    if "google.com/maps/search/" not in html or ">Google Maps</a>" not in html:
+        raise SystemExit(f"{filename}: Google-Maps-Button fehlt")
+    if html.find(f'data-content="{key}.oeffnung"') > html.find(">Google Maps</a>"):
+        raise SystemExit(f"{filename}: Maps-Button muss unter der Öffnungszeiten-Box stehen")
+    if "lg:grid-cols-2" not in html:
+        raise SystemExit(f"{filename}: Lead und Öffnungszeiten müssen nebeneinander stehen")
     if 'class="hvw-explain mt-6 text-lg leading-relaxed"' not in html:
         raise SystemExit(f"{filename}: Erklärungstext muss die Klasse hvw-explain tragen")
     if f'data-content="{key}.body"' in html and "max-w-3xl" in html.split(f'data-content="{key}.body"')[0].split("<div")[-1]:
