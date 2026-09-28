@@ -66,7 +66,7 @@ assert.strictEqual(withOpeningHours.length, 1);
 assert.strictEqual(withOpeningHours[0].title, 'Käfele mit der Kuratorin der Ausstellung');
 
 const hero = html.slice(html.indexOf('data-hero-slider'), html.indexOf('hvw-hero__shade'));
-assert.strictEqual((hero.match(/<img/g) || []).length, 25, 'fünfundzwanzig Herobilder');
+assert.strictEqual((hero.match(/<img/g) || []).length, 23, 'dreiundzwanzig Herobilder');
 [
   'hero-hochwasser.jpg',
   'hero-velofahrer.jpg',
@@ -92,19 +92,27 @@ assert.strictEqual((hero.match(/<img/g) || []).length, 25, 'fünfundzwanzig Hero
   assert.ok(hero.includes(name), name);
   assert.ok(fs.existsSync(path.join(__dirname, '../images', name)), name + ' Datei');
 });
-assert.ok(hero.includes('hero-textilfabrik.jpg'), 'Spinnerei');
+assert.ok(!html.includes('hero-textilfabrik.jpg'), 'Spinnerei entfernt');
+assert.ok(!html.includes('hero-tram.jpg'), 'Tram-Datei entfernt');
+assert.ok(!hero.includes('FotLb_006215'), 'Spinnerei-Signatur entfernt');
+assert.ok(!hero.includes('hero-tram.jpg'), 'Tram entfernt');
+assert.ok(!hero.includes('Tram mit Personal vor der Remise auf dem Rieterareal'), 'Tram-Titel entfernt');
+assert.ok(!hero.includes('Winterthurer Bibliotheken, 150785'), 'Tram-Signatur entfernt');
+assert.ok(hero.includes('hero-tram-oerlikon.jpg'), 'Tram Oerlikon bleibt');
 assert.ok(hero.includes('hero-schmiede.jpg'), 'Schmiede');
 assert.ok(hero.includes('hero-maschinenhalle.jpg'), 'Maschinenhalle');
 assert.ok(hero.includes('hero-textilmaschine.jpg'), 'Textilmaschine');
-assert.ok(hero.includes('hero-tram.jpg'), 'Tram');
-assert.ok(hero.includes('Tram mit Personal vor der Remise auf dem Rieterareal'), 'Tram-Titel');
-assert.ok(hero.includes('Winterthurer Bibliotheken, 150785'), 'Tram-Signatur');
+assert.strictEqual((hero.match(/hvw-hero__contain/g) || []).length, 1, 'ein Bild vollständig');
+const machine = hero.slice(Math.max(0, hero.indexOf('hero-textilmaschine.jpg') - 180), hero.indexOf('hero-textilmaschine.jpg'));
+assert.ok(machine.includes('hvw-hero__contain'), 'Frau zwischen den Maschinen vollständig');
+assert.ok(css.includes('img.hvw-hero__contain'), 'Contain-Regel');
+assert.ok(css.includes('object-fit: contain'), 'ganzes Bild sichtbar');
 assert.ok(!hero.includes('hero-filmdreh.jpg'), 'Filmdreh ersetzt');
 assert.ok(hero.includes('Heinz Baumann, Januar 1967, Winterthur'), 'Nachweis Maschinenhalle');
 assert.ok(hero.includes('Com_L16-0078-0003-0001'), 'Signatur Maschinenhalle');
 assert.strictEqual(HERO_SLIDER_MS, 5000);
 assert.strictEqual(nextHeroIndex(0, 5), 1);
-assert.strictEqual(nextHeroIndex(24, 25), 0);
+assert.strictEqual(nextHeroIndex(22, 23), 0);
 
 const mainSrc = fs.readFileSync(path.join(__dirname, '../js/main.js'), 'utf8');
 const sliderConst = mainSrc.indexOf('const HERO_SLIDER_MS');

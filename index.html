@@ -17,7 +17,7 @@
   <meta property="og:title" content="Historischer Verein Winterthur">
   <meta property="og:description" content="Träger von Museum Schaffen, Museum Lindengut und Schloss Mörsburg. Veranstaltungen, Mitgliedschaft und Stadtgeschichte — seit 1874.">
   <meta property="og:url" content="https://www.hvwinterthur.ch/">
-  <meta property="og:image" content="images/hero-textilfabrik.jpg?v=3">
+  <meta property="og:image" content="images/hero-maschinenhalle.jpg">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="theme-color" content="#1a1a1a">
   <link rel="icon" href="images/favicon.ico" sizes="any">
@@ -29,7 +29,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="js/tailwind-config.js"></script>
-  <link rel="stylesheet" href="css/site.css?v=20260922-cover">
+  <link rel="stylesheet" href="css/site.css?v=20260928-contain">
 
   <script type="application/ld+json">
   {
@@ -144,18 +144,11 @@
       <div class="hvw-hero__media" data-hero-slider>
         <img
           class="is-active"
-          src="images/hero-textilfabrik.jpg?v=3"
-          alt="Mitarbeiterin in der Spinnerei im Bühler-Areal, Winterthur-Seen, 12.07.1983. Foto: Wolfgang Sträuli, Winterthurer Bibliotheken, FotLb_006215"
-          data-credit="Wolfgang Sträuli, 12.07.1983, Winterthur-Seen|Bühler-Areal, Mitarbeiterin in der Spinnerei|Winterthurer Bibliotheken, FotLb_006215"
-          width="1920"
-          height="1080"
-          fetchpriority="high">
-        <img
           src="images/hero-schmiede.jpg"
           alt="Schmied hält ein glühendes Werkstück mit einer Zange"
           width="1920"
           height="1080"
-          aria-hidden="true">
+          fetchpriority="high">
         <img
           src="images/hero-maschinenhalle.jpg"
           alt="Sulzer Winterthur, Januar 1967. Foto: Heinz Baumann, ETH-Bibliothek Zürich, Bildarchiv, Com_L16-0078-0003-0001"
@@ -164,15 +157,9 @@
           height="1080"
           aria-hidden="true">
         <img
+          class="hvw-hero__contain"
           src="images/hero-textilmaschine.jpg"
           alt="Frau an Textilmaschinen vor einem Fenster"
-          width="1920"
-          height="1080"
-          aria-hidden="true">
-        <img
-          src="images/hero-tram.jpg"
-          alt="Tram mit Personal vor der Remise auf dem Rieterareal, Winterthur-Töss, um 1900. Winterthurer Bibliotheken, 150785"
-          data-credit="um 1900, Winterthur-Töss|Tram mit Personal vor der Remise auf dem Rieterareal|Winterthurer Bibliotheken, 150785"
           width="1920"
           height="1080"
           aria-hidden="true">
@@ -337,11 +324,7 @@
           </a>
         </div>
       </div>
-      <p class="hvw-hero__credit">
-        <span>Wolfgang Sträuli, 12.07.1983, Winterthur-Seen</span>
-        <span>Bühler-Areal, Mitarbeiterin in der Spinnerei</span>
-        <span>Winterthurer Bibliotheken, FotLb_006215</span>
-      </p>
+      <p class="hvw-hero__credit" hidden></p>
     </section>
 
     <!-- Event-Karten: Mobile 1 · Tablet 2 · Desktop 3 -->

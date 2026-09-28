@@ -99,6 +99,11 @@ body {
   transition: opacity 0.9s ease;
 }
 
+.hvw-hero__media img.hvw-hero__contain {
+  object-fit: contain;
+  object-position: center;
+}
+
 .hvw-hero__media img.is-active {
   opacity: 1;
 }
