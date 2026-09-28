@@ -97,6 +97,7 @@ def merge_live_fields(
     remote_draft = remote_draft or {}
     out, override_stats = apply_deploy_overrides(out, ids, seed, remote_draft)
     split_house_hours(out, remote)
+    link_moersburg_tours(out)
     return out, {
         "kept": kept,
         "added": added,
@@ -119,6 +120,40 @@ def split_opening_hours(text: str) -> tuple[str, str] | None:
     if not lead or not hours:
         return None
     return lead, hours
+
+
+TOUR_PDF_LINKS = (
+    ("öffentliche Führungen", "dokumente/szenische-fuehrung-berta.pdf"),
+    ("oeffentliche Führungen", "dokumente/szenische-fuehrung-berta.pdf"),
+    ("Private Führungen", "dokumente/historische-privat-fuehrungen.pdf"),
+)
+
+
+def link_tour_phrase(html: str, phrase: str, href: str) -> str:
+    """Hängt eine PDF-Adresse an eine Formulierung, ohne bestehende Links zu doppeln."""
+    words = [re.escape(part) for part in phrase.split()]
+    pattern = re.compile(
+        r"(<a\b[^>]*>.*?</a>)|(" + r"\s+".join(words) + r")",
+        flags=re.IGNORECASE | re.DOTALL,
+    )
+
+    def repl(match: re.Match[str]) -> str:
+        if match.group(1):
+            return match.group(1)
+        return f'<a href="{href}">{match.group(2)}</a>'
+
+    return pattern.sub(repl, html)
+
+
+def link_moersburg_tours(fields: dict[str, str]) -> None:
+    for field_id in ("moersburg.lead", "moersburg.oeffnung", "moersburg.body"):
+        text = fields.get(field_id, "")
+        if not text:
+            continue
+        updated = text
+        for phrase, href in TOUR_PDF_LINKS:
+            updated = link_tour_phrase(updated, phrase, href)
+        fields[field_id] = updated
 
 
 def split_house_hours(fields: dict[str, str], already_present: dict[str, str]) -> None:
@@ -177,6 +212,7 @@ def merge_draft_fields(
         else:
             out[field_id] = draft_val
     split_house_hours(out, remote_draft)
+    link_moersburg_tours(out)
     return out
 
 
@@ -261,6 +297,7 @@ def main() -> int:
             live_fields, ids, seed_fields, remote_draft
         )
         split_house_hours(live_fields, remote_live)
+        link_moersburg_tours(live_fields)
         stats = {
             "kept": len(remote_live),
             "added": added,

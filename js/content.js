@@ -119,7 +119,7 @@
             continue;
           }
           el.setAttribute("href", href);
-          if (/^https?:\/\//i.test(href)) {
+          if (/^https?:\/\//i.test(href) || /\.pdf(?:$|[?#])/i.test(href)) {
             el.setAttribute("target", "_blank");
             el.setAttribute("rel", "noopener noreferrer");
           }

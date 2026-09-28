@@ -91,4 +91,37 @@ src = (ROOT / "scripts/merge-content-json.py").read_text(encoding="utf-8")
 if "sammlung.objekt.1.image" in merge.INITIAL_SEED_FIELD_IDS:
     raise SystemExit("Sammlung darf nicht in INITIAL_SEED_FIELD_IDS stehen")
 
+tour_ids = ["moersburg.oeffnung", "moersburg.lead"]
+tour_seed = {
+    "moersburg.oeffnung": "Öffnungszeiten<br>Mi–Sa: 14–17 Uhr",
+    "moersburg.lead": "Ritterburg.",
+}
+tour_remote = {
+    "moersburg.oeffnung": (
+        "Regelmässige öffentliche Führungen gemäss <a href=\"agenda.html\">Programm</a>."
+        "<br>Private Führungen nach Absprache."
+    ),
+    "moersburg.lead": "Ritterburg am Stadtrand.",
+}
+tour_live, _tour_stats = merge.merge_live_fields(tour_ids, tour_seed, tour_remote, {})
+opening = tour_live["moersburg.oeffnung"]
+if '<a href="dokumente/szenische-fuehrung-berta.pdf">öffentliche Führungen</a>' not in opening:
+    raise SystemExit(f"öffentliche Führungen nicht verlinkt: {opening}")
+if '<a href="dokumente/historische-privat-fuehrungen.pdf">Private Führungen</a>' not in opening:
+    raise SystemExit(f"Private Führungen nicht verlinkt: {opening}")
+if opening.count("<a ") != 3 or '<a href="agenda.html">Programm</a>' not in opening:
+    raise SystemExit(f"bestehender Programmlink verändert: {opening}")
+if tour_live["moersburg.lead"] != "Ritterburg am Stadtrand.":
+    raise SystemExit("Lead ohne die Formulierungen darf sich nicht ändern")
+again, _again_stats = merge.merge_live_fields(tour_ids, tour_seed, {"moersburg.oeffnung": opening, "moersburg.lead": tour_live["moersburg.lead"]}, {})
+if again["moersburg.oeffnung"] != opening:
+    raise SystemExit("Führungs-Links werden beim zweiten Merge doppelt gesetzt")
+for pdf in ("historische-privat-fuehrungen.pdf", "szenische-fuehrung-berta.pdf"):
+    path = ROOT / "dokumente" / pdf
+    if not path.is_file() or path.read_bytes()[:5] != b"%PDF-":
+        raise SystemExit(f"PDF fehlt: {path}")
+build = (ROOT / "scripts/build-hostpoint-vorschau.sh").read_text(encoding="utf-8")
+if "dokumente/historische-privat-fuehrungen.pdf" not in build or "dokumente/szenische-fuehrung-berta.pdf" not in build:
+    raise SystemExit("Vorschau-Build muss die Führungs-PDFs kopieren")
+
 print("content merge ok")
