@@ -483,6 +483,46 @@
       "rich": true,
       "multiline": true
     },
+    "partner.15.name": {
+      "label": "Partner · IG Geschichtsstadt Winterthur · Name",
+      "page": "partner.html",
+      "max": 80,
+      "rich": false,
+      "multiline": false
+    },
+    "partner.15.body": {
+      "label": "Partner · IG Geschichtsstadt Winterthur · Text",
+      "page": "partner.html",
+      "max": 360,
+      "rich": true,
+      "multiline": true
+    },
+    "partner.15.url": {
+      "label": "Partner · IG Geschichtsstadt Winterthur · Link",
+      "page": "partner.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "url"
+    },
+    "partner.15.logo": {
+      "label": "Partner · IG Geschichtsstadt Winterthur · Logo",
+      "page": "partner.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "image",
+      "optional": true
+    },
+    "partner.15.image": {
+      "label": "Partner · IG Geschichtsstadt Winterthur · Bild",
+      "page": "partner.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "image",
+      "optional": true
+    },
     "partner.1.name": {
       "label": "Partner · Schloss Hegi · Name",
       "page": "partner.html",
