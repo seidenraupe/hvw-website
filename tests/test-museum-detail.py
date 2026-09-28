@@ -35,6 +35,12 @@ for key, filename in (("lindengut", "lindengut.html"), ("moersburg", "moersburg.
         raise SystemExit(f"{filename}: Google-Maps-Button fehlt")
     if html.find(f'data-content="{key}.oeffnung"') > html.find(">Google Maps</a>"):
         raise SystemExit(f"{filename}: Maps-Button muss unter der Öffnungszeiten-Box stehen")
+    if key == "lindengut":
+        tour = "https://www.jantofilm.ch/panotour/MuseumLindengut/index.html"
+        if tour not in html or ">360-Grad-Tour</a>" not in html:
+            raise SystemExit("Lindengut: Button 360-Grad-Tour fehlt")
+        if html.find('data-content="lindengut.lead"') > html.find(">360-Grad-Tour</a>"):
+            raise SystemExit("360-Grad-Tour muss unter der linken Textbox stehen")
     if "lg:grid-cols-2" not in html:
         raise SystemExit(f"{filename}: Lead und Öffnungszeiten müssen nebeneinander stehen")
     if 'class="hvw-explain mt-6 text-lg leading-relaxed"' not in html:
