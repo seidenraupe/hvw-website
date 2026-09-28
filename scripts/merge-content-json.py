@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from pathlib import Path
 from typing import Any
@@ -95,6 +96,7 @@ def merge_live_fields(
             added += 1
     remote_draft = remote_draft or {}
     out, override_stats = apply_deploy_overrides(out, ids, seed, remote_draft)
+    split_house_hours(out, remote)
     return out, {
         "kept": kept,
         "added": added,
@@ -105,6 +107,32 @@ def merge_live_fields(
 
 def norm_text(value: str) -> str:
     return " ".join(str(value or "").split())
+
+
+def split_opening_hours(text: str) -> tuple[str, str] | None:
+    """Trennt einen Lead, der noch den Block «Öffnungszeiten» enthält."""
+    match = re.search(r"(?:^|<br\s*/?>|\n)\s*(Öffnungszeiten\b)", text, flags=re.IGNORECASE)
+    if not match:
+        return None
+    lead = re.sub(r"(?:\s|<br\s*/?>)+$", "", text[: match.start()], flags=re.IGNORECASE).strip()
+    hours = text[match.start(1) :].strip()
+    if not lead or not hours:
+        return None
+    return lead, hours
+
+
+def split_house_hours(fields: dict[str, str], already_present: dict[str, str]) -> None:
+    for key in ("lindengut", "moersburg"):
+        hours_id = f"{key}.oeffnung"
+        lead_id = f"{key}.lead"
+        if hours_id not in fields or lead_id not in fields:
+            continue
+        if hours_id in already_present:
+            continue
+        parts = split_opening_hours(fields.get(lead_id, ""))
+        if not parts:
+            continue
+        fields[lead_id], fields[hours_id] = parts
 
 
 # Neue data-content-Felder vom 30.08.2026: Startwerte, keine Redaktionsarbeit.
@@ -148,6 +176,7 @@ def merge_draft_fields(
             out[field_id] = live_val
         else:
             out[field_id] = draft_val
+    split_house_hours(out, remote_draft)
     return out
 
 
@@ -231,6 +260,7 @@ def main() -> int:
         live_fields, override_stats = apply_deploy_overrides(
             live_fields, ids, seed_fields, remote_draft
         )
+        split_house_hours(live_fields, remote_live)
         stats = {
             "kept": len(remote_live),
             "added": added,

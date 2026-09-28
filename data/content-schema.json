@@ -311,9 +311,16 @@
       "multiline": false
     },
     "lindengut.lead": {
-      "label": "Lindengut · Einleitung",
+      "label": "Lindengut · Lead",
       "page": "lindengut.html",
-      "max": 400,
+      "max": 1000,
+      "rich": true,
+      "multiline": true
+    },
+    "lindengut.oeffnung": {
+      "label": "Lindengut · Öffnungszeiten und Eintritt",
+      "page": "lindengut.html",
+      "max": 600,
       "rich": true,
       "multiline": true
     },
@@ -387,9 +394,16 @@
       "multiline": false
     },
     "moersburg.lead": {
-      "label": "Mörsburg · Einleitung",
+      "label": "Mörsburg · Lead",
       "page": "moersburg.html",
-      "max": 400,
+      "max": 1000,
+      "rich": true,
+      "multiline": true
+    },
+    "moersburg.oeffnung": {
+      "label": "Mörsburg · Öffnungszeiten und Eintritt",
+      "page": "moersburg.html",
+      "max": 600,
       "rich": true,
       "multiline": true
     },
