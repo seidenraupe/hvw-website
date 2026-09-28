@@ -41,6 +41,13 @@ for key, filename in (("lindengut", "lindengut.html"), ("moersburg", "moersburg.
             raise SystemExit("Lindengut: Button 360-Grad-Tour fehlt")
         if html.find('data-content="lindengut.lead"') > html.find(">360-Grad-Tour</a>"):
             raise SystemExit("360-Grad-Tour muss unter der linken Textbox stehen")
+        spiel = "https://360games.ch/lindengut/"
+        if spiel not in html or ">Online-Spiel in der Villa Lindengut</a>" not in html:
+            raise SystemExit("Lindengut: Button Online-Spiel fehlt")
+        if "Lieblings-Kinderspielzeug von NR Dr. Eduard Sulzer-Ziegler" not in html:
+            raise SystemExit("Lindengut: Erklärung zum Online-Spiel fehlt")
+        if html.find('data-content="lindengut.body"') > html.find(">Online-Spiel in der Villa Lindengut</a>"):
+            raise SystemExit("Online-Spiel muss unter dem Erklärungstext stehen")
     if "lg:grid-cols-2" not in html:
         raise SystemExit(f"{filename}: Lead und Öffnungszeiten müssen nebeneinander stehen")
     if 'class="hvw-explain mt-6 text-lg leading-relaxed"' not in html:
