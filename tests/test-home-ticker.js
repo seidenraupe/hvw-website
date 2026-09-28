@@ -66,7 +66,7 @@ assert.strictEqual(withOpeningHours.length, 1);
 assert.strictEqual(withOpeningHours[0].title, 'Käfele mit der Kuratorin der Ausstellung');
 
 const hero = html.slice(html.indexOf('data-hero-slider'), html.indexOf('hvw-hero__shade'));
-assert.strictEqual((hero.match(/<img/g) || []).length, 23, 'dreiundzwanzig Herobilder');
+assert.strictEqual((hero.match(/<img/g) || []).length, 36, 'sechsunddreissig Herobilder');
 [
   'hero-hochwasser.jpg',
   'hero-velofahrer.jpg',
@@ -88,6 +88,19 @@ assert.strictEqual((hero.match(/<img/g) || []).length, 23, 'dreiundzwanzig Herob
   'hero-eislaufen-kinder.jpg',
   'hero-schulklasse.jpg',
   'hero-schulstube.jpg',
+  'hero-laden.jpg',
+  'hero-lastwagen-kies.jpg',
+  'hero-neumuehle-lastwagen.jpg',
+  'hero-sulzer-lastwagen.jpg',
+  'hero-technikum-allee.jpg',
+  'hero-technikum.jpg',
+  'hero-giesserei.jpg',
+  'hero-telefonistinnen.jpg',
+  'hero-strassenbahn-toess.jpg',
+  'hero-tram-schnee.jpg',
+  'hero-strassenbahn-personal.jpg',
+  'hero-laeufer.jpg',
+  'hero-turner.jpg',
 ].forEach((name) => {
   assert.ok(hero.includes(name), name);
   assert.ok(fs.existsSync(path.join(__dirname, '../images', name)), name + ' Datei');
@@ -112,7 +125,13 @@ assert.ok(hero.includes('Heinz Baumann, Januar 1967, Winterthur'), 'Nachweis Mas
 assert.ok(hero.includes('Com_L16-0078-0003-0001'), 'Signatur Maschinenhalle');
 assert.strictEqual(HERO_SLIDER_MS, 5000);
 assert.strictEqual(nextHeroIndex(0, 5), 1);
-assert.strictEqual(nextHeroIndex(22, 23), 0);
+assert.strictEqual(nextHeroIndex(35, 36), 0);
+assert.ok(hero.includes('Neumühle Töss'), 'Neumühle sichtbar');
+assert.ok(hero.includes('Winterthur|Technikum'), 'Technikum sichtbar');
+assert.ok(hero.includes('Gebrüder Sulzer, Winterthur'), 'Sulzer sichtbar');
+assert.ok(hero.includes('Strassenbahn Winterthur'), 'Strassenbahn sichtbar');
+assert.ok(!hero.includes('data-credit="Turner am Barren|Winterthurer Bibliotheken"'), 'Turner ohne Bibliothekszeile');
+assert.ok(!hero.includes('data-credit="Giesser beim Abstich|Winterthurer Bibliotheken"'), 'Giesserei ohne Bibliothekszeile');
 
 const mainSrc = fs.readFileSync(path.join(__dirname, '../js/main.js'), 'utf8');
 const sliderConst = mainSrc.indexOf('const HERO_SLIDER_MS');
