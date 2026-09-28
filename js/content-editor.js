@@ -1,6 +1,6 @@
 /**
  * On-Page-Redaktion: Entwurf speichern, Vorschau, Freigabe.
- * Erlaubt: fett / kursiv / unterstrichen. Kein Layout.
+ * Erlaubt: fett / kursiv / unterstrichen und Links (interne Seiten oder http/https). Kein Layout.
  */
 (function () {
   const API = "redaktion/api.php";
@@ -15,6 +15,8 @@
   const REVIEW_KEY = "hvw-review-id";
   const ACCEPTED_KEY = "hvw-review-accepted";
   let acceptedIds = loadAccepted();
+  let savedRange = null;
+  let linkDialogOpen = false;
 
   const $ = (sel, root) => (root || document).querySelector(sel);
 
@@ -199,6 +201,8 @@
       el.classList.toggle("hvw-image-editable", view === "draft");
     });
     markChangedFields();
+    if (view !== "draft") closeLinkDialog();
+    updateFormatState();
   }
 
   function fieldMeta(id) {
@@ -216,6 +220,7 @@
     const len = plainLen(activeEl.getAttribute("data-content-rich") === "1" ? activeEl.innerHTML : activeEl.textContent);
     box.textContent = meta.label + " · " + len + " / " + meta.max + " Zeichen";
     box.classList.toggle("is-over", len > meta.max);
+    updateFormatState();
   }
 
   function markDirty() {
@@ -423,11 +428,198 @@
     }
   }
 
-  function exec(cmd) {
-    document.execCommand(cmd, false, null);
-    if (activeEl && activeEl.getAttribute("data-content-rich") === "1") {
+  function richActive() {
+    return !!(activeEl && view === "draft" && activeEl.getAttribute("data-content-rich") === "1");
+  }
+
+  function captureRange() {
+    const sel = window.getSelection();
+    if (!sel || !sel.rangeCount || !activeEl) return;
+    const range = sel.getRangeAt(0);
+    if (!activeEl.contains(range.commonAncestorContainer)) return;
+    savedRange = range.cloneRange();
+  }
+
+  function restoreRange() {
+    if (!activeEl || !savedRange) return false;
+    activeEl.focus();
+    const sel = window.getSelection();
+    if (!sel) return false;
+    sel.removeAllRanges();
+    sel.addRange(savedRange);
+    return true;
+  }
+
+  function linkFromRange(range) {
+    if (!range || !activeEl) return null;
+    let node = range.commonAncestorContainer;
+    if (node.nodeType === Node.TEXT_NODE) node = node.parentNode;
+    while (node && node !== activeEl) {
+      if (node.nodeName === "A") return node;
+      node = node.parentNode;
+    }
+    return null;
+  }
+
+  function unwrapElement(el) {
+    const parent = el.parentNode;
+    if (!parent) return;
+    while (el.firstChild) parent.insertBefore(el.firstChild, el);
+    el.remove();
+  }
+
+  function normalizeFormatting(root) {
+    if (!root) return;
+    root.querySelectorAll("b").forEach((el) => {
+      const next = document.createElement("strong");
+      while (el.firstChild) next.appendChild(el.firstChild);
+      el.replaceWith(next);
+    });
+    root.querySelectorAll("i").forEach((el) => {
+      const next = document.createElement("em");
+      while (el.firstChild) next.appendChild(el.firstChild);
+      el.replaceWith(next);
+    });
+    [...root.querySelectorAll("span, font")].forEach((el) => {
+      if (typeof window.hvwSanitizeRich !== "function") return;
+      const holder = document.createElement("div");
+      holder.innerHTML = window.hvwSanitizeRich(el.outerHTML);
+      el.replaceWith(...holder.childNodes);
+    });
+  }
+
+  function updateFormatState() {
+    const on = richActive();
+    [
+      ["hvw-btn-b", "bold"],
+      ["hvw-btn-i", "italic"],
+      ["hvw-btn-u", "underline"],
+    ].forEach(([id, cmd]) => {
+      const btn = $("#" + id);
+      if (!btn) return;
+      btn.disabled = !on;
+      let active = false;
+      if (on) {
+        try {
+          active = document.queryCommandState(cmd);
+        } catch (_err) {
+          active = false;
+        }
+      }
+      btn.classList.toggle("is-on", active);
+      btn.setAttribute("aria-pressed", active ? "true" : "false");
+    });
+    const linkBtn = $("#hvw-btn-link");
+    if (!linkBtn) return;
+    linkBtn.disabled = !on;
+    let inLink = false;
+    if (on) {
+      const sel = window.getSelection();
+      if (sel && sel.rangeCount && activeEl.contains(sel.anchorNode)) {
+        inLink = !!linkFromRange(sel.getRangeAt(0));
+      }
+    }
+    linkBtn.classList.toggle("is-on", inLink);
+    linkBtn.setAttribute("aria-pressed", inLink ? "true" : "false");
+  }
+
+  function openLinkDialog() {
+    if (!richActive()) return;
+    captureRange();
+    const existing = savedRange ? linkFromRange(savedRange) : null;
+    const input = $("#hvw-link-url");
+    input.value = existing ? existing.getAttribute("href") || "" : "";
+    linkDialogOpen = true;
+    $("#hvw-link-pop").hidden = false;
+    input.focus();
+    input.select();
+  }
+
+  function closeLinkDialog() {
+    linkDialogOpen = false;
+    const pop = $("#hvw-link-pop");
+    if (pop) pop.hidden = true;
+  }
+
+  function applyInlineLink(href) {
+    if (!restoreRange()) {
+      toast("Bitte zuerst den Text im Feld markieren.", true);
+      return false;
+    }
+    const sel = window.getSelection();
+    const range = sel && sel.rangeCount ? sel.getRangeAt(0) : null;
+    if (!range || !activeEl.contains(range.commonAncestorContainer)) {
+      toast("Bitte zuerst den Text im Feld markieren.", true);
+      return false;
+    }
+    const existing = linkFromRange(range);
+    if (existing) {
+      existing.setAttribute("href", href);
+      if (/^https?:\/\//i.test(href)) {
+        existing.setAttribute("target", "_blank");
+        existing.setAttribute("rel", "noopener noreferrer");
+      } else {
+        existing.removeAttribute("target");
+        existing.removeAttribute("rel");
+      }
+    } else if (range.collapsed) {
+      toast("Bitte den Text markieren, der zum Link werden soll.", true);
+      return false;
+    } else {
+      const anchor = document.createElement("a");
+      anchor.setAttribute("href", href);
+      if (/^https?:\/\//i.test(href)) {
+        anchor.setAttribute("target", "_blank");
+        anchor.setAttribute("rel", "noopener noreferrer");
+      }
+      try {
+        range.surroundContents(anchor);
+      } catch (_err) {
+        anchor.appendChild(range.extractContents());
+        range.insertNode(anchor);
+      }
+    }
+    if (typeof window.hvwSanitizeRich === "function") {
       activeEl.innerHTML = window.hvwSanitizeRich(activeEl.innerHTML);
     }
+    return true;
+  }
+
+  function commitLink() {
+    const href = window.hvwSafeRichHref ? window.hvwSafeRichHref($("#hvw-link-url").value) : "";
+    if (!href) {
+      toast("Adresse nicht erlaubt. Zum Beispiel agenda.html oder https://…", true);
+      return;
+    }
+    if (!applyInlineLink(href)) return;
+    closeLinkDialog();
+    markDirty();
+    updateCounter();
+  }
+
+  function removeLink() {
+    if (!restoreRange()) {
+      toast("Kein Link an dieser Stelle.", true);
+      return;
+    }
+    const sel = window.getSelection();
+    const range = sel && sel.rangeCount ? sel.getRangeAt(0) : savedRange;
+    const existing = linkFromRange(range);
+    if (!existing) {
+      toast("Kein Link an dieser Stelle.", true);
+      return;
+    }
+    unwrapElement(existing);
+    closeLinkDialog();
+    markDirty();
+    updateCounter();
+  }
+
+  function exec(cmd) {
+    if (!richActive()) return;
+    activeEl.focus();
+    document.execCommand(cmd, false, null);
+    normalizeFormatting(activeEl);
     markDirty();
     updateCounter();
   }
@@ -450,6 +642,12 @@
     }
     if ((e.metaKey || e.ctrlKey) && "biu".includes(e.key.toLowerCase())) {
       if (activeEl.getAttribute("data-content-rich") !== "1") e.preventDefault();
+    }
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+      if (activeEl.getAttribute("data-content-rich") === "1") {
+        e.preventDefault();
+        openLinkDialog();
+      }
     }
   }
 
@@ -575,10 +773,18 @@
           <span id="hvw-legend" hidden><span class="hvw-legend-swatch" aria-hidden="true"></span> Orange = geändert, noch nicht live</span>
           <span id="hvw-counter"></span>
         </div>
-        <div class="hvw-editor-bar__tools">
-          <button type="button" id="hvw-btn-b" title="Fett"><strong>F</strong></button>
-          <button type="button" id="hvw-btn-i" title="Kursiv"><em>K</em></button>
-          <button type="button" id="hvw-btn-u" title="Unterstrichen"><u>U</u></button>
+        <div class="hvw-editor-bar__tools" id="hvw-editor-tools">
+          <button type="button" id="hvw-btn-b" title="Fett" aria-pressed="false"><strong>F</strong></button>
+          <button type="button" id="hvw-btn-i" title="Kursiv" aria-pressed="false"><em>K</em></button>
+          <button type="button" id="hvw-btn-u" title="Unterstrichen" aria-pressed="false"><u>U</u></button>
+          <button type="button" id="hvw-btn-link" title="Link setzen" aria-pressed="false">Link</button>
+          <div id="hvw-link-pop" hidden>
+            <label for="hvw-link-url">Adresse</label>
+            <input id="hvw-link-url" type="text" inputmode="url" autocomplete="off" spellcheck="false" placeholder="agenda.html oder https://…">
+            <button type="button" id="hvw-link-apply">Setzen</button>
+            <button type="button" id="hvw-link-remove">Entfernen</button>
+            <button type="button" id="hvw-link-cancel">Abbrechen</button>
+          </div>
         </div>
         <div class="hvw-editor-bar__actions">
           <button type="button" id="hvw-btn-live">Live ansehen</button>
@@ -626,9 +832,27 @@
     document.body.appendChild(wrap);
     document.body.classList.add("hvw-has-editor");
 
+    $("#hvw-editor-tools").addEventListener("mousedown", (e) => {
+      if (e.target.closest("#hvw-link-pop")) return;
+      e.preventDefault();
+    });
     $("#hvw-btn-b").addEventListener("click", () => exec("bold"));
     $("#hvw-btn-i").addEventListener("click", () => exec("italic"));
     $("#hvw-btn-u").addEventListener("click", () => exec("underline"));
+    $("#hvw-btn-link").addEventListener("click", () => openLinkDialog());
+    $("#hvw-link-apply").addEventListener("click", () => commitLink());
+    $("#hvw-link-remove").addEventListener("click", () => removeLink());
+    $("#hvw-link-cancel").addEventListener("click", () => closeLinkDialog());
+    $("#hvw-link-url").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        commitLink();
+      } else if (e.key === "Escape") {
+        e.preventDefault();
+        closeLinkDialog();
+      }
+    });
+    document.addEventListener("selectionchange", () => updateFormatState());
     $("#hvw-btn-save").addEventListener("click", () => saveDraft().catch(() => {}));
     $("#hvw-btn-publish").addEventListener("click", () => publish());
     $("#hvw-btn-discard").addEventListener("click", () => discard());
@@ -756,6 +980,7 @@
         updateCounter();
       });
       el.addEventListener("input", () => {
+        if (el.getAttribute("data-content-rich") === "1") normalizeFormatting(el);
         if (el.hasAttribute("data-content-href") && window.hvwSanitizeUrl) {
           const href = window.hvwSanitizeUrl(el.textContent || "");
           if (href) el.setAttribute("href", href);
@@ -771,6 +996,7 @@
       el.addEventListener("keydown", onKey);
       el.addEventListener("paste", onPaste);
       el.addEventListener("blur", () => {
+        if (linkDialogOpen) return;
         if (el.getAttribute("data-content-rich") === "1") {
           el.innerHTML = window.hvwSanitizeRich(el.innerHTML);
         }
@@ -796,7 +1022,7 @@
         const field = e.target.closest && e.target.closest("[data-content]");
         if (!field) return;
         const link = e.target.closest("a");
-        if (link && link.contains(field)) e.preventDefault();
+        if (link && (link === field || field.contains(link))) e.preventDefault();
       },
       true
     );
