@@ -10,7 +10,7 @@ define('HVW_SCHEMA', HVW_ROOT . '/data/content-schema.json');
 define('HVW_LIVE', HVW_ROOT . '/data/content-live.json');
 define('HVW_DRAFT', __DIR__ . '/storage/content-draft.json');
 define('HVW_UPLOADS', HVW_ROOT . '/data/uploads');
-define('HVW_ALLOWED_TAGS', ['strong', 'em', 'u', 'br']);
+define('HVW_ALLOWED_TAGS', ['strong', 'em', 'u', 'br', 'a']);
 define('HVW_IMAGE_PLACEHOLDER', 'images/placeholder-event-1.svg');
 
 function hvw_cookie_path(): string
@@ -156,18 +156,208 @@ function hvw_plain_len(string $html): int
     return function_exists('mb_strlen') ? mb_strlen($text) : strlen($text);
 }
 
+function hvw_safe_rich_href(string $href): string
+{
+    $href = preg_replace('/[\x00-\x1F\x7F]/', '', $href) ?? '';
+    $href = preg_replace('/\s+/', '', $href) ?? '';
+    if ($href === '' || strlen($href) > 500) {
+        return '';
+    }
+    if (preg_match('#^(javascript|data|vbscript):#i', $href) || str_contains($href, '\\') || str_starts_with($href, '//')) {
+        return '';
+    }
+    if (str_starts_with($href, '#')) {
+        return preg_match('/^#[A-Za-z0-9_-]+$/', $href) ? $href : '';
+    }
+    if (preg_match('#^[a-z][a-z0-9+.-]*:#i', $href)) {
+        $parts = parse_url($href);
+        if (!is_array($parts)) {
+            return '';
+        }
+        $scheme = strtolower((string) ($parts['scheme'] ?? ''));
+        if (!in_array($scheme, ['http', 'https'], true) || isset($parts['user']) || isset($parts['pass'])) {
+            return '';
+        }
+        $host = (string) ($parts['host'] ?? '');
+        if ($host === '' || !str_contains($host, '.')) {
+            return '';
+        }
+        return $href;
+    }
+    if (str_contains($href, '..') || str_contains($href, ':')) {
+        return '';
+    }
+    if (!preg_match('@^(?:\./|/)?[A-Za-z0-9][A-Za-z0-9._~/-]*(?:\?[A-Za-z0-9._~%=&+-]*)?(?:#[A-Za-z0-9_-]+)?$@', $href)) {
+        return '';
+    }
+    return $href;
+}
+
+function hvw_rename_element(DOMElement $el, string $tag): DOMElement
+{
+    $next = $el->ownerDocument->createElement($tag);
+    while ($el->firstChild) {
+        $next->appendChild($el->firstChild);
+    }
+    $el->parentNode?->replaceChild($next, $el);
+    return $next;
+}
+
+function hvw_unwrap_element(DOMElement $el): void
+{
+    $parent = $el->parentNode;
+    if (!$parent) {
+        return;
+    }
+    while ($el->firstChild) {
+        $parent->insertBefore($el->firstChild, $el);
+    }
+    $parent->removeChild($el);
+}
+
+function hvw_strip_attributes(DOMElement $el): void
+{
+    while ($el->attributes->length > 0) {
+        $el->removeAttribute($el->attributes->item(0)->nodeName);
+    }
+}
+
+function hvw_sanitize_rich_children(DOMNode $parent): void
+{
+    $child = $parent->firstChild;
+    while ($child) {
+        $next = $child->nextSibling;
+        if ($child->nodeType !== XML_ELEMENT_NODE) {
+            if ($child->nodeType !== XML_TEXT_NODE) {
+                $parent->removeChild($child);
+            }
+            $child = $next;
+            continue;
+        }
+        /** @var DOMElement $el */
+        $el = $child;
+        $tag = strtolower($el->nodeName);
+        if (in_array($tag, ['script', 'style', 'iframe', 'object', 'embed'], true)) {
+            $parent->removeChild($el);
+            $child = $next;
+            continue;
+        }
+        if ($tag === 'b' || $tag === 'i') {
+            $el = hvw_rename_element($el, $tag === 'b' ? 'strong' : 'em');
+            $tag = strtolower($el->nodeName);
+        }
+        if ($tag === 'span' || $tag === 'font') {
+            $style = strtolower($el->getAttribute('style'));
+            $wraps = [];
+            if (preg_match('/text-decoration(?:-line)?\s*:[^;]*underline/', $style)) {
+                $wraps[] = 'u';
+            }
+            if (preg_match('/font-style\s*:\s*italic/', $style)) {
+                $wraps[] = 'em';
+            }
+            if (preg_match('/font-weight\s*:\s*(bold|bolder|[6-9]00)/', $style)) {
+                $wraps[] = 'strong';
+            }
+            if ($wraps) {
+                $doc = $el->ownerDocument;
+                $inner = $doc->createElement($wraps[0]);
+                while ($el->firstChild) {
+                    $inner->appendChild($el->firstChild);
+                }
+                $current = $inner;
+                for ($i = 1, $n = count($wraps); $i < $n; $i++) {
+                    $outer = $doc->createElement($wraps[$i]);
+                    $outer->appendChild($current);
+                    $current = $outer;
+                }
+                $el->appendChild($current);
+            }
+            $marker = $el->ownerDocument->createTextNode('');
+            $el->parentNode?->insertBefore($marker, $el);
+            hvw_unwrap_element($el);
+            $child = $marker->nextSibling;
+            $marker->parentNode?->removeChild($marker);
+            continue;
+        }
+        if (!in_array($tag, HVW_ALLOWED_TAGS, true)) {
+            hvw_sanitize_rich_children($el);
+            $marker = $el->ownerDocument->createTextNode('');
+            $el->parentNode?->insertBefore($marker, $el);
+            hvw_unwrap_element($el);
+            $child = $marker->nextSibling;
+            $marker->parentNode?->removeChild($marker);
+            continue;
+        }
+        if ($tag === 'a') {
+            $href = hvw_safe_rich_href($el->getAttribute('href'));
+            $nested = false;
+            for ($p = $el->parentNode; $p instanceof DOMElement; $p = $p->parentNode) {
+                if (strtolower($p->nodeName) === 'a') {
+                    $nested = true;
+                    break;
+                }
+            }
+            hvw_strip_attributes($el);
+            if ($href === '' || $nested) {
+                hvw_sanitize_rich_children($el);
+                $marker = $el->ownerDocument->createTextNode('');
+                $el->parentNode?->insertBefore($marker, $el);
+                hvw_unwrap_element($el);
+                $child = $marker->nextSibling;
+                $marker->parentNode?->removeChild($marker);
+                continue;
+            }
+            $el->setAttribute('href', $href);
+            if (preg_match('#^https?://#i', $href)) {
+                $el->setAttribute('target', '_blank');
+                $el->setAttribute('rel', 'noopener noreferrer');
+            }
+            hvw_sanitize_rich_children($el);
+            $child = $el->nextSibling;
+            continue;
+        }
+        hvw_strip_attributes($el);
+        if ($tag !== 'br') {
+            hvw_sanitize_rich_children($el);
+        }
+        $child = $el->nextSibling;
+    }
+}
+
 function hvw_sanitize_rich(string $html): string
 {
     $html = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F]/', '', $html) ?? '';
-    $html = str_ireplace(['<b>', '</b>'], ['<strong>', '</strong>'], $html);
-    $html = str_ireplace(['<i>', '</i>'], ['<em>', '</em>'], $html);
-    $html = strip_tags($html, '<' . implode('><', HVW_ALLOWED_TAGS) . '>');
-    $html = preg_replace('/<(strong|em|u|br)\b[^>]*>/i', '<$1>', $html) ?? $html;
-    $html = preg_replace('/<\/(strong|em|u)\b[^>]*>/i', '</$1>', $html) ?? $html;
-    $html = preg_replace('/<br\s*\/?>/i', '<br>', $html) ?? $html;
-    $html = preg_replace('/^(?:\s|<br\s*\/?>)+/i', '', $html) ?? $html;
-    $html = preg_replace('/(?:\s|<br\s*\/?>)+$/i', '', $html) ?? $html;
-    return trim($html);
+    if (trim($html) === '') {
+        return '';
+    }
+    $doc = new DOMDocument();
+    $prev = libxml_use_internal_errors(true);
+    $doc->loadHTML(
+        '<?xml encoding="UTF-8"><html><body><div id="hvw-rich-root">' . $html . '</div></body></html>',
+        LIBXML_HTML_NODEFDTD
+    );
+    libxml_clear_errors();
+    libxml_use_internal_errors($prev);
+    $root = $doc->getElementById('hvw-rich-root');
+    if (!$root) {
+        return '';
+    }
+    hvw_sanitize_rich_children($root);
+    $out = '';
+    foreach ($root->childNodes as $child) {
+        $out .= $doc->saveHTML($child);
+    }
+    $out = preg_replace_callback('/&#(\d+);/', static function (array $m): string {
+        $cp = (int) $m[1];
+        return $cp >= 128 ? mb_chr($cp, 'UTF-8') : $m[0];
+    }, $out) ?? $out;
+    $out = preg_replace_callback('/&#x([0-9a-f]+);/i', static function (array $m): string {
+        $cp = hexdec($m[1]);
+        return $cp >= 128 ? mb_chr($cp, 'UTF-8') : $m[0];
+    }, $out) ?? $out;
+    $out = preg_replace('/^(?:\s|<br\s*\/?>)+/i', '', $out) ?? $out;
+    $out = preg_replace('/(?:\s|<br\s*\/?>)+$/i', '', $out) ?? $out;
+    return trim($out);
 }
 
 function hvw_sanitize_plain(string $html): string

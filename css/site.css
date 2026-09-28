@@ -28,6 +28,30 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+/* Rich-Text aus der Redaktion: fett, kursiv, unterstrichen, Link */
+[data-content-rich="1"] strong {
+  font-weight: 700;
+}
+
+[data-content-rich="1"] em {
+  font-style: italic;
+}
+
+[data-content-rich="1"] u {
+  text-decoration: underline;
+  text-underline-offset: 0.12em;
+}
+
+[data-content-rich="1"] a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+[data-content-rich="1"] a:hover {
+  color: var(--hvw-accent);
+}
+
 /* Ticker — wie museumschaffen.ch, aber ruhiger */
 .hvw-ticker {
   overflow: hidden;

@@ -64,6 +64,52 @@ body.hvw-has-editor {
   background: rgba(255, 255, 255, 0.12);
 }
 
+#hvw-editor-bar button.is-on {
+  background: #fff;
+  color: #1a1a1a;
+}
+
+#hvw-link-pop {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem;
+  background: #fff;
+  color: #1a1a1a;
+}
+
+#hvw-link-pop[hidden] {
+  display: none !important;
+}
+
+#hvw-link-pop label {
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
+#hvw-link-pop input {
+  min-height: 2.5rem;
+  min-width: 14rem;
+  flex: 1 1 12rem;
+  border: 1px solid #1a1a1a;
+  padding: 0 0.6rem;
+  color: #1a1a1a;
+  background: #fff;
+  font: inherit;
+}
+
+#hvw-link-pop button {
+  color: #1a1a1a;
+  border-color: #1a1a1a;
+  background: #fff;
+}
+
+#hvw-link-pop button:hover:not(:disabled) {
+  background: #f3f3f3;
+  color: #1a1a1a;
+}
+
 #hvw-editor-bar button:disabled,
 #hvw-review-dock button:disabled {
   opacity: 0.4;
