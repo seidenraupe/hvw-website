@@ -433,6 +433,26 @@ body.hvw-editing [data-content-image].hvw-changed::after {
   display: none;
 }
 
+body.hvw-editing .hvw-bild-caption {
+  position: relative;
+  z-index: 4;
+}
+
+body.hvw-editing .hvw-bild-caption__label {
+  display: block;
+  padding: 0.85rem 1.25rem 0;
+  color: #1a1a1a;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+body.hvw-editing .hvw-bild-caption [data-content] {
+  min-height: 4.5rem;
+  color: #1a1a1a;
+}
+
 body.hvw-editing [data-content-image] .hvw-image-tools {
   position: absolute;
   left: 0;

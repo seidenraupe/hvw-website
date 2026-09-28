@@ -21,7 +21,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="js/tailwind-config.js"></script>
-  <link rel="stylesheet" href="css/site.css?v=20260928-erklaerung">
+  <link rel="stylesheet" href="css/site.css?v=20260928-legende">
 </head>
 <body class="bg-hvw-paper font-sans text-base text-hvw-ink antialiased">
   <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[200] focus:bg-white focus:px-4 focus:py-3 focus:shadow">Zum Inhalt springen</a>
@@ -82,7 +82,10 @@
                 <button type="button" class="hvw-image-clear">Platzhalter</button>
               </div>
             </div>
-            <p class="p-5 text-hvw-mute" data-content="moersburg.bild.1.caption" data-content-rich="1">Bild 1</p>
+            <div class="hvw-bild-caption">
+              <span class="hvw-bild-caption__label">Legende</span>
+              <p class="p-5 text-hvw-mute" data-content="moersburg.bild.1.caption" data-content-rich="1">Bild 1</p>
+            </div>
           </article>
           <article class="border border-hvw-ink bg-white">
             <div class="event-card__media aspect-[4/3]" data-lightbox data-content-image="moersburg.bild.2.image" data-content-image-fallback="images/placeholder-museum-moersburg.svg">
@@ -92,7 +95,10 @@
                 <button type="button" class="hvw-image-clear">Platzhalter</button>
               </div>
             </div>
-            <p class="p-5 text-hvw-mute" data-content="moersburg.bild.2.caption" data-content-rich="1">Bild 2</p>
+            <div class="hvw-bild-caption">
+              <span class="hvw-bild-caption__label">Legende</span>
+              <p class="p-5 text-hvw-mute" data-content="moersburg.bild.2.caption" data-content-rich="1">Bild 2</p>
+            </div>
           </article>
           <article class="border border-hvw-ink bg-white">
             <div class="event-card__media aspect-[4/3]" data-lightbox data-content-image="moersburg.bild.3.image" data-content-image-fallback="images/placeholder-museum-moersburg.svg">
@@ -102,7 +108,10 @@
                 <button type="button" class="hvw-image-clear">Platzhalter</button>
               </div>
             </div>
-            <p class="p-5 text-hvw-mute" data-content="moersburg.bild.3.caption" data-content-rich="1">Bild 3</p>
+            <div class="hvw-bild-caption">
+              <span class="hvw-bild-caption__label">Legende</span>
+              <p class="p-5 text-hvw-mute" data-content="moersburg.bild.3.caption" data-content-rich="1">Bild 3</p>
+            </div>
           </article>
         </div>
       </div>
@@ -158,6 +167,6 @@
 
   <script src="js/main.js" defer></script>
   <script src="js/lightbox.js?v=20260925-museen" defer></script>
-  <script src="js/content.js?v=20260925-museen" defer></script>
+  <script src="js/content.js?v=20260928-legende" defer></script>
 </body>
 </html>

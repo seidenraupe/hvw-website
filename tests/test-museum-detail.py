@@ -63,6 +63,12 @@ for key, filename in (("lindengut", "lindengut.html"), ("moersburg", "moersburg.
             raise SystemExit(f"{filename} fehlt {image}")
         if f'data-content="{caption}"' not in html:
             raise SystemExit(f"{filename} fehlt {caption}")
+        block = html.split(f'data-content="{caption}"', 1)[0]
+        lead = block[-280:]
+        if 'class="hvw-bild-caption"' not in lead or 'class="hvw-bild-caption__label">Legende</span>' not in lead:
+            raise SystemExit(f"{filename}: {caption} braucht eine Legende-Beschriftung für den Edit-Modus")
+        if 'data-content="' in lead.split('class="hvw-bild-caption"', 1)[-1]:
+            raise SystemExit(f"{filename}: Legende darf nicht im bearbeitbaren Text von {caption} stehen")
         if "hvw-image-tools" not in html:
             raise SystemExit(f"{filename} braucht Upload-Buttons")
     if "lightbox.js" not in html or "content.js" not in html:
@@ -72,5 +78,14 @@ if "lindengut" not in lib or "moersburg" not in lib:
     raise SystemExit("lib.php muss Lindengut- und Mörsburg-Uploads erlauben")
 if "lindengut.html" not in build or "moersburg.html" not in build:
     raise SystemExit("Vorschau-Build muss die Detailseiten enthalten")
+
+site_css = (ROOT / "css/site.css").read_text(encoding="utf-8")
+editor_css = (ROOT / "css/content-editor.css").read_text(encoding="utf-8")
+if ".hvw-bild-caption__label" not in site_css or "display: none" not in site_css.split(".hvw-bild-caption__label", 1)[1][:80]:
+    raise SystemExit("Legende-Beschriftung muss auf der öffentlichen Seite ausgeblendet sein")
+if "body.hvw-editing .hvw-bild-caption__label" not in editor_css:
+    raise SystemExit("Legende-Beschriftung muss im Edit-Modus sichtbar sein")
+if "body.hvw-editing .hvw-bild-caption [data-content]" not in editor_css:
+    raise SystemExit("Bildlegende braucht im Edit-Modus eine klickbare Mindesthöhe")
 
 print("museum detail pages ok")
