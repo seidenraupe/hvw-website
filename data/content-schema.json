@@ -320,7 +320,7 @@
     "lindengut.body": {
       "label": "Lindengut · Text",
       "page": "lindengut.html",
-      "max": 1200,
+      "max": 4000,
       "rich": true,
       "multiline": true
     },
@@ -396,7 +396,7 @@
     "moersburg.body": {
       "label": "Mörsburg · Text",
       "page": "moersburg.html",
-      "max": 1200,
+      "max": 4000,
       "rich": true,
       "multiline": true
     },
