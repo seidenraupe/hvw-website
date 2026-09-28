@@ -676,6 +676,11 @@ body.hvw-lightbox-open {
   overflow-wrap: anywhere;
 }
 
+/* Bildlegende: Beschriftung nur im Änderungsmodus, Textfeld bleibt öffentlich sichtbar. */
+.hvw-bild-caption__label {
+  display: none;
+}
+
 /* Erklärungstext Lindengut / Mörsburg: eine Spalte bis Tablet, zwei ab Desktop */
 .hvw-explain {
   hyphens: auto;

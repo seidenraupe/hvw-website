@@ -212,7 +212,7 @@
     }
   }
 
-  const EDITOR_ASSET_V = "20260928-format";
+  const EDITOR_ASSET_V = "20260928-legende";
 
   function loadEditor() {
     if (!document.querySelector('link[href*="css/content-editor.css"]')) {
