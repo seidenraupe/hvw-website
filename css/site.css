@@ -652,6 +652,19 @@ body.hvw-lightbox-open {
   overflow-wrap: anywhere;
 }
 
+/* Erklärungstext Lindengut / Mörsburg: eine Spalte bis Tablet, zwei ab Desktop */
+.hvw-explain {
+  hyphens: auto;
+  -webkit-hyphens: auto;
+}
+
+@media (min-width: 1024px) {
+  .hvw-explain {
+    column-count: 2;
+    column-gap: 3rem;
+  }
+}
+
 @media (max-width: 768px) {
   .partner-table thead {
     display: none;

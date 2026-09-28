@@ -23,8 +23,12 @@ for key, filename in (("lindengut", "lindengut.html"), ("moersburg", "moersburg.
             raise SystemExit(f"Feld fehlt: {field}")
         if f'data-content="{field}"' not in html:
             raise SystemExit(f"{filename} fehlt {field}")
-    if schema["fields"][f"{key}.body"]["max"] < 600:
-        raise SystemExit(f"{key}.body ist zu kurz begrenzt")
+    if schema["fields"][f"{key}.body"]["max"] != 4000:
+        raise SystemExit(f"{key}.body muss 4000 Zeichen erlauben")
+    if 'class="hvw-explain mt-6 text-lg leading-relaxed"' not in html:
+        raise SystemExit(f"{filename}: Erklärungstext muss die Klasse hvw-explain tragen")
+    if f'data-content="{key}.body"' in html and "max-w-3xl" in html.split(f'data-content="{key}.body"')[0].split("<div")[-1]:
+        raise SystemExit(f"{filename}: Erklärungstext darf nicht auf max-w-3xl begrenzt sein")
     for n in range(1, 4):
         image = f"{key}.bild.{n}.image"
         caption = f"{key}.bild.{n}.caption"
