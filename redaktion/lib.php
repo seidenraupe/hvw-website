@@ -582,6 +582,17 @@ function hvw_norm_text(string $value): string
     return trim(is_string($collapsed) ? $collapsed : $value);
 }
 
+function hvw_comparable_field(string $value, array $meta): string
+{
+    if (hvw_is_image_field($meta)) {
+        return trim($value);
+    }
+    if (!empty($meta['rich'])) {
+        return hvw_norm_text(hvw_sanitize_rich($value));
+    }
+    return hvw_norm_text($value);
+}
+
 function hvw_diff(array $draftFields, array $liveFields): array
 {
     $schema = hvw_schema();
@@ -592,7 +603,7 @@ function hvw_diff(array $draftFields, array $liveFields): array
             continue;
         }
         $b = (string) $draftFields[$id];
-        if (hvw_norm_text($a) !== hvw_norm_text($b)) {
+        if (hvw_comparable_field($a, $meta) !== hvw_comparable_field($b, $meta)) {
             $changes[] = [
                 'id' => $id,
                 'label' => $meta['label'] ?? $id,

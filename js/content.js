@@ -139,6 +139,10 @@
     return cleaned.trim();
   }
 
+  function canonicalRich(html) {
+    return sanitizeRich(html).replace(/\s+/g, " ").trim();
+  }
+
   function applyImageFields(fields) {
     if (!fields) return;
     document.querySelectorAll("[data-content-image]").forEach((el) => {
@@ -212,7 +216,7 @@
     }
   }
 
-  const EDITOR_ASSET_V = "20260928-legende";
+  const EDITOR_ASSET_V = "20260928-freigabe";
 
   function loadEditor() {
     if (!document.querySelector('link[href*="css/content-editor.css"]')) {
@@ -250,6 +254,7 @@
 
   window.hvwApplyContent = applyFields;
   window.hvwSanitizeRich = sanitizeRich;
+  window.hvwCanonicalRich = canonicalRich;
   window.hvwSafeRichHref = safeRichHref;
   window.hvwSanitizeUrl = sanitizeUrl;
 
