@@ -6,8 +6,13 @@ from urllib.parse import unquote
 html = (Path(__file__).resolve().parents[1] / "mitmachen.html").read_text(encoding="utf-8")
 if "Online-Anmeldung über Webling" in html or "bg-hvw-fog p-5" in html:
     raise SystemExit("graue Erklärungsbox ist wieder da")
-if html.find("Beteiligungs-Möglichkeiten") > html.find('id="beitraege-heading"'):
-    raise SystemExit("Beteiligung steht nicht über den Beiträgen")
+if not (
+    html.find('id="beitraege-heading"')
+    < html.find('id="anmelde-heading"')
+    < html.find('id="beteiligung-heading"')
+    < html.find("</main>")
+):
+    raise SystemExit("Reihenfolge: Kategorien, Anmeldeformular, Beteiligung am Seitenende")
 
 expected = {
     "ursina.largiader@hvwinterthur.ch": "Kulturvermittler/Laienführer Mörsburg",
@@ -21,7 +26,7 @@ for addr, needle in expected.items():
         raise SystemExit(f"Kartentext fehlt: {needle}")
 
 start = html.find('id="beteiligung-heading"')
-end = html.find('id="beitraege-heading"')
+end = html.find("</main>", start)
 block = html[start:end]
 for part in ("subject=", "body=", "Guten%20Tag", "Interesse melden"):
     if block.count(part) < 3:
