@@ -14,6 +14,9 @@ urls = [
     "https://www.moersburg-winterthur.ch/site/",
     "https://schlosshegi.ch/",
     "https://frauenrundgang.ch/",
+    "https://schlosskyburg.ch/",
+    "https://www.uhrenmuseumwinterthur.ch/",
+    "https://muenzkabinett.winterthur.ch/",
     "https://www.winterthur-glossar.ch/",
     "https://bilddatenbank.winterthur.ch/ims_publisher/",
     "https://industriekultur-winterthur.ch/site/",
@@ -49,8 +52,19 @@ heroes = [
 for filename in heroes:
     if filename not in page or not (ROOT / "images/partner" / filename).is_file():
         raise SystemExit(f"Hero fehlt: {filename}")
-if page.count('class="partner-slot partner-slot--photo') != 16:
+if page.count('class="partner-slot partner-slot--photo') != 19:
     raise SystemExit("Nicht jede Partnerzeile hat genau ein Bild")
+if not (
+    page.find("Frauenstadtrundgang Winterthur")
+    < page.find("Museum Schloss Kyburg")
+    < page.find("Uhrenmuseum Winterthur")
+    < page.find("Münzkabinett Winterthur")
+    < page.find("Winterthur-Glossar")
+):
+    raise SystemExit("Neue Partner müssen nach Frauenstadtrundgang und vor dem Glossar stehen")
+for filename in ("hero-17.jpg", "hero-18.jpg", "hero-19.jpg"):
+    if filename not in page or not (ROOT / "images/partner" / filename).is_file():
+        raise SystemExit(f"Hero fehlt: {filename}")
 
 for html in ROOT.glob("*.html"):
     if html.name == "programm.html":
