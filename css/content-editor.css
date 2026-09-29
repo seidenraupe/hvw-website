@@ -433,6 +433,16 @@ body.hvw-editing [data-content-image].hvw-changed::after {
   display: none;
 }
 
+body.hvw-editing .hvw-quelle,
+body.hvw-editing .hvw-quelle:not(:has([data-content]:not(:empty))) {
+  display: block;
+}
+
+body.hvw-editing .hvw-quelle [data-content] {
+  min-height: 2.75rem;
+  color: #1a1a1a;
+}
+
 body.hvw-editing .hvw-bild-caption {
   position: relative;
   z-index: 4;
