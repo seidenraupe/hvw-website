@@ -559,6 +559,99 @@
       "type": "image",
       "optional": true
     },
+    "partner.17.name": {
+      "label": "Partner · Museum Schloss Kyburg · Name",
+      "page": "partner.html",
+      "max": 80,
+      "rich": false,
+      "multiline": false
+    },
+    "partner.17.body": {
+      "label": "Partner · Museum Schloss Kyburg · Text",
+      "page": "partner.html",
+      "max": 360,
+      "rich": true,
+      "multiline": true
+    },
+    "partner.17.url": {
+      "label": "Partner · Museum Schloss Kyburg · Link",
+      "page": "partner.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "url"
+    },
+    "partner.17.image": {
+      "label": "Partner · Museum Schloss Kyburg · Bild",
+      "page": "partner.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "image",
+      "optional": true
+    },
+    "partner.18.name": {
+      "label": "Partner · Uhrenmuseum Winterthur · Name",
+      "page": "partner.html",
+      "max": 80,
+      "rich": false,
+      "multiline": false
+    },
+    "partner.18.body": {
+      "label": "Partner · Uhrenmuseum Winterthur · Text",
+      "page": "partner.html",
+      "max": 360,
+      "rich": true,
+      "multiline": true
+    },
+    "partner.18.url": {
+      "label": "Partner · Uhrenmuseum Winterthur · Link",
+      "page": "partner.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "url"
+    },
+    "partner.18.image": {
+      "label": "Partner · Uhrenmuseum Winterthur · Bild",
+      "page": "partner.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "image",
+      "optional": true
+    },
+    "partner.19.name": {
+      "label": "Partner · Münzkabinett Winterthur · Name",
+      "page": "partner.html",
+      "max": 80,
+      "rich": false,
+      "multiline": false
+    },
+    "partner.19.body": {
+      "label": "Partner · Münzkabinett Winterthur · Text",
+      "page": "partner.html",
+      "max": 360,
+      "rich": true,
+      "multiline": true
+    },
+    "partner.19.url": {
+      "label": "Partner · Münzkabinett Winterthur · Link",
+      "page": "partner.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "url"
+    },
+    "partner.19.image": {
+      "label": "Partner · Münzkabinett Winterthur · Bild",
+      "page": "partner.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "image",
+      "optional": true
+    },
     "partner.1.name": {
       "label": "Partner · Schloss Hegi · Name",
       "page": "partner.html",
