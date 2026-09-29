@@ -1024,7 +1024,7 @@
       "multiline": true
     },
     "sammlung.objekt.1.quelle": {
-      "label": "Sammlung · Objekt 1 · Quellen",
+      "label": "Sammlung · Objekt 1 · Quellen-Nachweis",
       "page": "sammlung.html",
       "max": 150,
       "rich": true,
@@ -1055,7 +1055,7 @@
       "multiline": true
     },
     "sammlung.objekt.2.quelle": {
-      "label": "Sammlung · Objekt 2 · Quellen",
+      "label": "Sammlung · Objekt 2 · Quellen-Nachweis",
       "page": "sammlung.html",
       "max": 150,
       "rich": true,
@@ -1086,7 +1086,7 @@
       "multiline": true
     },
     "sammlung.objekt.3.quelle": {
-      "label": "Sammlung · Objekt 3 · Quellen",
+      "label": "Sammlung · Objekt 3 · Quellen-Nachweis",
       "page": "sammlung.html",
       "max": 150,
       "rich": true,
@@ -1117,7 +1117,7 @@
       "multiline": true
     },
     "sammlung.objekt.4.quelle": {
-      "label": "Sammlung · Objekt 4 · Quellen",
+      "label": "Sammlung · Objekt 4 · Quellen-Nachweis",
       "page": "sammlung.html",
       "max": 150,
       "rich": true,
@@ -1148,7 +1148,7 @@
       "multiline": true
     },
     "sammlung.objekt.5.quelle": {
-      "label": "Sammlung · Objekt 5 · Quellen",
+      "label": "Sammlung · Objekt 5 · Quellen-Nachweis",
       "page": "sammlung.html",
       "max": 150,
       "rich": true,
@@ -1179,7 +1179,7 @@
       "multiline": true
     },
     "sammlung.objekt.6.quelle": {
-      "label": "Sammlung · Objekt 6 · Quellen",
+      "label": "Sammlung · Objekt 6 · Quellen-Nachweis",
       "page": "sammlung.html",
       "max": 150,
       "rich": true,
