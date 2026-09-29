@@ -1,10 +1,9 @@
 /**
  * Google Analytics 4 (gtag.js) — optionaler Loader für Seiten ohne Inline-Tag.
  *
- * Soft-Launch /programm enthält den Google-Tag bereits inline im <head>
- * (von Google empfohlen / für die Tag-Erkennung nötig). Diese Datei
- * überspringt das erneute Laden, wenn gtag bereits konfiguriert ist, und
- * kann auf weiteren Seiten data/analytics.json nutzen.
+ * Die Website-Seiten enthalten den Google-Tag inline im <head>.
+ * Diese Datei überspringt das erneute Laden, wenn gtag bereits
+ * konfiguriert ist, und kann auf weiteren Seiten data/analytics.json nutzen.
  */
 (function initAnalytics() {
   const CONFIG_URL = '/data/analytics.json';
