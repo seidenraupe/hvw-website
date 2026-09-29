@@ -152,21 +152,21 @@ Beim Soft-Launch-Deploy wird das PDF in GitHub Actions frisch erzeugt,
 sofern die Eventfrog-API von GitHub aus antwortet. Schlägt der Abruf
 fehl (z. B. HTTP 403), bleibt das PDF aus dem Repository.
 
-### Google Analytics 4 (Soft-Launch)
+### Google Analytics 4
 
-Die Programmseite kann mit **GA4** im Konto `thomas.giger@cloud-7.net` gemessen werden
+Die Website und die Programmseite werden mit **GA4** im Konto `thomas.giger@cloud-7.net` gemessen
 (gleiche Analytics-Oberfläche wie bei Ihren anderen Websites).
 
-Aktuelle Soft-Launch Measurement ID: **`G-7C20PSV7SW`**
+Aktuelle Measurement ID: **`G-8M4EZQDQ98`**
 
-Auf `/programm` ist der Google-Tag **inline** im `<head>` (wie von Google
-vorgesehen), damit die Tag-Erkennung greift. Zusätzlich bleibt
-`data/analytics.json` / `js/analytics.js` für weitere Seiten.
+Der Google-Tag steht **inline** im `<head>` der Website und der Programmseite
+(wie von Google vorgesehen), damit die Tag-Erkennung greift. Dieselbe
+Measurement ID steht in `data/analytics.json`.
 
 1. Mit diesem Konto auf [analytics.google.com](https://analytics.google.com) anmelden
 2. **Admin** → Property / Datenstream für `https://www.hvwinterthur.ch`
-3. **Measurement ID** in `programm/index.html` (Inline-Tag) und
-   `data/analytics.json` eintragen, Soft-Launch neu deployen
+3. **Measurement ID** im Inline-Tag der HTML-Seiten und in
+   `data/analytics.json` eintragen, neu deployen
 4. In GA4 unter **Realtime** prüfen bzw. Tag-Setup erneut testen
 
 ### Später: volle Website live
