@@ -1,7 +1,7 @@
 # Hostpoint / Apache — Soft-Launch Historischer Verein Winterthur
 #
 # Stamm-URL bleibt die Weiterleitung zur bestehenden Vereinswebsite.
-# Die öffentliche Programmseite ist entfernt. Das Programm-PDF bleibt unter /programm/.
+# Die öffentliche Programmseite und das Programm-PDF sind entfernt.
 
 DirectoryIndex index.html
 
@@ -18,10 +18,10 @@ Options -Indexes
   RewriteRule ^$ https://www.historischer-verein-winterthur.ch/ [L,R=301]
   RewriteRule ^index\.html$ https://www.historischer-verein-winterthur.ch/ [L,R=301]
 
-  # Öffentliche Programmseite ist gelöscht. PDF unter /programm/Programm.pdf bleibt.
+  # Öffentliche Programmseite und Programm-PDF sind gelöscht.
   RewriteRule ^programm/?$ - [G,L]
-  RewriteRule ^programm/index\.html$ - [G,L]
   RewriteRule ^programm\.html$ - [G,L]
+  RewriteRule ^programm/ - [G,L]
 
   # /coucou → /coucou/ (Coucou-JSON-Kontrolle)
   RewriteRule ^coucou$ /coucou/ [L,R=301]
@@ -29,9 +29,6 @@ Options -Indexes
   # /mus → /mus/ (Museum-Schaffen-JSON-Kontrolle)
   RewriteRule ^mus$ /mus/ [L,R=301]
 
-  # Altes Halbjahresprogramm-PDF → fortlaufendes Programm
-  RewriteRule ^programm/HalbJahresprogramm\.pdf$ /programm/Programm.pdf [L,R=301]
-  RewriteRule ^programm/HalbJahresprogramm\.json$ /programm/Programm.json [L,R=301]
 </IfModule>
 
 <IfModule mod_headers.c>
