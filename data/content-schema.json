@@ -1167,6 +1167,14 @@
       "rich": true,
       "multiline": true
     },
+    "sammlung.objekt.1.quelle": {
+      "label": "Sammlung · Objekt 1 · Quellen",
+      "page": "sammlung.html",
+      "max": 150,
+      "rich": true,
+      "multiline": true,
+      "optional": true
+    },
     "sammlung.objekt.2.image": {
       "label": "Sammlung · Objekt 2 · Bild",
       "page": "sammlung.html",
@@ -1189,6 +1197,14 @@
       "max": 400,
       "rich": true,
       "multiline": true
+    },
+    "sammlung.objekt.2.quelle": {
+      "label": "Sammlung · Objekt 2 · Quellen",
+      "page": "sammlung.html",
+      "max": 150,
+      "rich": true,
+      "multiline": true,
+      "optional": true
     },
     "sammlung.objekt.3.image": {
       "label": "Sammlung · Objekt 3 · Bild",
@@ -1213,6 +1229,14 @@
       "rich": true,
       "multiline": true
     },
+    "sammlung.objekt.3.quelle": {
+      "label": "Sammlung · Objekt 3 · Quellen",
+      "page": "sammlung.html",
+      "max": 150,
+      "rich": true,
+      "multiline": true,
+      "optional": true
+    },
     "sammlung.objekt.4.image": {
       "label": "Sammlung · Objekt 4 · Bild",
       "page": "sammlung.html",
@@ -1235,6 +1259,14 @@
       "max": 400,
       "rich": true,
       "multiline": true
+    },
+    "sammlung.objekt.4.quelle": {
+      "label": "Sammlung · Objekt 4 · Quellen",
+      "page": "sammlung.html",
+      "max": 150,
+      "rich": true,
+      "multiline": true,
+      "optional": true
     },
     "sammlung.objekt.5.image": {
       "label": "Sammlung · Objekt 5 · Bild",
@@ -1259,6 +1291,14 @@
       "rich": true,
       "multiline": true
     },
+    "sammlung.objekt.5.quelle": {
+      "label": "Sammlung · Objekt 5 · Quellen",
+      "page": "sammlung.html",
+      "max": 150,
+      "rich": true,
+      "multiline": true,
+      "optional": true
+    },
     "sammlung.objekt.6.image": {
       "label": "Sammlung · Objekt 6 · Bild",
       "page": "sammlung.html",
@@ -1281,6 +1321,14 @@
       "max": 400,
       "rich": true,
       "multiline": true
+    },
+    "sammlung.objekt.6.quelle": {
+      "label": "Sammlung · Objekt 6 · Quellen",
+      "page": "sammlung.html",
+      "max": 150,
+      "rich": true,
+      "multiline": true,
+      "optional": true
     },
     "zitate.intro": {
       "label": "Stimmen · Einleitung",

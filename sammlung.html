@@ -21,7 +21,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="js/tailwind-config.js"></script>
-  <link rel="stylesheet" href="css/site.css?v=20260922-sammlung">
+  <link rel="stylesheet" href="css/site.css?v=20260929-quellen">
 </head>
 <body class="bg-hvw-paper font-sans text-base text-hvw-ink antialiased">
   <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[200] focus:bg-white focus:px-4 focus:py-3 focus:shadow">Zum Inhalt springen</a>
@@ -72,7 +72,7 @@
         </h2>
 
         <div class="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-          <article class="border border-hvw-ink bg-white">
+          <article class="flex flex-col border border-hvw-ink bg-white">
             <div class="event-card__media aspect-[4/3]" data-lightbox data-content-image="sammlung.objekt.1.image" data-content-image-fallback="images/sammlung-ausstellung.jpg">
               <img src="images/sammlung-ausstellung.jpg" alt="Industriemodell einer Textilmaschine" width="1200" height="900" loading="lazy">
               <div class="hvw-image-tools">
@@ -80,16 +80,20 @@
                 <button type="button" class="hvw-image-clear">Platzhalter</button>
               </div>
             </div>
-            <div class="p-5 sm:p-6">
+            <div class="flex flex-1 flex-col p-5 sm:p-6">
               <h3 class="text-lg font-semibold uppercase tracking-wide" data-content="sammlung.objekt.1.title">Modell einer Textilmaschine</h3>
               <p class="mt-2 text-hvw-mute" data-content="sammlung.objekt.1.body" data-content-rich="1">
                 Modell einer Sulzer-Webmaschine aus dem frühen 20. Jahrhundert — Zeugnis
                 der industriellen Blütezeit Winterthurs.
               </p>
+              <div class="hvw-quelle mt-auto">
+                <p class="hvw-quelle__label">Quellen</p>
+                <p data-content="sammlung.objekt.1.quelle" data-content-rich="1"></p>
+              </div>
             </div>
           </article>
 
-          <article class="border border-hvw-ink bg-white">
+          <article class="flex flex-col border border-hvw-ink bg-white">
             <div class="event-card__media aspect-[4/3]" data-lightbox data-content-image="sammlung.objekt.2.image" data-content-image-fallback="images/sammlung-titelbild.jpg">
               <img src="images/sammlung-titelbild.jpg" alt="Stadtplan von Winterthur" width="1200" height="900" loading="lazy">
               <div class="hvw-image-tools">
@@ -97,16 +101,20 @@
                 <button type="button" class="hvw-image-clear">Platzhalter</button>
               </div>
             </div>
-            <div class="p-5 sm:p-6">
+            <div class="flex flex-1 flex-col p-5 sm:p-6">
               <h3 class="text-lg font-semibold uppercase tracking-wide" data-content="sammlung.objekt.2.title">Stadtplan Winterthur, 1890</h3>
               <p class="mt-2 text-hvw-mute" data-content="sammlung.objekt.2.body" data-content-rich="1">
                 Handkolorierter Plan mit den damals neuen Industriearealen und dem
                 wachsenden Stadtkern.
               </p>
+              <div class="hvw-quelle mt-auto">
+                <p class="hvw-quelle__label">Quellen</p>
+                <p data-content="sammlung.objekt.2.quelle" data-content-rich="1"></p>
+              </div>
             </div>
           </article>
 
-          <article class="border border-hvw-ink bg-white">
+          <article class="flex flex-col border border-hvw-ink bg-white">
             <div class="event-card__media aspect-[4/3]" data-lightbox data-content-image="sammlung.objekt.3.image" data-content-image-fallback="images/sammlung-house.jpg">
               <img src="images/sammlung-house.jpg" alt="Einrichtungsgegenstand aus dem Bürgerhaus" width="1200" height="900" loading="lazy">
               <div class="hvw-image-tools">
@@ -114,16 +122,20 @@
                 <button type="button" class="hvw-image-clear">Platzhalter</button>
               </div>
             </div>
-            <div class="p-5 sm:p-6">
+            <div class="flex flex-1 flex-col p-5 sm:p-6">
               <h3 class="text-lg font-semibold uppercase tracking-wide" data-content="sammlung.objekt.3.title">Salon-Einrichtung Lindengut</h3>
               <p class="mt-2 text-hvw-mute" data-content="sammlung.objekt.3.body" data-content-rich="1">
                 Möbel und Gebrauchsgegenstände aus dem ehemaligen Bürgerhaus — Alltagskultur
                 einer Winterthurer Familie.
               </p>
+              <div class="hvw-quelle mt-auto">
+                <p class="hvw-quelle__label">Quellen</p>
+                <p data-content="sammlung.objekt.3.quelle" data-content-rich="1"></p>
+              </div>
             </div>
           </article>
 
-          <article class="border border-hvw-ink bg-white">
+          <article class="flex flex-col border border-hvw-ink bg-white">
             <div class="event-card__media aspect-[4/3]" data-lightbox data-content-image="sammlung.objekt.4.image" data-content-image-fallback="images/placeholder-sammlung-1.svg">
               <img src="images/placeholder-sammlung-1.svg" alt="" width="1200" height="900" loading="lazy">
               <div class="event-card__watermark" aria-hidden="true"><span>finales Bild fehlt</span></div>
@@ -132,16 +144,20 @@
                 <button type="button" class="hvw-image-clear">Platzhalter</button>
               </div>
             </div>
-            <div class="p-5 sm:p-6">
+            <div class="flex flex-1 flex-col p-5 sm:p-6">
               <h3 class="text-lg font-semibold uppercase tracking-wide" data-content="sammlung.objekt.4.title">Ritterhelm, 15. Jh.</h3>
               <p class="mt-2 text-hvw-mute" data-content="sammlung.objekt.4.body" data-content-rich="1">
                 Eisenhelm aus dem Bestand Schloss Mörsburg — eines der ältesten Objekte
                 der Vereinssammlung.
               </p>
+              <div class="hvw-quelle mt-auto">
+                <p class="hvw-quelle__label">Quellen</p>
+                <p data-content="sammlung.objekt.4.quelle" data-content-rich="1"></p>
+              </div>
             </div>
           </article>
 
-          <article class="border border-hvw-ink bg-white">
+          <article class="flex flex-col border border-hvw-ink bg-white">
             <div class="event-card__media aspect-[4/3]" data-lightbox data-content-image="sammlung.objekt.5.image" data-content-image-fallback="images/placeholder-sammlung-2.svg">
               <img src="images/placeholder-sammlung-2.svg" alt="" width="1200" height="900" loading="lazy">
               <div class="event-card__watermark" aria-hidden="true"><span>finales Bild fehlt</span></div>
@@ -150,16 +166,20 @@
                 <button type="button" class="hvw-image-clear">Platzhalter</button>
               </div>
             </div>
-            <div class="p-5 sm:p-6">
+            <div class="flex flex-1 flex-col p-5 sm:p-6">
               <h3 class="text-lg font-semibold uppercase tracking-wide" data-content="sammlung.objekt.5.title">Werkzeugkasten eines Maschinisten</h3>
               <p class="mt-2 text-hvw-mute" data-content="sammlung.objekt.5.body" data-content-rich="1">
                 Persönliche Utensilien eines Sulzer-Angestellten mit Gravur und
                 Firmenaufkleber — Biografie in einem Objekt.
               </p>
+              <div class="hvw-quelle mt-auto">
+                <p class="hvw-quelle__label">Quellen</p>
+                <p data-content="sammlung.objekt.5.quelle" data-content-rich="1"></p>
+              </div>
             </div>
           </article>
 
-          <article class="border border-hvw-ink bg-white">
+          <article class="flex flex-col border border-hvw-ink bg-white">
             <div class="event-card__media aspect-[4/3]" data-lightbox data-content-image="sammlung.objekt.6.image" data-content-image-fallback="images/placeholder-sammlung-3.svg">
               <img src="images/placeholder-sammlung-3.svg" alt="" width="1200" height="900" loading="lazy">
               <div class="event-card__watermark" aria-hidden="true"><span>finales Bild fehlt</span></div>
@@ -168,12 +188,16 @@
                 <button type="button" class="hvw-image-clear">Platzhalter</button>
               </div>
             </div>
-            <div class="p-5 sm:p-6">
+            <div class="flex flex-1 flex-col p-5 sm:p-6">
               <h3 class="text-lg font-semibold uppercase tracking-wide" data-content="sammlung.objekt.6.title">Fabrikporträt, um 1920</h3>
               <p class="mt-2 text-hvw-mute" data-content="sammlung.objekt.6.body" data-content-rich="1">
                 Gruppenfoto der Belegschaft einer Winterthurer Maschinenfabrik —
                 Teil der fotografischen Sammlung des Vereins.
               </p>
+              <div class="hvw-quelle mt-auto">
+                <p class="hvw-quelle__label">Quellen</p>
+                <p data-content="sammlung.objekt.6.quelle" data-content-rich="1"></p>
+              </div>
             </div>
           </article>
         </div>
@@ -231,6 +255,6 @@
 
   <script src="js/main.js" defer></script>
   <script src="js/lightbox.js?v=20260922-sammlung" defer></script>
-  <script src="js/content.js?v=20260922-syntax" defer></script>
+  <script src="js/content.js?v=20260929-quellen" defer></script>
 </body>
 </html>

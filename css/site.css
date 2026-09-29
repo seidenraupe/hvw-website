@@ -681,6 +681,32 @@ body.hvw-lightbox-open {
   overflow-wrap: anywhere;
 }
 
+/* Quellen unter den Sammlungskacheln: kleinere Schrift, leer ohne Platz. */
+.hvw-quelle {
+  padding-top: 0.85rem;
+  border-top: 1px solid rgba(26, 26, 26, 0.15);
+}
+
+.hvw-quelle__label {
+  margin: 0;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--hvw-mute);
+}
+
+.hvw-quelle [data-content] {
+  margin: 0.3rem 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--hvw-mute);
+}
+
+.hvw-quelle:not(:has([data-content]:not(:empty))) {
+  display: none;
+}
+
 /* Bildlegende: Beschriftung nur im Änderungsmodus, Textfeld bleibt öffentlich sichtbar. */
 .hvw-bild-caption__label {
   display: none;

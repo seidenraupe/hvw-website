@@ -16,7 +16,7 @@ lib = (ROOT / "redaktion/lib.php").read_text(encoding="utf-8")
 merge = (ROOT / "scripts/merge-content-json.py").read_text(encoding="utf-8")
 
 for n in range(1, 7):
-    for part in ("image", "title", "body"):
+    for part in ("image", "title", "body", "quelle"):
         field = f"sammlung.objekt.{n}.{part}"
         if field not in schema["fields"]:
             raise SystemExit(f"Schema fehlt {field}")
@@ -26,12 +26,19 @@ for n in range(1, 7):
         raise SystemExit(f"sammlung.objekt.{n}.image ist kein image-Feld")
     if schema["fields"][f"sammlung.objekt.{n}.body"].get("max") != 400:
         raise SystemExit(f"sammlung.objekt.{n}.body muss 400 Zeichen erlauben")
+    quelle = schema["fields"][f"sammlung.objekt.{n}.quelle"]
+    if quelle.get("max") != 150 or not quelle.get("optional") or not quelle.get("rich"):
+        raise SystemExit(f"sammlung.objekt.{n}.quelle muss optional, rich und 150 Zeichen sein")
+    if live["fields"][f"sammlung.objekt.{n}.quelle"] != "":
+        raise SystemExit(f"sammlung.objekt.{n}.quelle startet leer")
     if f'data-content-image="sammlung.objekt.{n}.image"' not in sammlung:
         raise SystemExit(f"sammlung.html fehlt Bildfeld {n}")
     if f'data-content="sammlung.objekt.{n}.title"' not in sammlung:
         raise SystemExit(f"sammlung.html fehlt Titel {n}")
     if f'data-content="sammlung.objekt.{n}.body"' not in sammlung:
         raise SystemExit(f"sammlung.html fehlt Text {n}")
+    if f'data-content="sammlung.objekt.{n}.quelle"' not in sammlung:
+        raise SystemExit(f"sammlung.html fehlt Quellen {n}")
 
 if sammlung.count("hvw-image-tools") < 6:
     raise SystemExit("Sammlung braucht Upload-Buttons auf allen 6 Objekten")
@@ -59,5 +66,12 @@ if "EDITORIAL_PREFIXES" not in merge or "sammlung.objekt." not in merge:
     raise SystemExit("Merge muss Sammlungsfelder als Redaktions-Inhalt behandeln")
 if "promoted_from_draft" not in merge:
     raise SystemExit("Merge muss Entwürfe in leere Live-Felder übernehmen")
+editor_css = (ROOT / "css/content-editor.css").read_text(encoding="utf-8")
+if ".hvw-quelle" not in css or "font-size: 0.8125rem" not in css:
+    raise SystemExit("Quellen brauchen kleinere Schrift")
+if "body.hvw-editing .hvw-quelle" not in editor_css:
+    raise SystemExit("Quellen müssen im Änderungsmodus sichtbar sein")
+if sammlung.count("hvw-quelle__label") != 6 or sammlung.count(">Quellen<") != 6:
+    raise SystemExit("Jede Kachel braucht die Beschriftung Quellen")
 
 print("sammlung editor lightbox ok")

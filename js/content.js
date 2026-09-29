@@ -216,7 +216,7 @@
     }
   }
 
-  const EDITOR_ASSET_V = "20260928-freigabe";
+  const EDITOR_ASSET_V = "20260929-quellen";
 
   function loadEditor() {
     if (!document.querySelector('link[href*="css/content-editor.css"]')) {
