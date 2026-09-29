@@ -100,6 +100,11 @@ credits.forEach((credit) => {
   assert.strictEqual(credit.split('|').length, 3, 'drei Zeilen: ' + credit);
 });
 assert.ok(html.includes('hvw-hero__more'), 'Hero-Text unter dem Bild auf Mobile');
+assert.ok(html.includes('hvw-hero__claim'), 'Claim hat eigene Klasse');
+assert.ok(html.includes('id="hero-claim"'), 'Claim ist die Hero-Überschrift');
+assert.ok(html.indexOf('hvw-hero__claim') < html.indexOf('hvw-hero__more'), 'Claim steht vor dem Text unter dem Bild');
+assert.ok(css.includes('.hvw-hero__claim'), 'Claim-Position im CSS');
+assert.ok(/@media \(max-width: 767px\)[\s\S]*\.hvw-hero__brand \{\s*display: none/.test(css), 'Vereinsname im Mobile-Hero ausgeblendet');
 assert.ok(html.includes('Historischer Verein Winterthur'), 'Vereinsname mit Grossbuchstaben');
 assert.ok(!html.includes('lowercase tracking-tight'), 'Hero-Marke nicht mehr erzwungen klein');
 assert.ok(!html.includes('historischer verein winterthur'), 'keine Kleinschreibung des Vereinsnamens');
