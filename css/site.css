@@ -104,6 +104,14 @@ body {
   object-position: center;
 }
 
+.hvw-hero__media img.hvw-hero__top {
+  object-position: center top;
+}
+
+.hvw-hero__lead {
+  color: rgba(255, 255, 255, 0.9);
+}
+
 .hvw-hero__media img.is-active {
   opacity: 1;
 }
@@ -147,7 +155,83 @@ body {
 
 .hvw-hero__credit span {
   display: block;
-  white-space: nowrap;
+  white-space: normal;
+}
+
+@media (max-width: 767px) {
+  .hvw-hero {
+    --hvw-hero-view: calc(100svh - 9rem);
+    min-height: 0;
+    display: block;
+    background: var(--hvw-paper);
+    color: var(--hvw-ink);
+  }
+
+  body:has(.hvw-ticker:not([hidden])) .hvw-hero {
+    --hvw-hero-view: calc(100svh - 12.15rem);
+  }
+
+  .hvw-hero__media,
+  .hvw-hero__shade {
+    bottom: auto;
+    height: var(--hvw-hero-view);
+  }
+
+  .hvw-hero__shade {
+    background:
+      linear-gradient(180deg, rgba(0, 0, 0, 0.16) 0%, rgba(0, 0, 0, 0.04) 46%, rgba(0, 0, 0, 0.62) 100%);
+  }
+
+  .hvw-hero__content {
+    padding: 0 1.25rem 2.5rem;
+  }
+
+  .hvw-hero__brand {
+    display: flex;
+    align-items: flex-end;
+    min-height: var(--hvw-hero-view);
+    margin: 0;
+    padding: 0 0 5.25rem;
+    color: #fff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.75);
+  }
+
+  .hvw-hero__more {
+    position: relative;
+    z-index: 2;
+    margin-top: 1.75rem;
+    color: var(--hvw-ink);
+    background: var(--hvw-paper);
+  }
+
+  .hvw-hero__lead {
+    color: var(--hvw-ink);
+  }
+
+  .hvw-hero__more .hvw-hero__cta--solid {
+    background: var(--hvw-ink);
+    color: #fff;
+  }
+
+  .hvw-hero__more .hvw-hero__cta--solid:hover {
+    background: var(--hvw-charcoal);
+  }
+
+  .hvw-hero__more .hvw-hero__cta--line {
+    border-color: var(--hvw-ink);
+    color: var(--hvw-ink);
+    background: transparent;
+  }
+
+  .hvw-hero__more .hvw-hero__cta--line:hover {
+    background: var(--hvw-fog);
+  }
+
+  .hvw-hero__credit {
+    top: calc(var(--hvw-hero-view) - 0.65rem);
+    bottom: auto;
+    transform: translateY(-100%);
+  }
 }
 
 @media (min-width: 768px) {
@@ -159,6 +243,10 @@ body {
     right: 1.25rem;
     bottom: 0.85rem;
     font-size: 0.75rem;
+  }
+
+  .hvw-hero__credit span {
+    white-space: nowrap;
   }
 }
 

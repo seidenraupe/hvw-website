@@ -38,7 +38,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="js/tailwind-config.js"></script>
-  <link rel="stylesheet" href="css/site.css?v=20260928-contain">
+  <link rel="stylesheet" href="css/site.css?v=20260929-hero">
 
   <script type="application/ld+json">
   {
@@ -154,15 +154,15 @@
         <img
           class="is-active"
           src="images/hero-turner.jpg"
-          alt="Turner im Handstand auf dem Barren, dahinter Zuschauer"
-          data-credit="Turner am Barren"
+          alt="Turnverein Hegi am Eidgenössischen Turnfest in Bern, 1947. Winterthurer Bibliotheken, 160615"
+          data-credit="1947, Bern|Turnverein Hegi am Eidgenössischen Turnfest|Winterthurer Bibliotheken, 160615"
           width="1920"
           height="1080"
           fetchpriority="high">
         <img
           src="images/hero-schichtwechsel.jpg"
-          alt="Menschen gehen über einen Fabrikweg, darüber ein verglaster Übergang mit Uhr"
-          data-credit="Menschen auf dem Fabrikweg"
+          alt="Sulzer Feierabend, Winterthur, Januar 1967. Foto: Heinz Baumann, ETH-Bibliothek Zürich, Bildarchiv, Com_L16-0078-0007-0001"
+          data-credit="Heinz Baumann, Januar 1967, Winterthur|Sulzer Feierabend|ETH-Bibliothek Zürich, Bildarchiv, Com_L16-0078-0007-0001"
           width="1920"
           height="1080"
           aria-hidden="true">
@@ -174,31 +174,34 @@
           height="1080"
           aria-hidden="true">
         <img
+          class="hvw-hero__top"
           src="images/hero-spinnsaal.jpg"
-          alt="Frau zwischen zwei Reihen Spinnmaschinen"
-          data-credit="Frau im Spinnsaal"
+          alt="Mitarbeiterin in der Spinnerei im Bühler-Areal, Winterthur-Seen, 12.07.1983. Foto: Wolfgang Sträuli, Winterthurer Bibliotheken, FotLb_006215"
+          data-credit="Wolfgang Sträuli, 12.07.1983, Winterthur-Seen|Bühler-Areal, Mitarbeiterin in der Spinnerei|Winterthurer Bibliotheken, FotLb_006215"
           width="1920"
           height="1080"
           aria-hidden="true">
       </div>
       <div class="hvw-hero__shade" aria-hidden="true"></div>
       <div class="hvw-hero__content">
-        <p id="hero-brand" class="mb-3 text-2xl font-semibold tracking-tight sm:text-3xl md:text-4xl">
+        <p id="hero-brand" class="hvw-hero__brand mb-3 text-2xl font-semibold tracking-tight sm:text-3xl md:text-4xl">
           Historischer Verein Winterthur
         </p>
-        <h1 class="max-w-2xl text-3xl font-semibold leading-tight sm:text-4xl md:text-5xl" data-content="start.hero.headline">
-          Geschichte erklärt die Gegenwart.
-        </h1>
-        <p class="mt-4 max-w-xl text-lg text-white/90 sm:text-xl" data-content="start.hero.lead" data-content-rich="1">
-          Seit 1874 verbinden wir Winterthur mit seiner Geschichte — in drei Museen, mit Vorträgen und einem klaren Programm.
-        </p>
-        <div class="mt-8 flex flex-wrap gap-3">
-          <a href="agenda.html" class="inline-flex min-h-12 items-center bg-white px-6 font-semibold text-hvw-ink no-underline hover:bg-hvw-fog">
-            Agenda ansehen
-          </a>
-          <a href="mitmachen.html" class="inline-flex min-h-12 items-center border border-white px-6 font-semibold text-white no-underline hover:bg-white/10">
-            Mitglied werden
-          </a>
+        <div class="hvw-hero__more">
+          <h1 class="max-w-2xl text-3xl font-semibold leading-tight sm:text-4xl md:text-5xl" data-content="start.hero.headline">
+            Geschichte erklärt die Gegenwart.
+          </h1>
+          <p class="hvw-hero__lead mt-4 max-w-xl text-lg sm:text-xl" data-content="start.hero.lead" data-content-rich="1">
+            Seit 1874 verbinden wir Winterthur mit seiner Geschichte — in drei Museen, mit Vorträgen und einem klaren Programm.
+          </p>
+          <div class="mt-8 flex flex-wrap gap-3">
+            <a href="agenda.html" class="hvw-hero__cta hvw-hero__cta--solid inline-flex min-h-12 items-center bg-white px-6 font-semibold text-hvw-ink no-underline hover:bg-hvw-fog">
+              Agenda ansehen
+            </a>
+            <a href="mitmachen.html" class="hvw-hero__cta hvw-hero__cta--line inline-flex min-h-12 items-center border border-white px-6 font-semibold text-white no-underline hover:bg-white/10">
+              Mitglied werden
+            </a>
+          </div>
         </div>
       </div>
       <p class="hvw-hero__credit" hidden></p>
