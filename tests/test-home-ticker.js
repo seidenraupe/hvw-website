@@ -66,21 +66,24 @@ assert.strictEqual(withOpeningHours.length, 1);
 assert.strictEqual(withOpeningHours[0].title, 'Käfele mit der Kuratorin der Ausstellung');
 
 const hero = html.slice(html.indexOf('data-hero-slider'), html.indexOf('hvw-hero__shade'));
-assert.strictEqual((hero.match(/<img/g) || []).length, 4, 'vier Herobilder');
+assert.strictEqual((hero.match(/<img/g) || []).length, 7, 'sieben Herobilder');
 [
   'hero-turner.jpg',
   'hero-schichtwechsel.jpg',
   'hero-maschinenhalle.jpg',
   'hero-spinnsaal.jpg',
+  'hero-tramfahrt.jpg',
+  'hero-eisfeld.jpg',
+  'hero-gleisarbeiter.jpg',
 ].forEach((name) => {
   assert.ok(hero.includes(name), name);
   assert.ok(fs.existsSync(path.join(__dirname, '../images', name)), name + ' Datei');
 });
 assert.ok(!html.includes('hero-textilfabrik.jpg'), 'Spinnerei entfernt');
-assert.ok(!html.includes('hero-tram.jpg'), 'Tram-Datei entfernt');
+assert.ok(!html.includes('hero-tram.jpg'), 'alte Tram-Datei entfernt');
 assert.ok(!hero.includes('hero-schmiede.jpg'), 'Schmiede entfernt');
 assert.ok(!hero.includes('hero-textilmaschine.jpg'), 'alte Textilmaschine entfernt');
-assert.ok(!hero.includes('Winterthurer Bibliotheken, 150785'), 'Tram-Signatur entfernt');
+assert.ok(!hero.includes('Winterthurer Bibliotheken, 150785'), 'alte Tram-Signatur entfernt');
 assert.ok(hero.includes('hero-maschinenhalle.jpg'), 'Maschinenhalle');
 assert.ok(hero.includes('hero-spinnsaal.jpg'), 'Spinnsaal');
 assert.ok(hero.includes('hvw-hero__top'), 'Spinnsaal oben ausgerichtet');
@@ -88,8 +91,11 @@ assert.ok(hero.includes('data-credit="Heinz Baumann, Januar 1967, Winterthur|Sul
 assert.ok(hero.includes('data-credit="Heinz Baumann, Januar 1967, Winterthur|Sulzer Feierabend|ETH-Bibliothek Zürich, Bildarchiv, Com_L16-0078-0007-0001"'), 'Nachweis Feierabend');
 assert.ok(hero.includes('data-credit="Wolfgang Sträuli, 12.07.1983, Winterthur-Seen|Bühler-Areal, Mitarbeiterin in der Spinnerei|Winterthurer Bibliotheken, FotLb_006215"'), 'Nachweis Spinnerei');
 assert.ok(hero.includes('data-credit="1947, Bern|Turnverein Hegi am Eidgenössischen Turnfest|Winterthurer Bibliotheken, 160615"'), 'Nachweis Turner');
+assert.ok(hero.includes('data-credit="1938, Winterthur-Wülflingen|Letzte Tramfahrt|Winterthurer Bibliotheken"'), 'Nachweis Tramfahrt');
+assert.ok(hero.includes('data-credit="1974, Mattenbach Winterthur|Eisfeld Zelgli, Schülersportwoche|Winterthurer Bibliotheken"'), 'Nachweis Eisfeld');
+assert.ok(hero.includes('data-credit="Marc Dahinden, 1990er-Jahre, Winterthur|Gleisarbeiter in der Nacht bei Regen|Winterthurer Bibliotheken"'), 'Nachweis Gleisarbeiter');
 const credits = [...hero.matchAll(/data-credit="([^"]+)"/g)].map((match) => match[1]);
-assert.strictEqual(credits.length, 4, 'vier Nachweise');
+assert.strictEqual(credits.length, 7, 'sieben Nachweise');
 credits.forEach((credit) => {
   assert.strictEqual(credit.split('|').length, 3, 'drei Zeilen: ' + credit);
 });
@@ -98,8 +104,8 @@ assert.ok(html.includes('Historischer Verein Winterthur'), 'Vereinsname mit Gros
 assert.ok(!html.includes('lowercase tracking-tight'), 'Hero-Marke nicht mehr erzwungen klein');
 assert.ok(!html.includes('historischer verein winterthur'), 'keine Kleinschreibung des Vereinsnamens');
 assert.strictEqual(HERO_SLIDER_MS, 5000);
-assert.strictEqual(nextHeroIndex(0, 4), 1);
-assert.strictEqual(nextHeroIndex(3, 4), 0);
+assert.strictEqual(nextHeroIndex(0, 7), 1);
+assert.strictEqual(nextHeroIndex(6, 7), 0);
 
 const mainSrc = fs.readFileSync(path.join(__dirname, '../js/main.js'), 'utf8');
 const sliderConst = mainSrc.indexOf('const HERO_SLIDER_MS');
