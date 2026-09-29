@@ -187,6 +187,10 @@ body {
   }
 
   .hvw-hero__brand {
+    display: none;
+  }
+
+  .hvw-hero__claim {
     display: flex;
     align-items: flex-end;
     min-height: var(--hvw-hero-view);
