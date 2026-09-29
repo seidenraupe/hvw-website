@@ -106,13 +106,13 @@ if (hvw_sanitize_image_path('data/uploads/' . $generatedMuseum) !== 'data/upload
     exit(1);
 }
 
-$partner = hvw_image_info('partner.10.logo');
-if (!$partner || $partner['prefix'] !== 'partnerlogo' || $partner['slot'] !== 10 || ($partner['mode'] ?? '') !== 'contain') {
-    fwrite(STDERR, "Partner-Logo nicht erkannt\n");
+$partner = hvw_image_info('partner.10.image');
+if (!$partner || $partner['prefix'] !== 'partnerbild' || $partner['slot'] !== 10 || ($partner['mode'] ?? '') !== 'cover') {
+    fwrite(STDERR, "Partner-Bild nicht erkannt\n");
     exit(1);
 }
 $partnerName = hvw_image_filename($partner);
-if (!preg_match('#^partnerlogo-10-[a-z0-9]+\.jpg$#', $partnerName)) {
+if (!preg_match('#^partnerbild-10-[a-z0-9]+\.jpg$#', $partnerName)) {
     fwrite(STDERR, "Partner-Dateiname falsch: {$partnerName}\n");
     exit(1);
 }
@@ -120,8 +120,17 @@ if (hvw_sanitize_image_path('data/uploads/' . $partnerName) !== 'data/uploads/' 
     fwrite(STDERR, "Partner-Upload-Pfad abgelehnt\n");
     exit(1);
 }
-if (hvw_sanitize_image_path('images/partner/logo-14.jpg') !== 'images/partner/logo-14.jpg') {
-    fwrite(STDERR, "Partner-Startlogo muss erlaubt bleiben\n");
+$geschichtsstadt = hvw_image_info('partner.15.image');
+if (!$geschichtsstadt || $geschichtsstadt['prefix'] !== 'partnerbild' || $geschichtsstadt['slot'] !== 15) {
+    fwrite(STDERR, "Partner 15 nicht erkannt\n");
+    exit(1);
+}
+if (hvw_sanitize_image_path('images/partner/hero-geschichtsstadt.jpg') !== 'images/partner/hero-geschichtsstadt.jpg') {
+    fwrite(STDERR, "Partner-Hero muss erlaubt bleiben\n");
+    exit(1);
+}
+if (hvw_sanitize_image_path('images/partner/hero-16.jpg') !== '') {
+    fwrite(STDERR, "unbekannter Partner-Hero wurde durchgelassen\n");
     exit(1);
 }
 if (hvw_sanitize_url('https://dorfmuseum-wülflingen.ch/') !== 'https://dorfmuseum-wülflingen.ch/') {

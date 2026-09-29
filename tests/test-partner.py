@@ -32,19 +32,25 @@ for url in urls:
         raise SystemExit(f"Link fehlt: {url}")
 if "publikationen.html" in page:
     raise SystemExit("Partnerseite verlinkt noch Publikationen")
-if 'data-content-image="partner.14.logo"' not in page or 'data-content-href="1"' not in page:
-    raise SystemExit("Logo-Upload oder Linkfeld fehlt")
+if "partner-slot--logo" in page or ">Logo<" in page:
+    raise SystemExit("Logo-Spalte ist noch auf der Partnerseite")
+if 'data-content-image="partner.14.image"' not in page or 'data-content-href="1"' not in page:
+    raise SystemExit("Bildfeld oder Linkfeld fehlt")
 if page.find("IG Geschichtsstadt Winterthur") > page.find("Schloss Hegi"):
     raise SystemExit("Geschichtsstadt steht nicht zuoberst")
 if not (page.find("IG Geschichtsstadt Winterthur") < page.find("Gasthaus Schlosshalde") < page.find("Schloss Hegi")):
     raise SystemExit("Schlosshalde muss an zweiter Stelle stehen")
-if "bild-geschichtsstadt.jpg" not in page or "logo-geschichtsstadt.png" not in page:
-    raise SystemExit("Teaser oder Logo der Geschichtsstadt fehlt")
-if "bild-schlosshalde.jpg" not in page or "logo-schlosshalde.png" not in page:
-    raise SystemExit("Teaser oder Logo der Schlosshalde fehlt")
-for filename in ("logo-schlosshalde.png", "bild-schlosshalde.jpg"):
-    if not (ROOT / "images/partner" / filename).is_file():
-        raise SystemExit(f"Bilddatei fehlt: {filename}")
+heroes = [
+    "hero-geschichtsstadt.jpg",
+    "hero-schlosshalde.jpg",
+    "hero-1.jpg",
+    "hero-14.jpg",
+]
+for filename in heroes:
+    if filename not in page or not (ROOT / "images/partner" / filename).is_file():
+        raise SystemExit(f"Hero fehlt: {filename}")
+if page.count('class="partner-slot partner-slot--photo') != 16:
+    raise SystemExit("Nicht jede Partnerzeile hat genau ein Bild")
 
 for html in ROOT.glob("*.html"):
     if html.name == "programm.html":

@@ -435,10 +435,13 @@ function hvw_sanitize_image_path(string $value): string
     if (preg_match('#^images/partner/(logo|bild)-(?:[1-9]|1[0-4])\.jpg$#', $value)) {
         return $value;
     }
+    if (preg_match('#^images/partner/hero-(?:[1-9]|1[0-4]|geschichtsstadt|schlosshalde)\.jpg$#', $value)) {
+        return $value;
+    }
     if (preg_match('#^data/uploads/(rueckblick|sammlung|lindengut|moersburg)-[1-6]-[a-z0-9]+\.(jpe?g|png|webp)$#', $value)) {
         return $value;
     }
-    if (preg_match('#^data/uploads/(partnerlogo|partnerbild)-(?:[1-9]|1[0-4])-[a-z0-9]+\.(jpe?g|png|webp)$#', $value)) {
+    if (preg_match('#^data/uploads/(partnerlogo|partnerbild)-(?:[1-9]|1[0-6])-[a-z0-9]+\.(jpe?g|png|webp)$#', $value)) {
         return $value;
     }
     return '';
@@ -455,12 +458,11 @@ function hvw_image_info(string $id): ?array
     if (preg_match('/^(lindengut|moersburg)\.bild\.([1-3])\.image$/', $id, $m)) {
         return ['prefix' => $m[1], 'slot' => (int) $m[2]];
     }
-    if (preg_match('/^partner\.([1-9]|1[0-4])\.(logo|image)$/', $id, $m)) {
-        $kind = $m[2] === 'logo' ? 'partnerlogo' : 'partnerbild';
+    if (preg_match('/^partner\.([1-9]|1[0-6])\.image$/', $id, $m)) {
         return [
-            'prefix' => $kind,
+            'prefix' => 'partnerbild',
             'slot' => (int) $m[1],
-            'mode' => $m[2] === 'logo' ? 'contain' : 'cover',
+            'mode' => 'cover',
         ];
     }
     return null;
@@ -470,7 +472,7 @@ function hvw_image_filename(array $slotInfo): string
 {
     $prefix = (string) ($slotInfo['prefix'] ?? '');
     $slot = (int) ($slotInfo['slot'] ?? 0);
-    $maxSlot = str_starts_with($prefix, 'partner') ? 14 : 6;
+    $maxSlot = str_starts_with($prefix, 'partner') ? 16 : 6;
     if (!preg_match('/^(rueckblick|sammlung|lindengut|moersburg|partnerlogo|partnerbild)$/', $prefix) || $slot < 1 || $slot > $maxSlot) {
         return '';
     }
