@@ -66,72 +66,38 @@ assert.strictEqual(withOpeningHours.length, 1);
 assert.strictEqual(withOpeningHours[0].title, 'Käfele mit der Kuratorin der Ausstellung');
 
 const hero = html.slice(html.indexOf('data-hero-slider'), html.indexOf('hvw-hero__shade'));
-assert.strictEqual((hero.match(/<img/g) || []).length, 36, 'sechsunddreissig Herobilder');
+assert.strictEqual((hero.match(/<img/g) || []).length, 4, 'vier Herobilder');
 [
-  'hero-hochwasser.jpg',
-  'hero-velofahrer.jpg',
-  'hero-eislaufen-drei.jpg',
-  'hero-eisfeld-kirche.jpg',
-  'hero-tram-oerlikon.jpg',
-  'hero-textilarbeiterin.jpg',
-  'hero-frauengruppe.jpg',
-  'hero-bahnhof.jpg',
-  'hero-schichtwechsel.jpg',
-  'hero-auto-frauen.jpg',
-  'hero-fabrik-kamine.jpg',
-  'hero-fabrik-historisch.jpg',
-  'hero-fasnacht-toess.jpg',
-  'hero-technikumstrasse.jpg',
-  'hero-atelier-gruppe.jpg',
-  'hero-gasometer.jpg',
-  'hero-kinder-strasse.jpg',
-  'hero-eislaufen-kinder.jpg',
-  'hero-schulklasse.jpg',
-  'hero-schulstube.jpg',
-  'hero-laden.jpg',
-  'hero-lastwagen-kies.jpg',
-  'hero-neumuehle-lastwagen.jpg',
-  'hero-sulzer-lastwagen.jpg',
-  'hero-technikum-allee.jpg',
-  'hero-technikum.jpg',
-  'hero-giesserei.jpg',
-  'hero-telefonistinnen.jpg',
-  'hero-strassenbahn-toess.jpg',
-  'hero-tram-schnee.jpg',
-  'hero-strassenbahn-personal.jpg',
-  'hero-laeufer.jpg',
   'hero-turner.jpg',
+  'hero-schichtwechsel.jpg',
+  'hero-maschinenhalle.jpg',
+  'hero-spinnsaal.jpg',
 ].forEach((name) => {
   assert.ok(hero.includes(name), name);
   assert.ok(fs.existsSync(path.join(__dirname, '../images', name)), name + ' Datei');
 });
 assert.ok(!html.includes('hero-textilfabrik.jpg'), 'Spinnerei entfernt');
 assert.ok(!html.includes('hero-tram.jpg'), 'Tram-Datei entfernt');
+assert.ok(!hero.includes('hero-schmiede.jpg'), 'Schmiede entfernt');
+assert.ok(!hero.includes('hero-textilmaschine.jpg'), 'alte Textilmaschine entfernt');
 assert.ok(!hero.includes('FotLb_006215'), 'Spinnerei-Signatur entfernt');
-assert.ok(!hero.includes('hero-tram.jpg'), 'Tram entfernt');
-assert.ok(!hero.includes('Tram mit Personal vor der Remise auf dem Rieterareal'), 'Tram-Titel entfernt');
 assert.ok(!hero.includes('Winterthurer Bibliotheken, 150785'), 'Tram-Signatur entfernt');
-assert.ok(hero.includes('hero-tram-oerlikon.jpg'), 'Tram Oerlikon bleibt');
-assert.ok(hero.includes('hero-schmiede.jpg'), 'Schmiede');
 assert.ok(hero.includes('hero-maschinenhalle.jpg'), 'Maschinenhalle');
-assert.ok(hero.includes('hero-textilmaschine.jpg'), 'Textilmaschine');
-assert.strictEqual((hero.match(/hvw-hero__contain/g) || []).length, 1, 'ein Bild vollständig');
-const machine = hero.slice(Math.max(0, hero.indexOf('hero-textilmaschine.jpg') - 180), hero.indexOf('hero-textilmaschine.jpg'));
-assert.ok(machine.includes('hvw-hero__contain'), 'Frau zwischen den Maschinen vollständig');
-assert.ok(css.includes('img.hvw-hero__contain'), 'Contain-Regel');
-assert.ok(css.includes('object-fit: contain'), 'ganzes Bild sichtbar');
-assert.ok(!hero.includes('hero-filmdreh.jpg'), 'Filmdreh ersetzt');
+assert.ok(hero.includes('hero-spinnsaal.jpg'), 'Spinnsaal');
 assert.ok(hero.includes('Heinz Baumann, Januar 1967, Winterthur'), 'Nachweis Maschinenhalle');
 assert.ok(hero.includes('Com_L16-0078-0003-0001'), 'Signatur Maschinenhalle');
-assert.strictEqual(HERO_SLIDER_MS, 5000);
-assert.strictEqual(nextHeroIndex(0, 5), 1);
-assert.strictEqual(nextHeroIndex(35, 36), 0);
-assert.ok(hero.includes('Neumühle Töss'), 'Neumühle sichtbar');
-assert.ok(hero.includes('Winterthur|Technikum'), 'Technikum sichtbar');
-assert.ok(hero.includes('Gebrüder Sulzer, Winterthur'), 'Sulzer sichtbar');
-assert.ok(hero.includes('Strassenbahn Winterthur'), 'Strassenbahn sichtbar');
+assert.ok(hero.includes('data-credit="Turner am Barren"'), 'Turner beschriftet');
+assert.ok(hero.includes('data-credit="Menschen auf dem Fabrikweg"'), 'Fabrikweg beschriftet');
+assert.ok(hero.includes('data-credit="Frau im Spinnsaal"'), 'Spinnsaal beschriftet');
 assert.ok(!hero.includes('data-credit="Turner am Barren|Winterthurer Bibliotheken"'), 'Turner ohne Bibliothekszeile');
-assert.ok(!hero.includes('data-credit="Giesser beim Abstich|Winterthurer Bibliotheken"'), 'Giesserei ohne Bibliothekszeile');
+assert.ok(!hero.includes('data-credit="Menschen auf dem Fabrikweg|Winterthurer Bibliotheken"'), 'Fabrikweg ohne Bibliothekszeile');
+assert.ok(!hero.includes('data-credit="Frau im Spinnsaal|Winterthurer Bibliotheken"'), 'Spinnsaal ohne Bibliothekszeile');
+assert.ok(html.includes('Historischer Verein Winterthur'), 'Vereinsname mit Grossbuchstaben');
+assert.ok(!html.includes('lowercase tracking-tight'), 'Hero-Marke nicht mehr erzwungen klein');
+assert.ok(!html.includes('historischer verein winterthur'), 'keine Kleinschreibung des Vereinsnamens');
+assert.strictEqual(HERO_SLIDER_MS, 5000);
+assert.strictEqual(nextHeroIndex(0, 4), 1);
+assert.strictEqual(nextHeroIndex(3, 4), 0);
 
 const mainSrc = fs.readFileSync(path.join(__dirname, '../js/main.js'), 'utf8');
 const sliderConst = mainSrc.indexOf('const HERO_SLIDER_MS');
