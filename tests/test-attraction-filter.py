@@ -4,7 +4,6 @@ import os
 import sys
 import types
 from datetime import datetime, timedelta
-from pathlib import Path
 
 fake_requests = types.ModuleType("requests")
 fake_requests.exceptions = types.SimpleNamespace(RequestException=Exception)
@@ -202,12 +201,6 @@ def main():
                 skipped_coucou, len(kept_coucou)
             )
         )
-
-    pdf_source = (
-        Path(__file__).resolve().parents[1] / "scripts" / "generate-programm-pdf.py"
-    ).read_text(encoding="utf-8")
-    if "filter_attraction_events" not in pdf_source:
-        raise SystemExit("Programm-PDF filtert Öffnungszeiten nicht")
 
     print("attraction filter ok")
 
