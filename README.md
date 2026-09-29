@@ -36,7 +36,6 @@ Datenquelle Titelseite: `/home-events.json` (eigener Hostpoint-Cron, wie Coucou/
 ```bash
 python3 -m http.server 8080
 # → http://localhost:8080
-# Soft-Launch Programm: http://localhost:8080/programm/
 ```
 
 ## Soft-Launch: Programm auf Hostpoint
@@ -48,11 +47,11 @@ Solange die Gesamtwebsite noch nicht live geht:
 
 - Stamm-URL `https://www.hvwinterthur.ch/` → Weiterleitung nach
   **`https://www.historischer-verein-winterthur.ch/`** (wie bisher)
-- Direktlink / Newsletter: **`https://www.hvwinterthur.ch/programm`**
+- Die öffentliche Programmseite `/programm` ist entfernt (HTTP 410).
+  Das Programm-PDF bleibt unter `/programm/Programm.pdf`.
 - Interne Redaktion (Passwort, nicht öffentlich):
   **`https://www.hvwinterthur.ch/vorschau/`**
-- Inhalt Programm: nur Eventfrog-«Programm» (ohne Rückblick / Prototyp-Navigation)
-- Apache/Hostpoint: `.htaccess` (Stamm-Redirect + `/programm`)
+- Apache/Hostpoint: `.htaccess` (Stamm-Redirect, Programmseite weg)
 - `robots.txt` + `noindex` auf Prototyp-Seiten
 
 ### Deploy auf Hostpoint (GitHub Actions)
@@ -122,17 +121,11 @@ Der frühere Plesk-Cron auf `giger-straehl.ch`
 - Soft-Launch-Deploy löscht die Export-JSONs nicht (`rsync --exclude`)
 - Skript-Updates nach Hostpoint: Action `deploy-cronjobs.yml` (bei Änderungen an `cronjobs/`)
 
-### Newsletter-Link
-
-```
-https://www.hvwinterthur.ch/programm
-```
-
 ### Programm (PDF)
 
-Auf der Soft-Launch-Programmseite gibt es einen Download des aktuellen
-Programms (A4, druckbar: kompakter Kopf mit den drei Museen, dann alle
-Anlässe ab Druckdatum bis zur letzten Veranstaltung):
+Das aktuelle Programm gibt es als PDF (A4, druckbar: kompakter Kopf mit den
+drei Museen, dann alle Anlässe ab Druckdatum bis zur letzten Veranstaltung).
+Die HTML-Seite dazu ist entfernt:
 
 ```
 https://www.hvwinterthur.ch/programm/Programm.pdf
@@ -154,12 +147,13 @@ fehl (z. B. HTTP 403), bleibt das PDF aus dem Repository.
 
 ### Google Analytics 4
 
-Die Website und die Programmseite werden mit **GA4** im Konto `thomas.giger@cloud-7.net` gemessen
+Die Website wird mit **GA4** im Konto `thomas.giger@cloud-7.net` gemessen
 (gleiche Analytics-Oberfläche wie bei Ihren anderen Websites).
+Die frühere Mess-ID der öffentlichen Programmseite ist entfernt.
 
 Aktuelle Measurement ID: **`G-8M4EZQDQ98`**
 
-Der Google-Tag steht **inline** im `<head>` der Website und der Programmseite
+Der Google-Tag steht **inline** im `<head>` der Website
 (wie von Google vorgesehen), damit die Tag-Erkennung greift. Dieselbe
 Measurement ID steht in `data/analytics.json`.
 
@@ -177,8 +171,7 @@ kompletten Site-Build (nicht nur Soft-Launch) nach Hostpoint deployen.
 ## Struktur
 
 ```
-programm/           Soft-Launch Programmseite (Hostpoint-URL /programm)
-programm.html       Redirect → /programm/
+programm/           Programm-PDF (die öffentliche HTML-Seite ist entfernt)
 .htaccess           Apache/Hostpoint (HTTPS, Clean URLs)
 robots.txt          Soft-Launch Indexierung
 scripts/build-hostpoint-soft-launch.sh
@@ -263,8 +256,8 @@ GitHub Pages führt kein PHP aus — dort kann man die Seiten ansehen, aber nich
 einloggen. Die Redaktion läuft deshalb auf Hostpoint, in einem **internen
 Ordner**, der nicht verlinkt und nicht indexiert ist:
 
-1. **Öffentlich bleibt nur** `https://www.hvwinterthur.ch/programm`
-   (Stamm-URL leitet weiter zur bestehenden Vereinswebsite).
+1. **Die öffentliche Programmseite ist entfernt.** Die Stamm-URL leitet
+   weiter zur bestehenden Vereinswebsite.
 2. **Vorschau:** `https://www.hvwinterthur.ch/vorschau/`
    — E-Mail (Allowlist) + Code, der an diese Adresse geht.
    Der Zugang gilt bis Mitternacht (Schweizer Zeit); am nächsten Tag

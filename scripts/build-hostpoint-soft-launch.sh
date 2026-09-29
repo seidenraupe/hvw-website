@@ -36,7 +36,6 @@ if [[ ! -f "${ROOT}/Statuten.pdf" ]]; then
   exit 1
 fi
 cp "${ROOT}/Statuten.pdf" "${OUT}/Statuten.pdf"
-cp "${ROOT}/programm/index.html" "${OUT}/programm/index.html"
 cp "${ROOT}/programm/.htaccess" "${OUT}/programm/.htaccess"
 mkdir -p "${OUT}/coucou"
 cp "${ROOT}/coucou/index.html" "${OUT}/coucou/index.html"
@@ -69,7 +68,7 @@ Hostpoint Soft-Launch — Upload-Anleitung
 ========================================
 
 Stamm-URL:  https://www.hvwinterthur.ch/  →  https://www.historischer-verein-winterthur.ch/
-Programm:   https://www.hvwinterthur.ch/programm  (Newsletter / Direktlink)
+Programmseite: entfernt (HTTP 410). PDF: https://www.hvwinterthur.ch/programm/Programm.pdf
 
 1. Im Hostpoint Control Panel den Document Root von www.hvwinterthur.ch öffnen
    (FTP/SFTP oder Dateimanager).
@@ -77,7 +76,7 @@ Programm:   https://www.hvwinterthur.ch/programm  (Newsletter / Direktlink)
    (index.html, .htaccess, robots.txt, programm/, css/, js/, data/, images/).
 3. Prüfen:
    - https://www.hvwinterthur.ch/         → Weiterleitung zur Vereinswebsite
-   - https://www.hvwinterthur.ch/programm → Programmseite
+   - https://www.hvwinterthur.ch/programm → 410, Seite ist entfernt
    - https://www.hvwinterthur.ch/coucou → Coucou-JSON-Kontrolle
    - https://www.hvwinterthur.ch/mus → MuS-JSON-Kontrolle
    - https://www.hvwinterthur.ch/impressum.html

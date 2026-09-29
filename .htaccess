@@ -1,7 +1,7 @@
 # Hostpoint / Apache — Soft-Launch Historischer Verein Winterthur
 #
 # Stamm-URL bleibt die Weiterleitung zur bestehenden Vereinswebsite.
-# Nur /programm ist die neue Soft-Launch-Seite (z. B. Newsletter-Link).
+# Die öffentliche Programmseite ist entfernt. Das Programm-PDF bleibt unter /programm/.
 
 DirectoryIndex index.html
 
@@ -18,9 +18,10 @@ Options -Indexes
   RewriteRule ^$ https://www.historischer-verein-winterthur.ch/ [L,R=301]
   RewriteRule ^index\.html$ https://www.historischer-verein-winterthur.ch/ [L,R=301]
 
-  # /programm und /programm.html → /programm/
-  RewriteRule ^programm$ /programm/ [L,R=301]
-  RewriteRule ^programm\.html$ /programm/ [L,R=301]
+  # Öffentliche Programmseite ist gelöscht. PDF unter /programm/Programm.pdf bleibt.
+  RewriteRule ^programm/?$ - [G,L]
+  RewriteRule ^programm/index\.html$ - [G,L]
+  RewriteRule ^programm\.html$ - [G,L]
 
   # /coucou → /coucou/ (Coucou-JSON-Kontrolle)
   RewriteRule ^coucou$ /coucou/ [L,R=301]
