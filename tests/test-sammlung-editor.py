@@ -71,7 +71,7 @@ if ".hvw-quelle" not in css or "font-size: 0.8125rem" not in css:
     raise SystemExit("Quellen brauchen kleinere Schrift")
 if "body.hvw-editing .hvw-quelle" not in editor_css:
     raise SystemExit("Quellen müssen im Änderungsmodus sichtbar sein")
-if sammlung.count("hvw-quelle__label") != 6 or sammlung.count(">Quellen<") != 6:
-    raise SystemExit("Jede Kachel braucht die Beschriftung Quellen")
+if sammlung.count("hvw-quelle__label") != 6 or sammlung.count(">Quellen-Nachweis<") != 6:
+    raise SystemExit("Jede Kachel braucht die Beschriftung Quellen-Nachweis")
 
 print("sammlung editor lightbox ok")
