@@ -31,4 +31,20 @@ merge = (ROOT / "scripts/merge-content-json.py").read_text(encoding="utf-8")
 if "GIT_WINS_FIELD_IDS" not in merge:
     raise SystemExit("Deploy-Merge muss Vorstand aus Git erzwingen können")
 
+if html.find('id="jahresbericht-heading"') == -1:
+    raise SystemExit("Jahresbericht-Sektion fehlt")
+if not (
+    html.find('id="kontakt-heading"')
+    < html.find('id="jahresbericht-heading"')
+    < html.find('id="vorstand-heading"')
+):
+    raise SystemExit("Jahresbericht muss vor dem Vorstand stehen")
+if 'href="Jahresbericht-2025.pdf"' not in html or "PDF herunterladen" not in html:
+    raise SystemExit("PDF-Download für Jahresbericht 2025 fehlt")
+if "Jahresbericht-2025.pdf" not in (ROOT / "scripts/build-hostpoint-vorschau.sh").read_text(encoding="utf-8"):
+    raise SystemExit("Vorschau-Build kopiert Jahresbericht-2025.pdf nicht")
+pdf = ROOT / "Jahresbericht-2025.pdf"
+if not pdf.is_file() or not pdf.read_bytes().startswith(b"%PDF"):
+    raise SystemExit("Jahresbericht-2025.pdf fehlt")
+
 print("ueber uns vorstand ok")
