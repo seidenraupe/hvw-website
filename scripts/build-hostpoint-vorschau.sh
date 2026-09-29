@@ -44,6 +44,11 @@ if [[ ! -f "${ROOT}/Jahresbericht-2025.pdf" ]]; then
   exit 1
 fi
 cp "${ROOT}/Jahresbericht-2025.pdf" "${OUT}/Jahresbericht-2025.pdf"
+if [[ ! -f "${ROOT}/JB_2024_final.pdf" ]]; then
+  echo "JB_2024_final.pdf fehlt — Vorschau auf Hostpoint wäre unvollständig." >&2
+  exit 1
+fi
+cp "${ROOT}/JB_2024_final.pdf" "${OUT}/JB_2024_final.pdf"
 for pdf in historische-privat-fuehrungen.pdf szenische-fuehrung-berta.pdf; do
   if [[ ! -f "${ROOT}/dokumente/${pdf}" ]]; then
     echo "dokumente/${pdf} fehlt — Vorschau auf Hostpoint wäre unvollständig." >&2

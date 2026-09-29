@@ -125,8 +125,13 @@ if (!$geschichtsstadt || $geschichtsstadt['prefix'] !== 'partnerbild' || $geschi
     fwrite(STDERR, "Partner 15 nicht erkannt\n");
     exit(1);
 }
-if (hvw_sanitize_image_path('images/partner/hero-geschichtsstadt.jpg') !== 'images/partner/hero-geschichtsstadt.jpg') {
-    fwrite(STDERR, "Partner-Hero muss erlaubt bleiben\n");
+if (hvw_sanitize_image_path('images/partner/hero-20.jpg') !== 'images/partner/hero-20.jpg') {
+    fwrite(STDERR, "Heimatschutz-Hero muss erlaubt bleiben\n");
+    exit(1);
+}
+$heimat = hvw_image_info('partner.20.image');
+if (!$heimat || $heimat['prefix'] !== 'partnerbild' || $heimat['slot'] !== 20) {
+    fwrite(STDERR, "Partner 20 nicht erkannt\n");
     exit(1);
 }
 if (hvw_sanitize_image_path('images/partner/hero-16.jpg') !== '') {

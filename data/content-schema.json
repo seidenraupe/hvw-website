@@ -491,7 +491,7 @@
       "multiline": true
     },
     "partner.intro": {
-      "label": "Partner · Einleitung",
+      "label": "Netzwerk · Einleitung",
       "page": "partner.html",
       "max": 280,
       "rich": true,
@@ -645,6 +645,37 @@
     },
     "partner.19.image": {
       "label": "Partner · Münzkabinett Winterthur · Bild",
+      "page": "partner.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "image",
+      "optional": true
+    },
+    "partner.20.name": {
+      "label": "Netzwerk · Heimatschutz Winterthur · Name",
+      "page": "partner.html",
+      "max": 80,
+      "rich": false,
+      "multiline": false
+    },
+    "partner.20.body": {
+      "label": "Netzwerk · Heimatschutz Winterthur · Text",
+      "page": "partner.html",
+      "max": 360,
+      "rich": true,
+      "multiline": true
+    },
+    "partner.20.url": {
+      "label": "Netzwerk · Heimatschutz Winterthur · Link",
+      "page": "partner.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "url"
+    },
+    "partner.20.image": {
+      "label": "Netzwerk · Heimatschutz Winterthur · Bild",
       "page": "partner.html",
       "max": 180,
       "rich": false,

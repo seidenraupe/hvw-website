@@ -29,6 +29,13 @@ urls = [
     "https://dorfmuseum-wülflingen.ch/",
     "https://www.museums.ch/",
     "https://netzwerk-kulturerbe.ch/",
+    "https://winterthur.heimatschutz.ch/",
+    "https://stadt.winterthur.ch/organisation/verwaltung-departemente/bau-und-mobilitaet/amt-fuer-staedtebau/stadtplanung/denkmalpflege",
+    "https://stadt.winterthur.ch/organisation/verwaltung-departemente/stadtkanzlei/stadtarchiv",
+    "https://bibliotheken.winterthur.ch/programm/sammlung-winterthur",
+    "https://www.zh.ch/de/sport-kultur/kultur/kulturerbe/archaeologie.html",
+    "https://www.zh.ch/de/sport-kultur/kultur/kulturerbe/denkmalpflege.html?search=denkmalpflege",
+    "https://www.zh.ch/de/sport-kultur/swisslos-fonds/gemeinnuetziger-fonds.html",
 ]
 for url in urls:
     if url not in page:
@@ -52,7 +59,7 @@ heroes = [
 for filename in heroes:
     if filename not in page or not (ROOT / "images/partner" / filename).is_file():
         raise SystemExit(f"Hero fehlt: {filename}")
-if page.count('class="partner-slot partner-slot--photo') != 19:
+if page.count('class="partner-slot partner-slot--photo') != 20:
     raise SystemExit("Nicht jede Partnerzeile hat genau ein Bild")
 if not (
     page.find("Frauenstadtrundgang Winterthur")
@@ -62,9 +69,22 @@ if not (
     < page.find("Winterthur-Glossar")
 ):
     raise SystemExit("Neue Partner müssen nach Frauenstadtrundgang und vor dem Glossar stehen")
-for filename in ("hero-17.jpg", "hero-18.jpg", "hero-19.jpg"):
+for filename in ("hero-17.jpg", "hero-18.jpg", "hero-19.jpg", "hero-20.jpg"):
     if filename not in page or not (ROOT / "images/partner" / filename).is_file():
         raise SystemExit(f"Hero fehlt: {filename}")
+if "Heimatschutz Winterthur" not in page:
+    raise SystemExit("Heimatschutz fehlt")
+if page.find("Heimatschutz Winterthur") < page.find("Netzwerk Kulturerbe Schweiz"):
+    raise SystemExit("Heimatschutz muss am Ende der Bildliste stehen")
+if not (
+    page.find("</table>")
+    < page.find('id="netzwerk-stadt-heading"')
+    < page.find('id="netzwerk-kanton-heading"')
+    < page.find("</main>")
+):
+    raise SystemExit("Stadt- und Kantonsblock müssen unter der Liste stehen")
+if page.find("<h1") > -1 and "Netzwerk" not in page[page.find("<h1"): page.find("</h1>") + 6]:
+    raise SystemExit("Seitentitel muss Netzwerk heissen")
 
 for html in ROOT.glob("*.html"):
     if html.name == "programm.html":
@@ -80,6 +100,10 @@ for html in ROOT.glob("*.html"):
     block = nav.group(1)
     if block.find('href="sammlung.html"') > block.find('href="partner.html"'):
         raise SystemExit(f"{html.name}: Partner steht noch vor Sammlung")
+    if ">Partner<" in block:
+        raise SystemExit(f"{html.name}: Navigation heisst noch Partner")
+    if ">Netzwerk<" not in block:
+        raise SystemExit(f"{html.name}: Navigation braucht den Eintrag Netzwerk")
 
 schema = json.loads((ROOT / "data/content-schema.json").read_text(encoding="utf-8"))
 live = json.loads((ROOT / "data/content-live.json").read_text(encoding="utf-8"))
