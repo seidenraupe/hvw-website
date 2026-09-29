@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """Mitmachen: Beteiligungskarten mit vorgefüllter Mail, ohne graue Webling-Box."""
 from pathlib import Path
-from urllib.parse import unquote
 
 html = (Path(__file__).resolve().parents[1] / "mitmachen.html").read_text(encoding="utf-8")
 if "Online-Anmeldung über Webling" in html or "bg-hvw-fog p-5" in html:
@@ -13,9 +12,10 @@ if not (
     < html.find("</main>")
 ):
     raise SystemExit("Reihenfolge: Kategorien, Anmeldeformular, Beteiligung am Seitenende")
+if "Laienführer" in html or "Kulturvermittler" in html or "ursina.largiader" in html:
+    raise SystemExit("Laienführer/Kultur-Vermittler darf nicht mehr auf Mitmachen stehen")
 
 expected = {
-    "ursina.largiader@hvwinterthur.ch": "Kulturvermittler/Laienführer Mörsburg",
     "josip.spec@hvwinterthur.ch": "Katalogisierung der Sammlung",
     "christian.huggenberg@hvwinterthur.ch": "Vereinsvorstand",
 }
@@ -29,9 +29,10 @@ start = html.find('id="beteiligung-heading"')
 end = html.find("</main>", start)
 block = html[start:end]
 for part in ("subject=", "body=", "Guten%20Tag", "Interesse melden"):
-    if block.count(part) < 3:
+    if block.count(part) < 2:
         raise SystemExit(f"Mail-Vorlage unvollständig: {part}")
-if "Teilweise entschädigt" not in block or block.count("Ehrenamtlich") < 2:
+if "Teilweise entschädigt" in block:
+    raise SystemExit("entschädigte Laienführer-Karte ist noch da")
+if block.count("Ehrenamtlich") < 2:
     raise SystemExit("Einsatzart fehlt")
 print("mitmachen beteiligung ok")
-print(unquote("Kulturvermittler/Laienf%C3%BChrer%20M%C3%B6rsburg"))
