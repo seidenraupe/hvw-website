@@ -649,16 +649,14 @@ body.hvw-lightbox-open {
   background: #fff;
 }
 
-.partner-slot--logo {
-  width: 9.5rem;
-  aspect-ratio: 4 / 3;
-  border: 1px solid #1a1a1a;
-}
-
 .partner-slot--photo {
   width: 14rem;
   aspect-ratio: 4 / 3;
   background: #2f2f2f;
+}
+
+.partner-slot--photo.partner-slot--contain {
+  background: #f3f1ec;
 }
 
 .partner-slot img {
@@ -671,10 +669,8 @@ body.hvw-lightbox-open {
   object-position: center;
 }
 
-.partner-slot--logo img {
+.partner-slot--photo.partner-slot--contain img {
   object-fit: contain;
-  padding: 0.45rem;
-  background: #fff;
 }
 
 .partner-link {
@@ -753,9 +749,8 @@ body.hvw-lightbox-open {
     border-bottom: 1px solid #1a1a1a;
   }
 
-  .partner-slot--logo,
   .partner-slot--photo {
     width: 100%;
-    max-width: 20rem;
+    max-width: 28rem;
   }
 }
