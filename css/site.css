@@ -65,7 +65,7 @@ body {
   display: inline-flex;
   gap: 3rem;
   padding: 0.75rem 0;
-  animation: hvw-ticker 36s linear infinite;
+  animation: hvw-ticker 108s linear infinite;
 }
 
 @keyframes hvw-ticker {
