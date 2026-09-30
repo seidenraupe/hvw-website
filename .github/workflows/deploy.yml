@@ -40,6 +40,12 @@ jobs:
       - name: Code auschecken
         uses: actions/checkout@v4
 
+      - name: Tailwind-CSS bauen
+        run: |
+          set -euo pipefail
+          npm ci
+          npm run build:css
+
       - name: Programm-PDF erzeugen
         env:
           EVENTFROG_API_KEY: ${{ secrets.EVENTFROG_API_KEY }}

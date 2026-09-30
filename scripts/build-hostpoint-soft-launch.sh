@@ -57,7 +57,11 @@ fi
 cp "${ROOT}/css/fonts.css" "${OUT}/css/fonts.css"
 mkdir -p "${OUT}/fonts/outfit"
 cp "${ROOT}/fonts/outfit/"*.woff2 "${OUT}/fonts/outfit/"
-cp "${ROOT}/js/tailwind-config.js" "${OUT}/js/tailwind-config.js"
+if [[ ! -s "${ROOT}/css/tailwind.css" ]]; then
+  echo "css/tailwind.css fehlt — zuerst npm run build:css" >&2
+  exit 1
+fi
+cp "${ROOT}/css/tailwind.css" "${OUT}/css/tailwind.css"
 cp "${ROOT}/js/analytics.js" "${OUT}/js/analytics.js"
 cp "${ROOT}/js/ga-events.js" "${OUT}/js/ga-events.js"
 cp "${ROOT}/js/main.js" "${OUT}/js/main.js"

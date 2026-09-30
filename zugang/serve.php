@@ -24,8 +24,7 @@ function hvw_zugang_layout(string $title, string $inner): void
     $prefix = ($base === '' ? '' : $base) . '/';
     echo '<link rel="icon" href="' . $esc($prefix) . 'images/favicon.ico">';
     echo '<link rel="stylesheet" href="' . $esc($prefix) . 'css/fonts.css">';
-    echo '<script src="https://cdn.tailwindcss.com"></script>';
-    echo '<script src="' . $esc($prefix) . 'js/tailwind-config.js"></script>';
+    echo '<link rel="stylesheet" href="' . $esc($prefix) . 'css/tailwind.css">';
     echo '<link rel="stylesheet" href="' . $esc($prefix) . 'css/site.css">';
     echo '</head><body class="bg-hvw-fog font-sans text-hvw-ink antialiased">';
     echo '<main class="mx-auto flex min-h-screen max-w-md flex-col justify-center px-5 py-12">';

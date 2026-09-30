@@ -177,6 +177,19 @@ Measurement ID steht in `data/analytics.json`.
 `noindex` wieder auf `index,follow` setzen, `robots.txt` öffnen und den
 kompletten Site-Build (nicht nur Soft-Launch) nach Hostpoint deployen.
 
+### Layout-CSS
+
+Tailwind wird nicht vom CDN geladen. Die Seiten verlinken `css/tailwind.css`,
+gebaut aus `css/tailwind.src.css` und `tailwind.config.js`. Nach neuen
+Utility-Klassen:
+
+```bash
+npm install
+npm run build:css
+```
+
+Der Hostpoint-Deploy baut diese Datei in GitHub Actions neu.
+
 ## Struktur
 
 ```
@@ -194,9 +207,10 @@ sammlung.html       Ausgewählte Objekte
 zitate.html         Stimmen aus Winterthur
 ueber-uns.html      Verein + FAQ (GEO)
 mitmachen.html      Mitgliedschaft
-css/site.css        Motion & Placeholder-Styles
+css/site.css        Ergänzungen (Motion, Accessibility, Platzhalter)
+css/tailwind.css    statisch gebautes Tailwind (nicht das CDN)
+css/tailwind.src.css  Quelle für npm run build:css
 js/main.js          Event-Karten-Rendering
-js/tailwind-config.js
 data/home-events.json
 images/             Logo, Foto, SVG-Platzhalter
 reference/wireframes/  Mood-Referenzen aus dem Upload

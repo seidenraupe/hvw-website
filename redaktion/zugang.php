@@ -54,8 +54,7 @@ $esc = static fn (string $s): string => htmlspecialchars($s, ENT_QUOTES, 'UTF-8'
   <meta name="robots" content="noindex,nofollow">
   <link rel="icon" href="../images/favicon.ico" sizes="any">
   <link rel="stylesheet" href="../css/fonts.css">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="../js/tailwind-config.js"></script>
+  <link rel="stylesheet" href="../css/tailwind.css">
   <link rel="stylesheet" href="../css/site.css">
 </head>
 <body class="bg-hvw-fog font-sans text-hvw-ink antialiased">
