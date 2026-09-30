@@ -26,7 +26,12 @@ Options -Indexes
   RewriteRule ^js/ - [L]
   RewriteRule ^images/ - [L]
 
-  RewriteRule ^programm/HalbJahresprogramm\.pdf$ programm/Programm.pdf [L,R=301]
+  RewriteRule ^Statuten\.pdf$ dokumente/Statuten.pdf [L,R=301]
+  RewriteRule ^Sammlungskonzept\.pdf$ dokumente/Sammlungskonzept.pdf [L,R=301]
+  RewriteRule ^Jahresbericht-2025\.pdf$ dokumente/Jahresbericht-2025.pdf [L,R=301]
+  RewriteRule ^JB_2024_final\.pdf$ dokumente/JB_2024_final.pdf [L,R=301]
+  RewriteRule ^programm/Programm\.pdf$ dokumente/Programm.pdf [L,R=301]
+  RewriteRule ^programm/HalbJahresprogramm\.pdf$ dokumente/Programm.pdf [L,R=301]
   RewriteRule ^programm/HalbJahresprogramm\.json$ programm/Programm.json [L,R=301]
 
   RewriteRule ^ zugang/serve.php [QSA,L]

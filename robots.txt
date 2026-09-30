@@ -3,7 +3,7 @@
 User-agent: *
 Allow: /impressum.html
 Allow: /datenschutz.html
-Allow: /Statuten.pdf
+Allow: /dokumente/
 Allow: /css/
 Allow: /js/
 Allow: /data/

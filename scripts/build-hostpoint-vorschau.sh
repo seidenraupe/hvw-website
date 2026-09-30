@@ -30,35 +30,23 @@ mkdir -p "${OUT}/data/uploads"
 rm -f "${OUT}/data/uploads/"*.jpg "${OUT}/data/uploads/"*.jpeg \
       "${OUT}/data/uploads/"*.png "${OUT}/data/uploads/"*.webp
 cp "${ROOT}/data/content-live.json" "${OUT}/data/content-live.seed.json"
-if [[ ! -f "${ROOT}/Statuten.pdf" ]]; then
-  echo "Statuten.pdf fehlt — Vorschau auf Hostpoint wäre unvollständig." >&2
-  exit 1
-fi
-cp "${ROOT}/Statuten.pdf" "${OUT}/Statuten.pdf"
-if [[ ! -f "${ROOT}/Sammlungskonzept.pdf" ]]; then
-  echo "Sammlungskonzept.pdf fehlt — Vorschau auf Hostpoint wäre unvollständig." >&2
-  exit 1
-fi
-cp "${ROOT}/Sammlungskonzept.pdf" "${OUT}/Sammlungskonzept.pdf"
-if [[ ! -f "${ROOT}/Jahresbericht-2025.pdf" ]]; then
-  echo "Jahresbericht-2025.pdf fehlt — Vorschau auf Hostpoint wäre unvollständig." >&2
-  exit 1
-fi
-cp "${ROOT}/Jahresbericht-2025.pdf" "${OUT}/Jahresbericht-2025.pdf"
-if [[ ! -f "${ROOT}/JB_2024_final.pdf" ]]; then
-  echo "JB_2024_final.pdf fehlt — Vorschau auf Hostpoint wäre unvollständig." >&2
-  exit 1
-fi
-cp "${ROOT}/JB_2024_final.pdf" "${OUT}/JB_2024_final.pdf"
-for pdf in historische-privat-fuehrungen.pdf szenische-fuehrung-berta.pdf; do
+VORSCHAU_PDFS=(
+  Statuten.pdf
+  Sammlungskonzept.pdf
+  Jahresbericht-2025.pdf
+  JB_2024_final.pdf
+  Programm.pdf
+  historische-privat-fuehrungen.pdf
+  szenische-fuehrung-berta.pdf
+)
+mkdir -p "${OUT}/dokumente"
+for pdf in "${VORSCHAU_PDFS[@]}"; do
   if [[ ! -f "${ROOT}/dokumente/${pdf}" ]]; then
     echo "dokumente/${pdf} fehlt — Vorschau auf Hostpoint wäre unvollständig." >&2
     exit 1
   fi
+  cp "${ROOT}/dokumente/${pdf}" "${OUT}/dokumente/${pdf}"
 done
-mkdir -p "${OUT}/dokumente"
-cp "${ROOT}/dokumente/historische-privat-fuehrungen.pdf" "${OUT}/dokumente/historische-privat-fuehrungen.pdf"
-cp "${ROOT}/dokumente/szenische-fuehrung-berta.pdf" "${OUT}/dokumente/szenische-fuehrung-berta.pdf"
 copy_dir "${ROOT}/programm" "${OUT}/programm"
 copy_dir "${ROOT}/coucou" "${OUT}/coucou"
 copy_dir "${ROOT}/mus" "${OUT}/mus"

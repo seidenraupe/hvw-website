@@ -16,7 +16,7 @@ API-Key:
 
 Usage:
   EVENTFROG_API_KEY=... python3 scripts/generate-programm-pdf.py
-  python3 scripts/generate-programm-pdf.py -o programm/Programm.pdf
+  python3 scripts/generate-programm-pdf.py -o dokumente/Programm.pdf
 """
 
 from __future__ import print_function
@@ -56,7 +56,8 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.dirname(SCRIPT_DIR)
 sys.path.insert(0, os.path.join(ROOT_DIR, "cronjobs"))
 from eventfrog_to_coucou import filter_attraction_events  # noqa: E402
-DEFAULT_OUTPUT = os.path.join(ROOT_DIR, "programm", "Programm.pdf")
+DEFAULT_OUTPUT = os.path.join(ROOT_DIR, "dokumente", "Programm.pdf")
+PROGRAMM_META = os.path.join(ROOT_DIR, "programm", "Programm.json")
 DEFAULT_LOGO = os.path.join(ROOT_DIR, "images", "hvw-logo.png")
 DEFAULT_ORG_IDS = ["4936116", "5116588", "5137433"]
 MUSEUM_PHOTOS = [
@@ -788,7 +789,11 @@ def main(argv=None):
     )
     print("PDF geschrieben: {0} ({1} Bytes)".format(out_path, os.path.getsize(out_path)))
 
-    meta_path = os.path.splitext(out_path)[0] + ".json"
+    meta_path = PROGRAMM_META
+    os.makedirs(os.path.dirname(meta_path), exist_ok=True)
+    pdf_rel = "dokumente/Programm.pdf"
+    if os.path.basename(out_path) != "Programm.pdf":
+        pdf_rel = os.path.relpath(out_path, ROOT_DIR).replace("\\", "/")
     with open(meta_path, "w", encoding="utf-8") as f:
         json.dump(
             {
@@ -800,7 +805,7 @@ def main(argv=None):
                 "slug": slug,
                 "eventCount": len(events),
                 "format": "A4",
-                "file": os.path.basename(out_path),
+                "file": pdf_rel,
                 "downloadName": download_name,
             },
             f,

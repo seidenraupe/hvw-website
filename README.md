@@ -48,7 +48,8 @@ Solange die Gesamtwebsite noch nicht live geht:
 - Stamm-URL `https://www.hvwinterthur.ch/` → Weiterleitung nach
   **`https://www.historischer-verein-winterthur.ch/`** (wie bisher)
 - Die öffentliche Programmseite `/programm` ist entfernt (HTTP 410).
-  Das Programm-PDF bleibt unter `/programm/Programm.pdf`.
+  Alle PDFs liegen unter `/dokumente/` (Programm: `/dokumente/Programm.pdf`).
+  Alte Pfade leiten per 301 dorthin um.
 - Interne Redaktion (Passwort, nicht öffentlich):
   **`https://www.hvwinterthur.ch/vorschau/`**
 - Apache/Hostpoint: `.htaccess` (Stamm-Redirect, Programmseite weg)
@@ -128,7 +129,7 @@ drei Museen, dann alle Anlässe ab Druckdatum bis zur letzten Veranstaltung).
 Die HTML-Seite dazu ist entfernt:
 
 ```
-https://www.hvwinterthur.ch/programm/Programm.pdf
+https://www.hvwinterthur.ch/dokumente/Programm.pdf
 ```
 
 Beim Speichern heisst die Datei `Programm HVW MM.JJJJ bis MM.JJJJ.pdf`

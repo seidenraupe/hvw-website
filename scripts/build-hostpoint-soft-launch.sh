@@ -31,11 +31,14 @@ cp "${ROOT}/.htaccess" "${OUT}/.htaccess"
 cp "${ROOT}/robots.txt" "${OUT}/robots.txt"
 cp "${ROOT}/impressum.html" "${OUT}/impressum.html"
 cp "${ROOT}/datenschutz.html" "${OUT}/datenschutz.html"
-if [[ ! -f "${ROOT}/Statuten.pdf" ]]; then
-  echo "Statuten.pdf fehlt — Deploy auf Hostpoint wäre unvollständig." >&2
-  exit 1
-fi
-cp "${ROOT}/Statuten.pdf" "${OUT}/Statuten.pdf"
+mkdir -p "${OUT}/dokumente"
+for pdf in Statuten.pdf Programm.pdf; do
+  if [[ ! -f "${ROOT}/dokumente/${pdf}" ]]; then
+    echo "dokumente/${pdf} fehlt — Deploy auf Hostpoint wäre unvollständig." >&2
+    exit 1
+  fi
+  cp "${ROOT}/dokumente/${pdf}" "${OUT}/dokumente/${pdf}"
+done
 cp "${ROOT}/programm/.htaccess" "${OUT}/programm/.htaccess"
 mkdir -p "${OUT}/coucou"
 cp "${ROOT}/coucou/index.html" "${OUT}/coucou/index.html"
@@ -43,9 +46,6 @@ cp "${ROOT}/coucou/.htaccess" "${OUT}/coucou/.htaccess"
 mkdir -p "${OUT}/mus"
 cp "${ROOT}/mus/index.html" "${OUT}/mus/index.html"
 cp "${ROOT}/mus/.htaccess" "${OUT}/mus/.htaccess"
-if [[ -f "${ROOT}/programm/Programm.pdf" ]]; then
-  cp "${ROOT}/programm/Programm.pdf" "${OUT}/programm/Programm.pdf"
-fi
 if [[ -f "${ROOT}/programm/Programm.json" ]]; then
   cp "${ROOT}/programm/Programm.json" "${OUT}/programm/Programm.json"
 fi
@@ -80,7 +80,7 @@ Hostpoint Soft-Launch — Upload-Anleitung
 ========================================
 
 Stamm-URL:  https://www.hvwinterthur.ch/  →  https://www.historischer-verein-winterthur.ch/
-Programmseite: entfernt (HTTP 410). PDF: https://www.hvwinterthur.ch/programm/Programm.pdf
+Programmseite: entfernt (HTTP 410). PDFs: https://www.hvwinterthur.ch/dokumente/
 
 1. Im Hostpoint Control Panel den Document Root von www.hvwinterthur.ch öffnen
    (FTP/SFTP oder Dateimanager).
@@ -93,7 +93,8 @@ Programmseite: entfernt (HTTP 410). PDF: https://www.hvwinterthur.ch/programm/Pr
    - https://www.hvwinterthur.ch/mus → MuS-JSON-Kontrolle
    - https://www.hvwinterthur.ch/impressum.html
    - https://www.hvwinterthur.ch/datenschutz.html
-   - https://www.hvwinterthur.ch/Statuten.pdf
+   - https://www.hvwinterthur.ch/dokumente/Statuten.pdf
+   - https://www.hvwinterthur.ch/dokumente/Programm.pdf
 4. Eventfrog: Domain www.hvwinterthur.ch für das Embed freischalten.
 
 Hinweis: Die übrige Prototyp-Website gehört NICHT in diesen Upload.

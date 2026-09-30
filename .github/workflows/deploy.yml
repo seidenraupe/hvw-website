@@ -55,12 +55,12 @@ jobs:
             echo "::warning::EVENTFROG_API_KEY fehlt — vorhandenes PDF im Repo wird verwendet (falls vorhanden)."
           else
             python3 -m pip install -r scripts/requirements-pdf.txt
-            if ! python3 scripts/generate-programm-pdf.py -o programm/Programm.pdf; then
+            if ! python3 scripts/generate-programm-pdf.py -o dokumente/Programm.pdf; then
               echo "::warning::Eventfrog-API von GitHub aus nicht erreichbar (z. B. HTTP 403). Vorhandenes PDF im Repo wird deployed."
             fi
           fi
-          if [ ! -f programm/Programm.pdf ]; then
-            echo "::error::programm/Programm.pdf fehlt und konnte nicht erzeugt werden."
+          if [ ! -f dokumente/Programm.pdf ]; then
+            echo "::error::dokumente/Programm.pdf fehlt und konnte nicht erzeugt werden."
             exit 1
           fi
 
@@ -70,8 +70,8 @@ jobs:
       - name: Statuten-PDF im Paket prüfen
         run: |
           set -euo pipefail
-          test -s deploy/hostpoint-soft-launch/Statuten.pdf
-          echo "Soft-Launch enthält Statuten.pdf ($(wc -c < deploy/hostpoint-soft-launch/Statuten.pdf) Bytes) → Hostpoint /Statuten.pdf"
+          test -s deploy/hostpoint-soft-launch/dokumente/Statuten.pdf
+          echo "Soft-Launch enthält dokumente/Statuten.pdf ($(wc -c < deploy/hostpoint-soft-launch/dokumente/Statuten.pdf) Bytes)"
 
       - name: Interne Vorschau bauen
         env:
@@ -85,8 +85,8 @@ jobs:
           set -euo pipefail
           chmod +x ./scripts/build-hostpoint-vorschau.sh
           ./scripts/build-hostpoint-vorschau.sh
-          test -s deploy/hostpoint-vorschau/Statuten.pdf
-          echo "Vorschau enthält Statuten.pdf → Hostpoint /vorschau/Statuten.pdf"
+          test -s deploy/hostpoint-vorschau/dokumente/Statuten.pdf
+          echo "Vorschau enthält dokumente/Statuten.pdf → Hostpoint /vorschau/dokumente/Statuten.pdf"
           python3 - <<'PY'
           import json, os, pathlib
           host = os.environ.get("MAIL_SMTP_HOST") or "smtp.mail.hostpoint.ch"

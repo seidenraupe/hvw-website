@@ -11,16 +11,16 @@ preview = (ROOT / "scripts/build-hostpoint-vorschau.sh").read_text(encoding="utf
 
 if "Alle Anlässe zum Herunterladen oder Ausdrucken" not in agenda:
     raise SystemExit("Download-Button-Text fehlt")
-if 'href="/programm/Programm.pdf"' not in agenda:
-    raise SystemExit("Button muss auf /programm/Programm.pdf zeigen")
-if "download=" in agenda.split('href="/programm/Programm.pdf"', 1)[-1].split("</a>", 1)[0]:
+if 'href="dokumente/Programm.pdf"' not in agenda:
+    raise SystemExit("Button muss auf dokumente/Programm.pdf zeigen")
+if "download=" in agenda.split('href="dokumente/Programm.pdf"', 1)[-1].split("</a>", 1)[0]:
     raise SystemExit("Programm-PDF darf kein download-Attribut haben (wie Statuten im Viewer öffnen)")
 if "data-programm-download" in agenda:
     raise SystemExit("Programm-Link darf download nicht per JS erzwingen")
 if "js/programm-download.js" in agenda:
     raise SystemExit("Agenda darf programm-download.js nicht mehr laden")
-if not (ROOT / "programm/Programm.pdf").is_file():
-    raise SystemExit("programm/Programm.pdf fehlt")
+if not (ROOT / "dokumente/Programm.pdf").is_file():
+    raise SystemExit("dokumente/Programm.pdf fehlt")
 if not (ROOT / "programm/Programm.json").is_file():
     raise SystemExit("programm/Programm.json fehlt")
 if "generate-programm-pdf.py" not in deploy:
