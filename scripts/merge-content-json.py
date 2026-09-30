@@ -99,6 +99,7 @@ def merge_live_fields(
     split_house_hours(out, remote)
     link_moersburg_tours(out)
     ensure_moersburg_member_admission(out)
+    break_lindengut_member_line(out)
     return out, {
         "kept": kept,
         "added": added,
@@ -183,6 +184,23 @@ def link_moersburg_tours(fields: dict[str, str]) -> None:
         fields[field_id] = updated
 
 
+def break_lindengut_member_line(fields: dict[str, str]) -> None:
+    """Mitgliederhinweis im Lindengut steht auf einer eigenen Zeile."""
+    text = fields.get("lindengut.oeffnung", "")
+    if not text or "für Mitglieder" not in text:
+        return
+    if re.search(r"(?:^|<br\s*/?>|\r?\n)\s*für Mitglieder", text):
+        return
+    updated, count = re.subn(
+        r"[^\S\r\n]*für Mitglieder",
+        "<br>für Mitglieder",
+        text,
+        count=1,
+    )
+    if count:
+        fields["lindengut.oeffnung"] = updated
+
+
 def split_house_hours(fields: dict[str, str], already_present: dict[str, str]) -> None:
     for key in ("lindengut", "moersburg"):
         hours_id = f"{key}.oeffnung"
@@ -240,6 +258,7 @@ def merge_draft_fields(
             out[field_id] = draft_val
     split_house_hours(out, remote_draft)
     link_moersburg_tours(out)
+    break_lindengut_member_line(out)
     return out
 
 
