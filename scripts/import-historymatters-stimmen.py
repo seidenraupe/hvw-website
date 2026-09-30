@@ -126,6 +126,7 @@ def main() -> None:
         for question, answer in zip(questions, parts[1:]):
             qn = question.replace("History Matters – ", "")
             ans = re.sub(r"\s+", " ", answer).strip()
+            ans = re.sub(r"\s+zurück$", "", ans)
             ans = ans.replace("am wichtigsten Geschichte kann", "am wichtigsten: Geschichte kann")
             if ans:
                 statements.append({"question": qn, "text": ans})
