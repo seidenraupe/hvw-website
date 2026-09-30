@@ -1,13 +1,4 @@
-# Die öffentliche Programmseite ist entfernt.
-# Die übrige Prototyp-Website soll vorerst nicht indexiert werden.
+# Öffentliche Website; Bearbeitungszugang nicht indexieren.
 User-agent: *
-Allow: /impressum.html
-Allow: /datenschutz.html
-Allow: /dokumente/
-Allow: /css/
-Allow: /js/
-Allow: /data/
-Allow: /images/
-Disallow: /edit
 Disallow: /edit/
-Disallow: /
+Disallow: /edit

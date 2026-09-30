@@ -1,7 +1,7 @@
 # Hostpoint / Apache — Soft-Launch Historischer Verein Winterthur
 #
-# Stamm-URL bleibt die Weiterleitung zur bestehenden Vereinswebsite.
-# Die öffentliche Programmseite ist entfernt. PDFs liegen unter /dokumente/.
+# Öffentliche Website am Document Root. PDFs liegen unter /dokumente/.
+# Bearbeitungszugang nur unter /edit/ (separates Deploy-Paket).
 
 DirectoryIndex index.html
 
@@ -17,10 +17,6 @@ Options -Indexes
   # Legacy: /vorschau/ → /edit/ (Go-Live-Vorbereitung)
   RewriteRule ^vorschau/?$ /edit/ [L,R=301]
   RewriteRule ^vorschau/(.+)$ /edit/$1 [L,R=301]
-
-  # Stamm (/ und /index.html) → bestehende Website
-  RewriteRule ^$ https://www.historischer-verein-winterthur.ch/ [L,R=301]
-  RewriteRule ^index\.html$ https://www.historischer-verein-winterthur.ch/ [L,R=301]
 
   # Öffentliche Programmseite ist gelöscht.
   RewriteRule ^programm/?$ - [G,L]

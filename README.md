@@ -43,17 +43,13 @@ python3 -m http.server 8080
 Produktive Zielumgebung ist **Hostpoint** (`www.hvwinterthur.ch`), nicht GitHub Pages.
 GitHub bleibt nur Prototyp-/Quellrepo.
 
-Solange die Gesamtwebsite noch nicht live geht:
-
-- Stamm-URL `https://www.hvwinterthur.ch/` → Weiterleitung nach
-  **`https://www.historischer-verein-winterthur.ch/`** (wie bisher)
+- **Öffentliche Website:** `https://www.hvwinterthur.ch/` (Document Root, indexierbar)
 - Die öffentliche Programmseite `/programm` ist entfernt (HTTP 410).
   Alle PDFs liegen unter `/dokumente/` (Programm: `/dokumente/Programm.pdf`).
   Alte Pfade leiten per 301 dorthin um.
-- Interne Redaktion (Passwort, nicht öffentlich):
-  **`https://www.hvwinterthur.ch/edit/`** (früher `/vorschau/`, leitet per 301 um)
-- Apache/Hostpoint: `.htaccess` (Stamm-Redirect, Programmseite weg)
-- `robots.txt` + `noindex` auf Prototyp-Seiten
+- **Bearbeitung** (E-Mail-Code, nicht indexiert): `https://www.hvwinterthur.ch/edit/`
+  (Legacy `/vorschau/` → 301 auf `/edit/`)
+- Live-Texte: `data/content-live.json` am Root (Deploy/Freigabe aus `/edit/`)
 
 ### Deploy auf Hostpoint (GitHub Actions)
 

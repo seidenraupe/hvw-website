@@ -1,105 +1,70 @@
 #!/usr/bin/env bash
-# Baut ein schlankes Upload-Paket für Hostpoint (nur Programm-Soft-Launch).
+# Baut die öffentliche Website für Hostpoint (Document Root, ohne /edit/-Zugang).
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 OUT="${ROOT}/deploy/hostpoint-soft-launch"
 
 rm -rf "${OUT}"
-mkdir -p "${OUT}/programm" "${OUT}/css" "${OUT}/js" "${OUT}/images" "${OUT}/data"
+mkdir -p "${OUT}"
 
-# Stamm-URL: Weiterleitung zur bestehenden Vereinswebsite (nicht zum Programm)
-cat > "${OUT}/index.html" <<'HTML'
-<!DOCTYPE html>
-<html lang="de-CH">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Historischer Verein Winterthur</title>
-  <link rel="canonical" href="https://www.historischer-verein-winterthur.ch/">
-  <meta name="robots" content="noindex,follow">
-  <meta http-equiv="refresh" content="0; url=https://www.historischer-verein-winterthur.ch/">
-  <script>location.replace('https://www.historischer-verein-winterthur.ch/' + location.search + location.hash);</script>
-</head>
-<body>
-  <p><a href="https://www.historischer-verein-winterthur.ch/">Weiter zur Website des Historischen Vereins Winterthur</a></p>
-</body>
-</html>
-HTML
+copy_dir() {
+  local src="$1"
+  local dest="$2"
+  mkdir -p "${dest}"
+  cp -a "${src}/." "${dest}/"
+}
 
-cp "${ROOT}/.htaccess" "${OUT}/.htaccess"
-cp "${ROOT}/robots.txt" "${OUT}/robots.txt"
-cp "${ROOT}/impressum.html" "${OUT}/impressum.html"
-cp "${ROOT}/datenschutz.html" "${OUT}/datenschutz.html"
+for page in index.html agenda.html museen.html lindengut.html moersburg.html ueber-uns.html mitmachen.html \
+            partner.html sammlung.html zitate.html \
+            impressum.html datenschutz.html; do
+  cp "${ROOT}/${page}" "${OUT}/${page}"
+done
+
+copy_dir "${ROOT}/css" "${OUT}/css"
+copy_dir "${ROOT}/fonts" "${OUT}/fonts"
+copy_dir "${ROOT}/js" "${OUT}/js"
+copy_dir "${ROOT}/images" "${OUT}/images"
+mkdir -p "${OUT}/data"
+cp "${ROOT}/data/analytics.json" "${OUT}/data/analytics.json"
+cp "${ROOT}/data/content-schema.json" "${OUT}/data/content-schema.json"
+cp "${ROOT}/data/content-live.json" "${OUT}/data/content-live.seed.json"
+mkdir -p "${OUT}/data/uploads"
+
+PUBLIC_PDFS=(
+  Statuten.pdf
+  Sammlungskonzept.pdf
+  Jahresbericht-2025.pdf
+  JB_2024_final.pdf
+  Programm.pdf
+  historische-privat-fuehrungen.pdf
+  szenische-fuehrung-berta.pdf
+)
 mkdir -p "${OUT}/dokumente"
-for pdf in Statuten.pdf Programm.pdf; do
+for pdf in "${PUBLIC_PDFS[@]}"; do
   if [[ ! -f "${ROOT}/dokumente/${pdf}" ]]; then
-    echo "dokumente/${pdf} fehlt — Deploy auf Hostpoint wäre unvollständig." >&2
+    echo "dokumente/${pdf} fehlt — öffentlicher Deploy wäre unvollständig." >&2
     exit 1
   fi
   cp "${ROOT}/dokumente/${pdf}" "${OUT}/dokumente/${pdf}"
 done
-cp "${ROOT}/programm/.htaccess" "${OUT}/programm/.htaccess"
-mkdir -p "${OUT}/coucou"
-cp "${ROOT}/coucou/index.html" "${OUT}/coucou/index.html"
-cp "${ROOT}/coucou/.htaccess" "${OUT}/coucou/.htaccess"
-mkdir -p "${OUT}/mus"
-cp "${ROOT}/mus/index.html" "${OUT}/mus/index.html"
-cp "${ROOT}/mus/.htaccess" "${OUT}/mus/.htaccess"
-if [[ -f "${ROOT}/programm/Programm.json" ]]; then
-  cp "${ROOT}/programm/Programm.json" "${OUT}/programm/Programm.json"
-fi
-cp "${ROOT}/css/site.css" "${OUT}/css/site.css"
-if [[ ! -f "${ROOT}/css/fonts.css" ]]; then
-  echo "css/fonts.css fehlt — Schriften wären nicht lokal." >&2
-  exit 1
-fi
-cp "${ROOT}/css/fonts.css" "${OUT}/css/fonts.css"
-mkdir -p "${OUT}/fonts/outfit"
-cp "${ROOT}/fonts/outfit/"*.woff2 "${OUT}/fonts/outfit/"
-if [[ ! -s "${ROOT}/css/tailwind.css" ]]; then
-  echo "css/tailwind.css fehlt — zuerst npm run build:css" >&2
-  exit 1
-fi
-cp "${ROOT}/css/tailwind.css" "${OUT}/css/tailwind.css"
-cp "${ROOT}/js/analytics.js" "${OUT}/js/analytics.js"
-cp "${ROOT}/js/ga-events.js" "${OUT}/js/ga-events.js"
-cp "${ROOT}/js/main.js" "${OUT}/js/main.js"
-cp "${ROOT}/js/programm-download.js" "${OUT}/js/programm-download.js"
-cp "${ROOT}/js/coucou-preview.js" "${OUT}/js/coucou-preview.js"
-cp "${ROOT}/data/analytics.json" "${OUT}/data/analytics.json"
-cp "${ROOT}/images/hvw-logo.png" "${OUT}/images/hvw-logo.png"
-for f in favicon.ico favicon-32.png favicon-192.png apple-touch-icon.png; do
-  if [[ -f "${ROOT}/images/${f}" ]]; then
-    cp "${ROOT}/images/${f}" "${OUT}/images/${f}"
-  fi
-done
+
+copy_dir "${ROOT}/programm" "${OUT}/programm"
+copy_dir "${ROOT}/coucou" "${OUT}/coucou"
+copy_dir "${ROOT}/mus" "${OUT}/mus"
+
+cp "${ROOT}/.htaccess" "${OUT}/.htaccess"
+cp "${ROOT}/robots.txt" "${OUT}/robots.txt"
 
 cat > "${OUT}/UPLOAD.txt" <<'TXT'
-Hostpoint Soft-Launch — Upload-Anleitung
-========================================
+Hostpoint — öffentliche Website (Document Root)
+===============================================
 
-Stamm-URL:  https://www.hvwinterthur.ch/  →  https://www.historischer-verein-winterthur.ch/
-Programmseite: entfernt (HTTP 410). PDFs: https://www.hvwinterthur.ch/dokumente/
+Stamm-URL:  https://www.hvwinterthur.ch/
+Bearbeitung: https://www.hvwinterthur.ch/edit/ (E-Mail-Code, nicht öffentlich)
 
-1. Im Hostpoint Control Panel den Document Root von www.hvwinterthur.ch öffnen
-   (FTP/SFTP oder Dateimanager).
-2. Den gesamten Inhalt DIESES Ordners in den Document Root hochladen
-   (index.html, .htaccess, robots.txt, programm/, css/, js/, data/, images/).
-3. Prüfen:
-   - https://www.hvwinterthur.ch/         → Weiterleitung zur Vereinswebsite
-   - https://www.hvwinterthur.ch/programm → 410, Seite ist entfernt
-   - https://www.hvwinterthur.ch/coucou → Coucou-JSON-Kontrolle
-   - https://www.hvwinterthur.ch/mus → MuS-JSON-Kontrolle
-   - https://www.hvwinterthur.ch/impressum.html
-   - https://www.hvwinterthur.ch/datenschutz.html
-   - https://www.hvwinterthur.ch/dokumente/Statuten.pdf
-   - https://www.hvwinterthur.ch/dokumente/Programm.pdf
-4. Eventfrog: Domain www.hvwinterthur.ch für das Embed freischalten.
-
-Hinweis: Die übrige Prototyp-Website gehört NICHT in diesen Upload.
 Bevorzugt: GitHub Action «Deploy via rsync» (siehe README).
 TXT
 
-echo "Hostpoint-Paket erstellt: ${OUT}"
-find "${OUT}" -type f | sort
+echo "Hostpoint-Stamm-Website erstellt: ${OUT}"
+find "${OUT}" -type f | wc -l

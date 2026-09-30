@@ -267,16 +267,21 @@ jobs:
           fi
 
 
-          echo "rsync Soft-Launch → ${SSH_USER}@${host}:${target}"
+          echo "rsync öffentliche Website → ${SSH_USER}@${host}:${target}"
           # coucou_export.json / guidle_export.json / mus_export.json /
           # home-events.json werden vom Hostpoint-Cron (cronjobs/) erzeugt
-          # und dürfen durch Soft-Launch-Deploys nicht gelöscht werden.
+          # und dürfen durch Deploys nicht gelöscht werden.
           rsync -avz --delete \
             --exclude 'coucou_export.json' \
             --exclude 'guidle_export.json' \
             --exclude 'mus_export.json' \
             --exclude 'home-events.json' \
             --exclude 'edit/' \
+            --exclude 'data/content-live.json' \
+            --exclude 'data/uploads/*.jpg' \
+            --exclude 'data/uploads/*.jpeg' \
+            --exclude 'data/uploads/*.png' \
+            --exclude 'data/uploads/*.webp' \
             -e "ssh -i ${keyfile} -p 22 -o IdentitiesOnly=yes -o StrictHostKeyChecking=no" \
             deploy/hostpoint-soft-launch/ \
             "${SSH_USER}@${host}:${target}"
@@ -334,16 +339,21 @@ jobs:
               -e "ssh -i ${keyfile} -p 22 -o IdentitiesOnly=yes -o StrictHostKeyChecking=no" \
               "${merge_dir}/merged-draft.json" \
               "${SSH_USER}@${host}:${target}edit/redaktion/storage/content-draft.json"
+            rsync -avz \
+              -e "ssh -i ${keyfile} -p 22 -o IdentitiesOnly=yes -o StrictHostKeyChecking=no" \
+              "${merge_dir}/merged-live.json" \
+              "${SSH_USER}@${host}:${target}data/content-live.json"
           else
             echo "::warning::Kein content-live.json auf dem Server — Redaktions-Merge übersprungen (Daten bleiben unangetastet)."
           fi
           rm -rf "${merge_dir}"
 
+          echo "Redaktions-Uploads → öffentliche Stamm-URL…"
           ssh -i "$keyfile" -p 22 \
             -o IdentitiesOnly=yes \
             -o StrictHostKeyChecking=no \
             "${SSH_USER}@${host}" \
-            "mkdir -p '${target}edit/data/uploads' '${target}edit/redaktion/storage' && chmod u+rwX '${target}edit/data' '${target}edit/data/uploads' '${target}edit/redaktion/storage' && chmod u+rw '${target}edit/data/content-live.json' '${target}edit/redaktion/storage/content-draft.json' '${target}edit/redaktion/storage/access-emails.json' '${target}edit/redaktion/storage/otp.json' '${target}edit/redaktion/storage/zugang-secret.txt' 2>/dev/null || true"
+            "mkdir -p '${target}data/uploads' '${target}edit/data/uploads' '${target}edit/redaktion/storage' && if [ -d '${target}edit/data/uploads' ]; then rsync -a '${target}edit/data/uploads/' '${target}data/uploads/'; fi && chmod u+rwX '${target}data' '${target}data/uploads' '${target}edit/data' '${target}edit/data/uploads' '${target}edit/redaktion/storage' && chmod u+rw '${target}edit/data/content-live.json' '${target}data/content-live.json' '${target}edit/redaktion/storage/content-draft.json' '${target}edit/redaktion/storage/access-emails.json' '${target}edit/redaktion/storage/otp.json' '${target}edit/redaktion/storage/zugang-secret.txt' 2>/dev/null || true"
 
           rm -f "$keyfile"
-          echo "Deploy abgeschlossen (Soft-Launch + /edit/)."
+          echo "Deploy abgeschlossen (Stamm-URL + /edit/)."

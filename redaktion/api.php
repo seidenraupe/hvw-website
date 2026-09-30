@@ -112,6 +112,10 @@ if ($action === 'publish' && $method === 'POST') {
         'fields' => $fields,
     ];
     hvw_write_json(HVW_LIVE, $live);
+    $publicLive = dirname(HVW_ROOT) . '/data/content-live.json';
+    if (is_dir(dirname(HVW_ROOT) . '/data') && is_writable(dirname(HVW_ROOT) . '/data')) {
+        hvw_write_json($publicLive, $live);
+    }
     $draft['status'] = 'published';
     $draft['publishedAt'] = $now;
     $draft['fields'] = $fields;
