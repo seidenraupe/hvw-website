@@ -85,6 +85,12 @@ if not (
     raise SystemExit("Stadt- und Kantonsblock müssen unter der Liste stehen")
 if page.find("<h1") > -1 and "Netzwerk" not in page[page.find("<h1"): page.find("</h1>") + 6]:
     raise SystemExit("Seitentitel muss Netzwerk heissen")
+if re.search(r"<th[^>]*>\s*Bild\s*</th>", page) or re.search(
+    r"<th[^>]*>\s*Organisation\s*</th>", page
+):
+    raise SystemExit("Tabellenlegende Bild/Organisation muss entfernt sein")
+if "<thead>" in page:
+    raise SystemExit("Netzwerk-Tabelle braucht keinen thead mehr")
 
 for html in ROOT.glob("*.html"):
     if html.name == "programm.html":

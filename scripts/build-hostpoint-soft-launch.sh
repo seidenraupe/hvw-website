@@ -6,7 +6,7 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 OUT="${ROOT}/deploy/hostpoint-soft-launch"
 
 rm -rf "${OUT}"
-mkdir -p "${OUT}/css" "${OUT}/js" "${OUT}/images" "${OUT}/data"
+mkdir -p "${OUT}/programm" "${OUT}/css" "${OUT}/js" "${OUT}/images" "${OUT}/data"
 
 # Stamm-URL: Weiterleitung zur bestehenden Vereinswebsite (nicht zum Programm)
 cat > "${OUT}/index.html" <<'HTML'
@@ -36,16 +36,24 @@ if [[ ! -f "${ROOT}/Statuten.pdf" ]]; then
   exit 1
 fi
 cp "${ROOT}/Statuten.pdf" "${OUT}/Statuten.pdf"
+cp "${ROOT}/programm/.htaccess" "${OUT}/programm/.htaccess"
 mkdir -p "${OUT}/coucou"
 cp "${ROOT}/coucou/index.html" "${OUT}/coucou/index.html"
 cp "${ROOT}/coucou/.htaccess" "${OUT}/coucou/.htaccess"
 mkdir -p "${OUT}/mus"
 cp "${ROOT}/mus/index.html" "${OUT}/mus/index.html"
 cp "${ROOT}/mus/.htaccess" "${OUT}/mus/.htaccess"
+if [[ -f "${ROOT}/programm/Programm.pdf" ]]; then
+  cp "${ROOT}/programm/Programm.pdf" "${OUT}/programm/Programm.pdf"
+fi
+if [[ -f "${ROOT}/programm/Programm.json" ]]; then
+  cp "${ROOT}/programm/Programm.json" "${OUT}/programm/Programm.json"
+fi
 cp "${ROOT}/css/site.css" "${OUT}/css/site.css"
 cp "${ROOT}/js/tailwind-config.js" "${OUT}/js/tailwind-config.js"
 cp "${ROOT}/js/analytics.js" "${OUT}/js/analytics.js"
 cp "${ROOT}/js/main.js" "${OUT}/js/main.js"
+cp "${ROOT}/js/programm-download.js" "${OUT}/js/programm-download.js"
 cp "${ROOT}/js/coucou-preview.js" "${OUT}/js/coucou-preview.js"
 cp "${ROOT}/data/analytics.json" "${OUT}/data/analytics.json"
 cp "${ROOT}/images/hvw-logo.png" "${OUT}/images/hvw-logo.png"
@@ -60,12 +68,12 @@ Hostpoint Soft-Launch — Upload-Anleitung
 ========================================
 
 Stamm-URL:  https://www.hvwinterthur.ch/  →  https://www.historischer-verein-winterthur.ch/
-Programmseite und Programm-PDF: entfernt (HTTP 410 unter /programm).
+Programmseite: entfernt (HTTP 410). PDF: https://www.hvwinterthur.ch/programm/Programm.pdf
 
 1. Im Hostpoint Control Panel den Document Root von www.hvwinterthur.ch öffnen
    (FTP/SFTP oder Dateimanager).
 2. Den gesamten Inhalt DIESES Ordners in den Document Root hochladen
-   (index.html, .htaccess, robots.txt, css/, js/, data/, images/).
+   (index.html, .htaccess, robots.txt, programm/, css/, js/, data/, images/).
 3. Prüfen:
    - https://www.hvwinterthur.ch/         → Weiterleitung zur Vereinswebsite
    - https://www.hvwinterthur.ch/programm → 410, Seite ist entfernt
