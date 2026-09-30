@@ -124,4 +124,21 @@ build = (ROOT / "scripts/build-hostpoint-vorschau.sh").read_text(encoding="utf-8
 if "dokumente/historische-privat-fuehrungen.pdf" not in build or "dokumente/szenische-fuehrung-berta.pdf" not in build:
     raise SystemExit("Vorschau-Build muss die Führungs-PDFs kopieren")
 
+hours_remote = {
+    "moersburg.oeffnung": (
+        "Öffnungszeiten<br>geöffnet von Mai bis Oktober<br>"
+        "Mi bis Sa 14 bis 17 Uhr<br>und So 13 - 17 Uhr.<br>"
+        "Szenische öffentliche Führungen gemäss Programm."
+    ),
+    "moersburg.lead": "Ritterburg.",
+}
+hours_live, _hours_stats = merge.merge_live_fields(
+    tour_ids, tour_seed, hours_remote, {}
+)
+hours = hours_live["moersburg.oeffnung"]
+if "Mai bis Oktober" in hours or "So 13" in hours or "13 - 17" in hours:
+    raise SystemExit(f"Mörsburg-Saisonblock bleibt stehen: {hours}")
+if "Szenische" not in hours or "öffentliche Führungen" not in hours:
+    raise SystemExit(f"Text nach dem Saisonblock fehlt: {hours}")
+
 print("content merge ok")
