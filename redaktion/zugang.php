@@ -56,8 +56,7 @@ $esc = static fn (string $s): string => htmlspecialchars($s, ENT_QUOTES, 'UTF-8'
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="../js/tailwind-config.js"></script>
+  <link rel="stylesheet" href="../css/tailwind.css">
   <link rel="stylesheet" href="../css/site.css">
 </head>
 <body class="bg-hvw-fog font-sans text-hvw-ink antialiased">

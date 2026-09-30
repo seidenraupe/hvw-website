@@ -50,7 +50,11 @@ if [[ -f "${ROOT}/programm/Programm.json" ]]; then
   cp "${ROOT}/programm/Programm.json" "${OUT}/programm/Programm.json"
 fi
 cp "${ROOT}/css/site.css" "${OUT}/css/site.css"
-cp "${ROOT}/js/tailwind-config.js" "${OUT}/js/tailwind-config.js"
+if [[ ! -s "${ROOT}/css/tailwind.css" ]]; then
+  echo "css/tailwind.css fehlt — zuerst npm run build:css" >&2
+  exit 1
+fi
+cp "${ROOT}/css/tailwind.css" "${OUT}/css/tailwind.css"
 cp "${ROOT}/js/analytics.js" "${OUT}/js/analytics.js"
 cp "${ROOT}/js/main.js" "${OUT}/js/main.js"
 cp "${ROOT}/js/programm-download.js" "${OUT}/js/programm-download.js"

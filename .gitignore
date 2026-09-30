@@ -1,3 +1,4 @@
+node_modules/
 redaktion/config.local.php
 redaktion/config.mail.php
 redaktion/storage/content-draft.json

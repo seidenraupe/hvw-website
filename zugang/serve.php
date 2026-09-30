@@ -26,8 +26,7 @@ function hvw_zugang_layout(string $title, string $inner): void
     echo '<link rel="preconnect" href="https://fonts.googleapis.com">';
     echo '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>';
     echo '<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">';
-    echo '<script src="https://cdn.tailwindcss.com"></script>';
-    echo '<script src="' . $esc($prefix) . 'js/tailwind-config.js"></script>';
+    echo '<link rel="stylesheet" href="' . $esc($prefix) . 'css/tailwind.css">';
     echo '<link rel="stylesheet" href="' . $esc($prefix) . 'css/site.css">';
     echo '</head><body class="bg-hvw-fog font-sans text-hvw-ink antialiased">';
     echo '<main class="mx-auto flex min-h-screen max-w-md flex-col justify-center px-5 py-12">';
