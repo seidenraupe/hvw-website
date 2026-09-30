@@ -98,6 +98,7 @@ def merge_live_fields(
     out, override_stats = apply_deploy_overrides(out, ids, seed, remote_draft)
     split_house_hours(out, remote)
     link_moersburg_tours(out)
+    update_industriekultur_partner(out)
     return out, {
         "kept": kept,
         "added": added,
@@ -145,6 +146,24 @@ def link_tour_phrase(html: str, phrase: str, href: str) -> str:
         )
 
     return pattern.sub(repl, html)
+
+
+def update_industriekultur_partner(fields: dict[str, str]) -> None:
+    """Industriekultur: historisch relevante Anlagen, Aufnahme in Absprache."""
+    text = fields.get("partner.6.body", "")
+    if not text:
+        return
+    updated = text.replace(
+        "dokumentiert erhaltene Industrieanlagen",
+        "dokumentiert historisch relevante, erhaltene Industrieanlagen",
+        1,
+    )
+    updated = updated.replace(
+        "in Winterthur arbeitet mit",
+        "in Winterthur fotografiert und beschreibt Objekte in Absprache mit",
+        1,
+    )
+    fields["partner.6.body"] = updated
 
 
 def link_moersburg_tours(fields: dict[str, str]) -> None:
@@ -215,6 +234,7 @@ def merge_draft_fields(
             out[field_id] = draft_val
     split_house_hours(out, remote_draft)
     link_moersburg_tours(out)
+    update_industriekultur_partner(out)
     return out
 
 

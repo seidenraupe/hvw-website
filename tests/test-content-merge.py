@@ -124,4 +124,30 @@ build = (ROOT / "scripts/build-hostpoint-vorschau.sh").read_text(encoding="utf-8
 if "dokumente/historische-privat-fuehrungen.pdf" not in build or "dokumente/szenische-fuehrung-berta.pdf" not in build:
     raise SystemExit("Vorschau-Build muss die Führungs-PDFs kopieren")
 
+old_partner = (
+    "Die Plattform dokumentiert erhaltene Industrieanlagen in einem nationalen Online-Inventar. "
+    "Getragen wird sie von der SGTI; ein Projektteam in Winterthur arbeitet mit den kantonalen Denkmalpflegen."
+)
+partner_live, _partner_stats = merge.merge_live_fields(
+    ["partner.6.body"],
+    {},
+    {"partner.6.body": old_partner},
+    {},
+)
+partner_text = partner_live["partner.6.body"]
+if "dokumentiert historisch relevante, erhaltene Industrieanlagen" not in partner_text:
+    raise SystemExit(f"Industriekultur-Anlagen nicht ergänzt: {partner_text}")
+if "fotografiert und beschreibt Objekte in Absprache mit den kantonalen Denkmalpflegen" not in partner_text:
+    raise SystemExit(f"Industriekultur-Aufnahme nicht ergänzt: {partner_text}")
+if "arbeitet mit" in partner_text:
+    raise SystemExit(f"alte Formulierung bleibt: {partner_text}")
+partner_again, _partner_again = merge.merge_live_fields(
+    ["partner.6.body"],
+    {},
+    {"partner.6.body": partner_text},
+    {},
+)
+if partner_again["partner.6.body"] != partner_text:
+    raise SystemExit("Industriekultur-Text wird beim zweiten Merge verdoppelt")
+
 print("content merge ok")
