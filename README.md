@@ -153,6 +153,15 @@ Die frühere Mess-ID der öffentlichen Programmseite ist entfernt.
 
 Aktuelle Measurement ID: **`G-8M4EZQDQ98`**
 
+`js/ga-events.js` sendet zusätzliche Ereignisse, ohne Formularfelder oder
+E-Mail-Texte zu übermitteln:
+
+- `mitglied_werden` — Klick auf «Mitglied werden», «Jetzt beitreten» oder «Beitreten»
+- `webling_form_start` / `webling_form_complete` — Start und Abschluss des Anmeldeformulars
+- `eventfrog_click` — Ticket-Link; `surface` ist `home` (Titelseite) oder `agenda`
+- `email_click` — E-Mail-Link, nur die Adresse
+- `phone_click` — Telefon-Link
+
 Der Google-Tag steht **inline** im `<head>` der Website
 (wie von Google vorgesehen), damit die Tag-Erkennung greift. Dieselbe
 Measurement ID steht in `data/analytics.json`.

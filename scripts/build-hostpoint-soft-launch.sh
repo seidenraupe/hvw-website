@@ -52,6 +52,7 @@ fi
 cp "${ROOT}/css/site.css" "${OUT}/css/site.css"
 cp "${ROOT}/js/tailwind-config.js" "${OUT}/js/tailwind-config.js"
 cp "${ROOT}/js/analytics.js" "${OUT}/js/analytics.js"
+cp "${ROOT}/js/ga-events.js" "${OUT}/js/ga-events.js"
 cp "${ROOT}/js/main.js" "${OUT}/js/main.js"
 cp "${ROOT}/js/programm-download.js" "${OUT}/js/programm-download.js"
 cp "${ROOT}/js/coucou-preview.js" "${OUT}/js/coucou-preview.js"
