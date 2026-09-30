@@ -149,18 +149,27 @@ def link_tour_phrase(html: str, phrase: str, href: str) -> str:
 
 
 def ensure_moersburg_member_admission(fields: dict[str, str]) -> None:
-    """Hängt den Gratis-Hinweis an den reduzierten Mörsburg-Preis, einmalig."""
+    """Kultur-Legi statt reduziertem Preis, plus Gratis-Hinweis für Mitglieder."""
     text = fields.get("moersburg.oeffnung", "")
-    if not text or "HVW-Mitglieder" in text:
+    if not text:
         return
-    updated, count = re.subn(
-        r"(CHF\s*3\.(?:–|-))(?!\s*,\s*für\s+HVW-Mitglieder)",
-        r"\1, für HVW-Mitglieder gratis",
+    text = re.sub(
+        r"reduziert\s+CHF\s*3(?:\.(?:–|-))?",
+        "mit Kultur-Legi CHF 2.50",
         text,
         count=1,
+        flags=re.IGNORECASE,
     )
-    if count:
-        fields["moersburg.oeffnung"] = updated
+    if "HVW-Mitglieder" not in text:
+        text, count = re.subn(
+            r"(CHF\s*2\.50|CHF\s*3\.(?:–|-))(?!\s*,\s*für\s+HVW-Mitglieder)",
+            r"\1, für HVW-Mitglieder gratis",
+            text,
+            count=1,
+        )
+        if not count:
+            return
+    fields["moersburg.oeffnung"] = text
 
 
 def link_moersburg_tours(fields: dict[str, str]) -> None:

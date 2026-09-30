@@ -138,8 +138,10 @@ hours_live, _hours_stats = merge.merge_live_fields(
 hours = hours_live["moersburg.oeffnung"]
 if "1. Mai bis 31. Oktober" not in hours or "So und Feiertage: 13–17 Uhr" not in hours:
     raise SystemExit(f"Öffnungszeiten dürfen nicht verschwinden: {hours}")
-if "CHF 3.–, für HVW-Mitglieder gratis" not in hours:
-    raise SystemExit(f"Mitglieder-Hinweis fehlt: {hours}")
+if "reduziert CHF 3" in hours:
+    raise SystemExit(f"reduzierter Preis bleibt stehen: {hours}")
+if "mit Kultur-Legi CHF 2.50, für HVW-Mitglieder gratis" not in hours:
+    raise SystemExit(f"Kultur-Legi oder Mitglieder-Hinweis fehlt: {hours}")
 again_hours, _ = merge.merge_live_fields(
     tour_ids, tour_seed, {"moersburg.oeffnung": hours, "moersburg.lead": "Ritterburg."}, {}
 )
