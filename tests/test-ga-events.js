@@ -152,6 +152,10 @@ assert.ok(privacy.includes('E-Mail- und'), 'Datenschutz nennt E-Mail- und Telefo
 assert.ok(privacy.includes('Führungs-PDFs'), 'Datenschutz nennt die PDF-Messung');
 
 const build = fs.readFileSync(path.join(root, 'scripts/build-hostpoint-soft-launch.sh'), 'utf8');
-assert.ok(build.includes('js/ga-events.js'), 'Soft-Launch kopiert ga-events.js');
+assert.ok(
+  build.includes('copy_dir "${ROOT}/js"'),
+  'Soft-Launch kopiert js/ (inkl. ga-events.js)',
+);
+assert.ok(fs.existsSync(path.join(root, 'js/ga-events.js')), 'ga-events.js existiert im Quellbaum');
 
 console.log('ga-events ok');
