@@ -9,8 +9,10 @@ index = (ROOT / "index.html").read_text(encoding="utf-8")
 robots = (ROOT / "robots.txt").read_text(encoding="utf-8")
 deploy = (ROOT / ".github/workflows/deploy.yml").read_text(encoding="utf-8")
 
-if "historischer-verein-winterthur.ch" in htaccess:
-    raise SystemExit("Root-.htaccess darf nicht mehr zur alten Domain weiterleiten")
+if "https://www.historischer-verein-winterthur.ch" in htaccess:
+    raise SystemExit("Root-.htaccess darf nicht zur alten Domain weiterleiten")
+if "historischer-verein-winterthur" in htaccess and "www.hvwinterthur.ch%{REQUEST_URI}" not in htaccess:
+    raise SystemExit("Legacy-Host in .htaccess muss per 301 auf www.hvwinterthur.ch zeigen")
 if "historischer-verein-winterthur.ch" in build:
     raise SystemExit("Root-Build darf keine Redirect-index.html erzeugen")
 if 'content="noindex,nofollow"' in index:

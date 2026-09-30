@@ -14,6 +14,10 @@ Options -Indexes
   RewriteCond %{HTTPS} !=on
   RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
+  # Legacy-Domain → kanonische Stamm-URL (Alias/ DNS auf dieses Hosting)
+  RewriteCond %{HTTP_HOST} ^(www\.)?historischer-verein-winterthur\.ch$ [NC]
+  RewriteRule ^ https://www.hvwinterthur.ch%{REQUEST_URI} [L,R=301]
+
   # Legacy: /vorschau/ → /edit/ (Go-Live-Vorbereitung)
   RewriteRule ^vorschau/?$ /edit/ [L,R=301]
   RewriteRule ^vorschau/(.+)$ /edit/$1 [L,R=301]
