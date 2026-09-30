@@ -47,8 +47,8 @@ Solange die Gesamtwebsite noch nicht live geht:
 
 - Stamm-URL `https://www.hvwinterthur.ch/` → Weiterleitung nach
   **`https://www.historischer-verein-winterthur.ch/`** (wie bisher)
-- Die öffentliche Programmseite und das Programm-PDF sind entfernt.
-  Adressen unter `/programm` antworten mit HTTP 410.
+- Die öffentliche Programmseite `/programm` ist entfernt (HTTP 410).
+  Das Programm-PDF bleibt unter `/programm/Programm.pdf`.
 - Interne Redaktion (Passwort, nicht öffentlich):
   **`https://www.hvwinterthur.ch/vorschau/`**
 - Apache/Hostpoint: `.htaccess` (Stamm-Redirect, Programmseite weg)
@@ -121,6 +121,30 @@ Der frühere Plesk-Cron auf `giger-straehl.ch`
 - Soft-Launch-Deploy löscht die Export-JSONs nicht (`rsync --exclude`)
 - Skript-Updates nach Hostpoint: Action `deploy-cronjobs.yml` (bei Änderungen an `cronjobs/`)
 
+### Programm (PDF)
+
+Das aktuelle Programm gibt es als PDF (A4, druckbar: kompakter Kopf mit den
+drei Museen, dann alle Anlässe ab Druckdatum bis zur letzten Veranstaltung).
+Die HTML-Seite dazu ist entfernt:
+
+```
+https://www.hvwinterthur.ch/programm/Programm.pdf
+```
+
+Beim Speichern heisst die Datei `Programm HVW MM.JJJJ bis MM.JJJJ.pdf`
+(Druckmonat bis letzte Veranstaltung; Punkte statt Schrägstrich, damit der Browser den Namen nicht abschneidet).
+
+Erzeugung aus Eventfrog (alle drei Org-IDs):
+
+```bash
+pip install -r scripts/requirements-pdf.txt
+EVENTFROG_API_KEY=… python3 scripts/generate-programm-pdf.py
+```
+
+Beim Soft-Launch-Deploy wird das PDF in GitHub Actions frisch erzeugt,
+sofern die Eventfrog-API von GitHub aus antwortet. Schlägt der Abruf
+fehl (z. B. HTTP 403), bleibt das PDF aus dem Repository.
+
 ### Google Analytics 4
 
 Die Website wird mit **GA4** im Konto `thomas.giger@cloud-7.net` gemessen
@@ -147,6 +171,7 @@ kompletten Site-Build (nicht nur Soft-Launch) nach Hostpoint deployen.
 ## Struktur
 
 ```
+programm/           Programm-PDF (die öffentliche HTML-Seite ist entfernt)
 .htaccess           Apache/Hostpoint (HTTPS, Clean URLs)
 robots.txt          Soft-Launch Indexierung
 scripts/build-hostpoint-soft-launch.sh

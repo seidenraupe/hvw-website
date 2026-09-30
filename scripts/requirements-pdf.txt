@@ -1,0 +1,4 @@
+# Dependencies for scripts/generate-programm-pdf.py
+requests>=2.27,<3
+reportlab>=3.6,<5
+Pillow>=9,<12

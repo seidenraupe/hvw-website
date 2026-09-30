@@ -58,6 +58,7 @@ done
 mkdir -p "${OUT}/dokumente"
 cp "${ROOT}/dokumente/historische-privat-fuehrungen.pdf" "${OUT}/dokumente/historische-privat-fuehrungen.pdf"
 cp "${ROOT}/dokumente/szenische-fuehrung-berta.pdf" "${OUT}/dokumente/szenische-fuehrung-berta.pdf"
+copy_dir "${ROOT}/programm" "${OUT}/programm"
 copy_dir "${ROOT}/coucou" "${OUT}/coucou"
 copy_dir "${ROOT}/mus" "${OUT}/mus"
 copy_dir "${ROOT}/zugang" "${OUT}/zugang"
