@@ -39,12 +39,19 @@ if not (
     < html.find('id="vorstand-heading"')
 ):
     raise SystemExit("Jahresbericht muss vor dem Vorstand stehen")
-if 'href="Jahresbericht-2025.pdf"' not in html or "PDF herunterladen" not in html:
+if 'href="Jahresbericht-2025.pdf"' not in html or "Jahresbericht 2025" not in html:
     raise SystemExit("PDF-Download für Jahresbericht 2025 fehlt")
+if 'href="JB_2024_final.pdf"' not in html or "Jahresbericht 2024" not in html:
+    raise SystemExit("PDF-Download für Jahresbericht 2024 fehlt")
 if "Jahresbericht-2025.pdf" not in (ROOT / "scripts/build-hostpoint-vorschau.sh").read_text(encoding="utf-8"):
     raise SystemExit("Vorschau-Build kopiert Jahresbericht-2025.pdf nicht")
+if "JB_2024_final.pdf" not in (ROOT / "scripts/build-hostpoint-vorschau.sh").read_text(encoding="utf-8"):
+    raise SystemExit("Vorschau-Build kopiert JB_2024_final.pdf nicht")
 pdf = ROOT / "Jahresbericht-2025.pdf"
 if not pdf.is_file() or not pdf.read_bytes().startswith(b"%PDF"):
     raise SystemExit("Jahresbericht-2025.pdf fehlt")
+pdf24 = ROOT / "JB_2024_final.pdf"
+if not pdf24.is_file() or not pdf24.read_bytes().startswith(b"%PDF"):
+    raise SystemExit("JB_2024_final.pdf fehlt")
 
 print("ueber uns vorstand ok")
