@@ -1,0 +1,3 @@
+# Interner Bearbeitungszugang: nichts indexieren.
+User-agent: *
+Disallow: /

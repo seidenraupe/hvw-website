@@ -8,7 +8,7 @@ schema = json.loads((ROOT / "data/content-schema.json").read_text(encoding="utf-
 live = json.loads((ROOT / "data/content-live.json").read_text(encoding="utf-8"))
 museen = (ROOT / "museen.html").read_text(encoding="utf-8")
 lib = (ROOT / "redaktion/lib.php").read_text(encoding="utf-8")
-build = (ROOT / "scripts/build-hostpoint-vorschau.sh").read_text(encoding="utf-8")
+build = (ROOT / "scripts/build-hostpoint-edit.sh").read_text(encoding="utf-8")
 
 if "winterthur.com" in museen or "moersburg-winterthur.ch" in museen:
     raise SystemExit("Museumsseite darf nicht mehr auf externe Haus-Websites verlinken")

@@ -57,9 +57,9 @@ if not (
     < html.find('id="kontakt-heading"')
 ):
     raise SystemExit("Statuten müssen oben rechts neben dem Intro stehen")
-if "Jahresbericht-2025.pdf" not in (ROOT / "scripts/build-hostpoint-vorschau.sh").read_text(encoding="utf-8"):
+if "Jahresbericht-2025.pdf" not in (ROOT / "scripts/build-hostpoint-edit.sh").read_text(encoding="utf-8"):
     raise SystemExit("Vorschau-Build kopiert Jahresbericht-2025.pdf nicht")
-if "JB_2024_final.pdf" not in (ROOT / "scripts/build-hostpoint-vorschau.sh").read_text(encoding="utf-8"):
+if "JB_2024_final.pdf" not in (ROOT / "scripts/build-hostpoint-edit.sh").read_text(encoding="utf-8"):
     raise SystemExit("Vorschau-Build kopiert JB_2024_final.pdf nicht")
 pdf = ROOT / "dokumente/Jahresbericht-2025.pdf"
 if not pdf.is_file() or not pdf.read_bytes().startswith(b"%PDF"):

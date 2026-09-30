@@ -170,11 +170,11 @@ def copy_guidle_export(export_path):
 
 
 def home_events_output_paths(httpdocs_dir):
-    """Ziele für den Titelseiten-Auszug (öffentlich + Vorschau)."""
+    """Ziele für den Titelseiten-Auszug (öffentlich + /edit/)."""
     return [
         os.path.join(httpdocs_dir, "home-events.json"),
         os.path.join(httpdocs_dir, "data", "home-events.json"),
-        os.path.join(httpdocs_dir, "vorschau", "data", "home-events.json"),
+        os.path.join(httpdocs_dir, "edit", "data", "home-events.json"),
     ]
 
 

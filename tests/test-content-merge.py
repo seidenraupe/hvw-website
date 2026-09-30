@@ -154,9 +154,9 @@ for pdf in ("historische-privat-fuehrungen.pdf", "szenische-fuehrung-berta.pdf")
     path = ROOT / "dokumente" / pdf
     if not path.is_file() or path.read_bytes()[:5] != b"%PDF-":
         raise SystemExit(f"PDF fehlt: {path}")
-build = (ROOT / "scripts/build-hostpoint-vorschau.sh").read_text(encoding="utf-8")
-if "VORSCHAU_PDFS" not in build or "historische-privat-fuehrungen.pdf" not in build:
-    raise SystemExit("Vorschau-Build muss dokumente/ inkl. Führungs-PDFs kopieren")
+build = (ROOT / "scripts/build-hostpoint-edit.sh").read_text(encoding="utf-8")
+if "EDIT_PDFS" not in build or "historische-privat-fuehrungen.pdf" not in build:
+    raise SystemExit("Edit-Build muss dokumente/ inkl. Führungs-PDFs kopieren")
 
 hours_remote = {
     "moersburg.oeffnung": (

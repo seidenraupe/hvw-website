@@ -1,5 +1,5 @@
 # Soft-Launch: deploy/hostpoint-soft-launch → Hostpoint (www.hvwinterthur.ch)
-# Interne Vorschau: deploy/hostpoint-vorschau → /vorschau/ (E-Mail-Code)
+# Bearbeitungszugang: deploy/hostpoint-edit → /edit/ (E-Mail-Code, früher /vorschau/)
 #
 # Benötigte Repository-Secrets (Settings → Secrets and variables → Actions):
 #   SSH_PRIVATE_KEY  – kompletter privater Key (inkl. -----BEGIN … PRIVATE KEY-----)
@@ -73,7 +73,7 @@ jobs:
           test -s deploy/hostpoint-soft-launch/dokumente/Statuten.pdf
           echo "Soft-Launch enthält dokumente/Statuten.pdf ($(wc -c < deploy/hostpoint-soft-launch/dokumente/Statuten.pdf) Bytes)"
 
-      - name: Interne Vorschau bauen
+      - name: Bearbeitungszugang /edit/ bauen
         env:
           MAIL_SMTP_HOST: ${{ secrets.MAIL_SMTP_HOST }}
           MAIL_SMTP_PORT: ${{ secrets.MAIL_SMTP_PORT }}
@@ -83,10 +83,10 @@ jobs:
           VORSCHAU_ALLOWED_EMAILS: ${{ secrets.VORSCHAU_ALLOWED_EMAILS }}
         run: |
           set -euo pipefail
-          chmod +x ./scripts/build-hostpoint-vorschau.sh
-          ./scripts/build-hostpoint-vorschau.sh
-          test -s deploy/hostpoint-vorschau/dokumente/Statuten.pdf
-          echo "Vorschau enthält dokumente/Statuten.pdf → Hostpoint /vorschau/dokumente/Statuten.pdf"
+          chmod +x ./scripts/build-hostpoint-edit.sh
+          ./scripts/build-hostpoint-edit.sh
+          test -s deploy/hostpoint-edit/dokumente/Statuten.pdf
+          echo "Edit-Paket enthält dokumente/Statuten.pdf → Hostpoint /edit/dokumente/Statuten.pdf"
           python3 - <<'PY'
           import json, os, pathlib
           host = os.environ.get("MAIL_SMTP_HOST") or "smtp.mail.hostpoint.ch"
@@ -104,7 +104,7 @@ jobs:
               item = extra.strip().lower()
               if item and item not in emails:
                   emails.append(item)
-          out = pathlib.Path("deploy/hostpoint-vorschau/redaktion/config.mail.php")
+          out = pathlib.Path("deploy/hostpoint-edit/redaktion/config.mail.php")
           def php_str(value: str) -> str:
               return "'" + value.replace("\\", "\\\\").replace("'", "\\'") + "'"
           lines = [
@@ -116,7 +116,7 @@ jobs:
               f"  'pass' => {php_str(password)},",
               "  'secure' => 'tls',",
               f"  'from' => {php_str(mail_from)},",
-              "  'from_name' => 'HVW Vorschau',",
+              "  'from_name' => 'HVW Edit',",
               "  'allowed_emails' => [",
           ]
           for email in emails:
@@ -276,12 +276,19 @@ jobs:
             --exclude 'guidle_export.json' \
             --exclude 'mus_export.json' \
             --exclude 'home-events.json' \
-            --exclude 'vorschau/' \
+            --exclude 'edit/' \
             -e "ssh -i ${keyfile} -p 22 -o IdentitiesOnly=yes -o StrictHostKeyChecking=no" \
             deploy/hostpoint-soft-launch/ \
             "${SSH_USER}@${host}:${target}"
 
-          echo "rsync interne Vorschau → ${SSH_USER}@${host}:${target}vorschau/"
+          echo "Legacy /vorschau/ → /edit/ migrieren (einmalig, falls Ordner noch existiert)…"
+          ssh -i "$keyfile" -p 22 \
+            -o IdentitiesOnly=yes \
+            -o StrictHostKeyChecking=no \
+            "${SSH_USER}@${host}" \
+            "if [ -d '${target}vorschau' ]; then mkdir -p '${target}edit'; rsync -a '${target}vorschau/' '${target}edit/'; rm -rf '${target}vorschau'; fi"
+
+          echo "rsync Bearbeitungszugang → ${SSH_USER}@${host}:${target}edit/"
           rsync -avz --delete \
             --exclude 'data/content-live.json' \
             --exclude 'data/home-events.json' \
@@ -296,18 +303,18 @@ jobs:
             --exclude 'redaktion/storage/zugang-secret.txt' \
             --exclude 'redaktion/config.local.php' \
             -e "ssh -i ${keyfile} -p 22 -o IdentitiesOnly=yes -o StrictHostKeyChecking=no" \
-            deploy/hostpoint-vorschau/ \
-            "${SSH_USER}@${host}:${target}vorschau/"
+            deploy/hostpoint-edit/ \
+            "${SSH_USER}@${host}:${target}edit/"
 
           echo "Redaktionstexte mergen (Server gewinnt, Git nur neue Felder)…"
           merge_dir=$(mktemp -d)
           rsync -avz \
             -e "ssh -i ${keyfile} -p 22 -o IdentitiesOnly=yes -o StrictHostKeyChecking=no" \
-            "${SSH_USER}@${host}:${target}vorschau/data/content-live.json" \
+            "${SSH_USER}@${host}:${target}edit/data/content-live.json" \
             "${merge_dir}/remote-live.json" || true
           rsync -avz \
             -e "ssh -i ${keyfile} -p 22 -o IdentitiesOnly=yes -o StrictHostKeyChecking=no" \
-            "${SSH_USER}@${host}:${target}vorschau/redaktion/storage/content-draft.json" \
+            "${SSH_USER}@${host}:${target}edit/redaktion/storage/content-draft.json" \
             "${merge_dir}/remote-draft.json" || true
 
           if [ -s "${merge_dir}/remote-live.json" ]; then
@@ -322,11 +329,11 @@ jobs:
             rsync -avz \
               -e "ssh -i ${keyfile} -p 22 -o IdentitiesOnly=yes -o StrictHostKeyChecking=no" \
               "${merge_dir}/merged-live.json" \
-              "${SSH_USER}@${host}:${target}vorschau/data/content-live.json"
+              "${SSH_USER}@${host}:${target}edit/data/content-live.json"
             rsync -avz \
               -e "ssh -i ${keyfile} -p 22 -o IdentitiesOnly=yes -o StrictHostKeyChecking=no" \
               "${merge_dir}/merged-draft.json" \
-              "${SSH_USER}@${host}:${target}vorschau/redaktion/storage/content-draft.json"
+              "${SSH_USER}@${host}:${target}edit/redaktion/storage/content-draft.json"
           else
             echo "::warning::Kein content-live.json auf dem Server — Redaktions-Merge übersprungen (Daten bleiben unangetastet)."
           fi
@@ -336,7 +343,7 @@ jobs:
             -o IdentitiesOnly=yes \
             -o StrictHostKeyChecking=no \
             "${SSH_USER}@${host}" \
-            "mkdir -p '${target}vorschau/data/uploads' '${target}vorschau/redaktion/storage' && chmod u+rwX '${target}vorschau/data' '${target}vorschau/data/uploads' '${target}vorschau/redaktion/storage' && chmod u+rw '${target}vorschau/data/content-live.json' '${target}vorschau/redaktion/storage/content-draft.json' '${target}vorschau/redaktion/storage/access-emails.json' '${target}vorschau/redaktion/storage/otp.json' '${target}vorschau/redaktion/storage/zugang-secret.txt' 2>/dev/null || true"
+            "mkdir -p '${target}edit/data/uploads' '${target}edit/redaktion/storage' && chmod u+rwX '${target}edit/data' '${target}edit/data/uploads' '${target}edit/redaktion/storage' && chmod u+rw '${target}edit/data/content-live.json' '${target}edit/redaktion/storage/content-draft.json' '${target}edit/redaktion/storage/access-emails.json' '${target}edit/redaktion/storage/otp.json' '${target}edit/redaktion/storage/zugang-secret.txt' 2>/dev/null || true"
 
           rm -f "$keyfile"
-          echo "Deploy abgeschlossen (Soft-Launch + /vorschau/)."
+          echo "Deploy abgeschlossen (Soft-Launch + /edit/)."

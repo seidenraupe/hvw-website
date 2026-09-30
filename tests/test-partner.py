@@ -119,6 +119,6 @@ if schema["fields"]["partner.7.url"]["type"] != "url":
     raise SystemExit("Partner-Link ist kein URL-Feld")
 if "partner." not in (ROOT / "scripts/merge-content-json.py").read_text(encoding="utf-8"):
     raise SystemExit("Merge behandelt Partner-Felder nicht als Redaktion")
-if "partner.html" not in (ROOT / "scripts/build-hostpoint-vorschau.sh").read_text(encoding="utf-8"):
+if "partner.html" not in (ROOT / "scripts/build-hostpoint-edit.sh").read_text(encoding="utf-8"):
     raise SystemExit("Vorschau-Build kopiert partner.html nicht")
 print("partner page ok")

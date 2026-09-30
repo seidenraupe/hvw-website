@@ -51,7 +51,7 @@ Solange die Gesamtwebsite noch nicht live geht:
   Alle PDFs liegen unter `/dokumente/` (Programm: `/dokumente/Programm.pdf`).
   Alte Pfade leiten per 301 dorthin um.
 - Interne Redaktion (Passwort, nicht öffentlich):
-  **`https://www.hvwinterthur.ch/vorschau/`**
+  **`https://www.hvwinterthur.ch/edit/`** (früher `/vorschau/`, leitet per 301 um)
 - Apache/Hostpoint: `.htaccess` (Stamm-Redirect, Programmseite weg)
 - `robots.txt` + `noindex` auf Prototyp-Seiten
 
@@ -60,9 +60,9 @@ Solange die Gesamtwebsite noch nicht live geht:
 Workflow: `.github/workflows/deploy.yml` — bei Push auf `main` (oder manuell unter Actions).
 
 Baut `deploy/hostpoint-soft-launch/` **und** die interne Vorschau
-(`deploy/hostpoint-vorschau/` → `/vorschau/`) und synct beides per rsync/SSH.
-Der Soft-Launch-Sync lässt `/vorschau/` unangetastet (`--exclude vorschau/`).
-Veröffentlichte Redaktionstexte in `/vorschau/data/content-live.json` und Entwürfe
+(`deploy/hostpoint-edit/` → `/edit/`) und synct beides per rsync/SSH.
+Der Soft-Launch-Sync lässt `/edit/` unangetastet (`--exclude edit/`).
+Veröffentlichte Redaktionstexte in `/edit/data/content-live.json` und Entwürfe
 werden bei Deploys **nicht überschrieben**. Neue Textfelder aus Git werden nur
 **ergänzt** (Merge: Server gewinnt, Git liefert Startwerte für neue IDs).
 
@@ -282,15 +282,15 @@ Ordner**, der nicht verlinkt und nicht indexiert ist:
 
 1. **Die öffentliche Programmseite ist entfernt.** Die Stamm-URL leitet
    weiter zur bestehenden Vereinswebsite.
-2. **Vorschau:** `https://www.hvwinterthur.ch/vorschau/`
+2. **Bearbeitungszugang:** `https://www.hvwinterthur.ch/edit/`
    — E-Mail (Allowlist) + Code, der an diese Adresse geht.
    Der Zugang gilt bis Mitternacht (Schweizer Zeit); am nächsten Tag
    braucht man einen neuen Code.
 3. **Texte ändern:** Oben «Änderungsmodus — Anmelden»,
-   oder `https://www.hvwinterthur.ch/vorschau/redaktion/`
+   oder `https://www.hvwinterthur.ch/edit/redaktion/`
    — Login `redaktion` oder `freigabe` (kein zweiter Mail-Code).
 4. **E-Mail-Liste pflegen:** als Freigabe unter
-   `https://www.hvwinterthur.ch/vorschau/redaktion/zugang.php`
+   `https://www.hvwinterthur.ch/edit/redaktion/zugang.php`
 5. Erst beim Launch wandert die Website an die Stamm-URL, der Mail-Code
    entfällt.
 
@@ -307,7 +307,7 @@ Texte und Code sind getrennt:
 
 | Spur | Wo | Was |
 |---|---|---|
-| Redaktion | Hostpoint `/vorschau/` | `data/content-live.json` und Entwurf auf dem **Server** |
+| Redaktion | Hostpoint `/edit/` | `data/content-live.json` und Entwurf auf dem **Server** |
 | Entwicklung | GitHub `main` | HTML, CSS, JS, Schema, neue Feld-IDs |
 
 Beim Deploy gilt: **Felder, die auf dem Server schon existieren, bleiben.** Git liefert nur Startwerte für **neue** Feld-IDs (Merge-Skript `scripts/merge-content-json.py`). Entwürfe werden gleich behandelt: vorhandene Änderungen bleiben, neue IDs kommen dazu.

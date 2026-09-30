@@ -1,6 +1,6 @@
 <?php
 /**
- * Zugangsschutz für /vorschau/: Allowlist + Einmalcode per E-Mail.
+ * Zugangsschutz für /edit/ (Bearbeitungszugang): Allowlist + Einmalcode per E-Mail.
  */
 
 declare(strict_types=1);

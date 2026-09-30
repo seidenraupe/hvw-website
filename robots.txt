@@ -8,6 +8,6 @@ Allow: /css/
 Allow: /js/
 Allow: /data/
 Allow: /images/
-Disallow: /vorschau
-Disallow: /vorschau/
+Disallow: /edit
+Disallow: /edit/
 Disallow: /

@@ -8,4 +8,4 @@ redaktion/storage/zugang-secret.txt
 redaktion/storage/*.log
 data/uploads/*
 !data/uploads/.htaccess
-deploy/hostpoint-vorschau/
+deploy/hostpoint-edit/

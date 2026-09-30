@@ -5,9 +5,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 agenda = (ROOT / "agenda.html").read_text(encoding="utf-8")
 htaccess = (ROOT / ".htaccess").read_text(encoding="utf-8")
-vorschau = (ROOT / "deploy/vorschau.htaccess").read_text(encoding="utf-8")
+vorschau = (ROOT / "deploy/edit.htaccess").read_text(encoding="utf-8")
 deploy = (ROOT / ".github/workflows/deploy.yml").read_text(encoding="utf-8")
-preview = (ROOT / "scripts/build-hostpoint-vorschau.sh").read_text(encoding="utf-8")
+preview = (ROOT / "scripts/build-hostpoint-edit.sh").read_text(encoding="utf-8")
 
 if "Alle Anlässe zum Herunterladen oder Ausdrucken" not in agenda:
     raise SystemExit("Download-Button-Text fehlt")
