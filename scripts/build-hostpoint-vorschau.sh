@@ -22,6 +22,7 @@ for page in index.html agenda.html museen.html lindengut.html moersburg.html ueb
 done
 
 copy_dir "${ROOT}/css" "${OUT}/css"
+copy_dir "${ROOT}/fonts" "${OUT}/fonts"
 copy_dir "${ROOT}/js" "${OUT}/js"
 copy_dir "${ROOT}/images" "${OUT}/images"
 copy_dir "${ROOT}/data" "${OUT}/data"

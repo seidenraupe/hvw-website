@@ -50,6 +50,13 @@ if [[ -f "${ROOT}/programm/Programm.json" ]]; then
   cp "${ROOT}/programm/Programm.json" "${OUT}/programm/Programm.json"
 fi
 cp "${ROOT}/css/site.css" "${OUT}/css/site.css"
+if [[ ! -f "${ROOT}/css/fonts.css" ]]; then
+  echo "css/fonts.css fehlt — Schriften wären nicht lokal." >&2
+  exit 1
+fi
+cp "${ROOT}/css/fonts.css" "${OUT}/css/fonts.css"
+mkdir -p "${OUT}/fonts/outfit"
+cp "${ROOT}/fonts/outfit/"*.woff2 "${OUT}/fonts/outfit/"
 cp "${ROOT}/js/tailwind-config.js" "${OUT}/js/tailwind-config.js"
 cp "${ROOT}/js/analytics.js" "${OUT}/js/analytics.js"
 cp "${ROOT}/js/main.js" "${OUT}/js/main.js"

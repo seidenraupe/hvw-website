@@ -6,7 +6,7 @@ Moderne HTML/CSS-Website aus den vorhandenen Wireframes/Mood-Referenzen, mit **T
 
 - Visuell verwandt mit [museumschaffen.ch](https://www.museumschaffen.ch/) (gleicher Trägerverein)
 - Klarere UX: grosse Touch-Ziele (min. 48px), hohe Kontraste, ruhige Navigation
-- Typografie: Outfit (geometrisch, gut lesbar — nicht Inter)
+- Typografie: Outfit (geometrisch, gut lesbar — nicht Inter), lokal aus @fontsource, ohne Google Fonts
 - Schwarz/Weiss wie Museum Schaffen, mit klaren CTAs
 
 ## Event-Karten (Tailwind)

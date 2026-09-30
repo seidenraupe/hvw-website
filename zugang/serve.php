@@ -23,9 +23,7 @@ function hvw_zugang_layout(string $title, string $inner): void
     $base = hvw_zugang_base();
     $prefix = ($base === '' ? '' : $base) . '/';
     echo '<link rel="icon" href="' . $esc($prefix) . 'images/favicon.ico">';
-    echo '<link rel="preconnect" href="https://fonts.googleapis.com">';
-    echo '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>';
-    echo '<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">';
+    echo '<link rel="stylesheet" href="' . $esc($prefix) . 'css/fonts.css">';
     echo '<script src="https://cdn.tailwindcss.com"></script>';
     echo '<script src="' . $esc($prefix) . 'js/tailwind-config.js"></script>';
     echo '<link rel="stylesheet" href="' . $esc($prefix) . 'css/site.css">';

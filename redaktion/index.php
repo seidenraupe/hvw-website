@@ -39,9 +39,7 @@ if (str_contains($next, '://') || str_starts_with($next, '//')) {
   <title>Redaktion — Historischer Verein Winterthur</title>
   <meta name="robots" content="noindex,nofollow">
   <link rel="icon" href="../images/favicon.ico" sizes="any">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/fonts.css">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="../js/tailwind-config.js"></script>
   <link rel="stylesheet" href="../css/site.css">
