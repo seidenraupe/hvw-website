@@ -97,8 +97,8 @@ def merge_live_fields(
     remote_draft = remote_draft or {}
     out, override_stats = apply_deploy_overrides(out, ids, seed, remote_draft)
     split_house_hours(out, remote)
-    strip_moersburg_hours_block(out)
     link_moersburg_tours(out)
+    ensure_moersburg_member_admission(out)
     return out, {
         "kept": kept,
         "added": added,
@@ -148,27 +148,19 @@ def link_tour_phrase(html: str, phrase: str, href: str) -> str:
     return pattern.sub(repl, html)
 
 
-# Saison- und Sonntagszeile der Mörsburg, vom Redaktionstext abtrennen.
-_MOERSBURG_HOURS_BLOCK = re.compile(
-    r"(?:\s|<br\s*/?>|\n|,)*"
-    r"(?:"
-    r"(?:1\.\s*)?(?:geöffnet|offen)\s+von\s+Mai\s+bis\s+(?:31\.\s*)?Oktober\.?"
-    r"|1\.\s*Mai\s+bis\s+31\.\s*Oktober\.?"
-    r"|(?:und\s+)?So(?:\s+und\s+Feiertage)?\s*:?\s*13\s*(?:bis|[–\-])\s*17\s*Uhr\.?"
-    r")",
-    flags=re.IGNORECASE,
-)
-
-
-def strip_moersburg_hours_block(fields: dict[str, str]) -> None:
-    for field_id in ("moersburg.oeffnung", "moersburg.lead", "moersburg.body"):
-        text = fields.get(field_id, "")
-        if not text or not _MOERSBURG_HOURS_BLOCK.search(text):
-            continue
-        updated = _MOERSBURG_HOURS_BLOCK.sub("", text)
-        updated = re.sub(r"(?:<br\s*/?>\s*){2,}", "<br>", updated, flags=re.IGNORECASE)
-        updated = re.sub(r"^(?:\s|<br\s*/?>)+|(?:\s|<br\s*/?>)+$", "", updated, flags=re.IGNORECASE)
-        fields[field_id] = updated
+def ensure_moersburg_member_admission(fields: dict[str, str]) -> None:
+    """Hängt den Gratis-Hinweis an den reduzierten Mörsburg-Preis, einmalig."""
+    text = fields.get("moersburg.oeffnung", "")
+    if not text or "HVW-Mitglieder" in text:
+        return
+    updated, count = re.subn(
+        r"(CHF\s*3\.(?:–|-))(?!\s*,\s*für\s+HVW-Mitglieder)",
+        r"\1, für HVW-Mitglieder gratis",
+        text,
+        count=1,
+    )
+    if count:
+        fields["moersburg.oeffnung"] = updated
 
 
 def link_moersburg_tours(fields: dict[str, str]) -> None:

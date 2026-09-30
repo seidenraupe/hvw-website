@@ -126,9 +126,9 @@ if "dokumente/historische-privat-fuehrungen.pdf" not in build or "dokumente/szen
 
 hours_remote = {
     "moersburg.oeffnung": (
-        "Öffnungszeiten<br>geöffnet von Mai bis Oktober<br>"
-        "Mi bis Sa 14 bis 17 Uhr<br>und So 13 - 17 Uhr.<br>"
-        "Szenische öffentliche Führungen gemäss Programm."
+        "<strong>Öffnungszeiten</strong><br>1. Mai bis 31. Oktober<br>"
+        "So und Feiertage: 13–17 Uhr<br><br><strong>Eintrittspreise</strong><br>"
+        "CHF 5.–, reduziert CHF 3.–"
     ),
     "moersburg.lead": "Ritterburg.",
 }
@@ -136,9 +136,14 @@ hours_live, _hours_stats = merge.merge_live_fields(
     tour_ids, tour_seed, hours_remote, {}
 )
 hours = hours_live["moersburg.oeffnung"]
-if "Mai bis Oktober" in hours or "So 13" in hours or "13 - 17" in hours:
-    raise SystemExit(f"Mörsburg-Saisonblock bleibt stehen: {hours}")
-if "Szenische" not in hours or "öffentliche Führungen" not in hours:
-    raise SystemExit(f"Text nach dem Saisonblock fehlt: {hours}")
+if "1. Mai bis 31. Oktober" not in hours or "So und Feiertage: 13–17 Uhr" not in hours:
+    raise SystemExit(f"Öffnungszeiten dürfen nicht verschwinden: {hours}")
+if "CHF 3.–, für HVW-Mitglieder gratis" not in hours:
+    raise SystemExit(f"Mitglieder-Hinweis fehlt: {hours}")
+again_hours, _ = merge.merge_live_fields(
+    tour_ids, tour_seed, {"moersburg.oeffnung": hours, "moersburg.lead": "Ritterburg."}, {}
+)
+if again_hours["moersburg.oeffnung"].count("HVW-Mitglieder") != 1:
+    raise SystemExit("Mitglieder-Hinweis wird doppelt gesetzt")
 
 print("content merge ok")
