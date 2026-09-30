@@ -18,6 +18,15 @@
     'jetzt beitreten': 'Jetzt beitreten',
     beitreten: 'Beitreten',
   };
+  const PDF_EVENTS = [
+    ['statuten.pdf', 'statuten_pdf'],
+    ['sammlungskonzept.pdf', 'sammlungskonzept_pdf'],
+    ['jahresbericht-2025.pdf', 'jahresbericht_2025_pdf'],
+    ['jb_2024_final.pdf', 'jahresbericht_2024_pdf'],
+    ['programm.pdf', 'programm_pdf'],
+    ['szenische-fuehrung-berta.pdf', 'szenische_fuehrung_pdf'],
+    ['historische-privat-fuehrungen.pdf', 'private_fuehrung_pdf'],
+  ];
 
   function clip(value) {
     const text = String(value == null ? '' : value).trim();
@@ -58,6 +67,21 @@
     return clip(value.slice('tel:'.length).split('?')[0].split('#')[0]);
   }
 
+  function pdfEvent(href) {
+    const value = String(href || '').trim();
+    if (!value || /^(mailto:|tel:|javascript:)/i.test(value)) return null;
+    let path = value.split('?')[0].split('#')[0];
+    try {
+      path = new URL(value, 'https://www.hvwinterthur.ch').pathname;
+    } catch (err) {
+      /* relativer Pfad bleibt */
+    }
+    const file = path.split('/').pop().toLowerCase();
+    const match = PDF_EVENTS.find((entry) => entry[0] === file);
+    if (!match) return null;
+    return { name: match[1], params: { file_name: clip(file) } };
+  }
+
   function isEventfrogHref(href) {
     const value = String(href || '').trim();
     if (!value || /^(mailto:|tel:|javascript:)/i.test(value)) return false;
@@ -81,6 +105,8 @@
     if (phone) {
       return { name: 'phone_click', params: { phone_number: phone } };
     }
+    const pdf = pdfEvent(href);
+    if (pdf) return pdf;
     const label = MEMBERSHIP_LABELS[visibleLabel(text)];
     if (label) {
       return {

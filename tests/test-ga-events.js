@@ -69,6 +69,23 @@ assert.strictEqual(otherTicket.params.surface, 'other');
 
 assert.strictEqual(click('https://example.org/tickets', 'Tickets', '/'), null);
 
+const pdfCases = [
+  ['Statuten.pdf', 'statuten_pdf'],
+  ['/Statuten.pdf', 'statuten_pdf'],
+  ['Sammlungskonzept.pdf', 'sammlungskonzept_pdf'],
+  ['Jahresbericht-2025.pdf', 'jahresbericht_2025_pdf'],
+  ['JB_2024_final.pdf', 'jahresbericht_2024_pdf'],
+  ['/programm/Programm.pdf', 'programm_pdf'],
+  ['dokumente/szenische-fuehrung-berta.pdf', 'szenische_fuehrung_pdf'],
+  ['dokumente/historische-privat-fuehrungen.pdf', 'private_fuehrung_pdf'],
+];
+pdfCases.forEach((entry) => {
+  const event = click(entry[0], 'Öffnen', '/ueber-uns.html');
+  assert.ok(event, entry[0]);
+  assert.strictEqual(event.name, entry[1], entry[0]);
+});
+assert.strictEqual(click('anderes.pdf', 'PDF', '/'), null);
+
 const longUrl = 'https://eventfrog.ch/' + 'a'.repeat(200);
 const clipped = click(longUrl, 'Details', '/');
 assert.ok(clipped.params.link_url.length <= PARAM_MAX);
@@ -132,6 +149,7 @@ const privacy = fs.readFileSync(path.join(root, 'datenschutz.html'), 'utf8');
 assert.ok(privacy.includes('Ticket-Links'), 'Datenschutz nennt die Ticket-Messung');
 assert.ok(privacy.includes('nicht'), 'Datenschutz grenzt Formularinhalte aus');
 assert.ok(privacy.includes('E-Mail- und'), 'Datenschutz nennt E-Mail- und Telefon-Klicks');
+assert.ok(privacy.includes('Führungs-PDFs'), 'Datenschutz nennt die PDF-Messung');
 
 const build = fs.readFileSync(path.join(root, 'scripts/build-hostpoint-soft-launch.sh'), 'utf8');
 assert.ok(build.includes('js/ga-events.js'), 'Soft-Launch kopiert ga-events.js');
