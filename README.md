@@ -158,6 +158,7 @@ E-Mail-Texte zu übermitteln:
 - `eventfrog_click` — Ticket-Link; `surface` ist `home` (Titelseite) oder `agenda`
 - `email_click` — E-Mail-Link, nur die Adresse
 - `phone_click` — Telefon-Link
+- je ein eigenes Ereignis pro PDF: `statuten_pdf`, `sammlungskonzept_pdf`, `jahresbericht_2025_pdf`, `jahresbericht_2024_pdf`, `programm_pdf`, `szenische_fuehrung_pdf`, `private_fuehrung_pdf`
 
 Der Google-Tag steht **inline** im `<head>` der Website
 (wie von Google vorgesehen), damit die Tag-Erkennung greift. Dieselbe
