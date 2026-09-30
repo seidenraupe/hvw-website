@@ -87,6 +87,40 @@ if split_draft["lindengut.lead"] != "Entwurf zur Villa.":
 if "So: 10–12 Uhr" not in split_draft["lindengut.oeffnung"]:
     raise SystemExit("Entwurf-Öffnungszeiten nicht übernommen")
 
+member_price = (
+    "<strong>Eintrittspreise:</strong><br>CHF 5.–, reduziert CHF 3.– für Mitglieder "
+    "des Historischen Vereins Winterthur mit Ausweis kostenlos"
+)
+member_live, _member_stats = merge.merge_live_fields(
+    ["lindengut.oeffnung"],
+    {},
+    {"lindengut.oeffnung": member_price},
+    {},
+)
+member_text = member_live["lindengut.oeffnung"]
+if "CHF 3.–<br>für Mitglieder" not in member_text:
+    raise SystemExit(f"Mitgliederhinweis nicht umbrochen: {member_text}")
+if member_text.count("für Mitglieder") != 1 or member_text.count("<br>für Mitglieder") != 1:
+    raise SystemExit(f"Mitgliederhinweis mehrfach: {member_text}")
+if "<strong>Eintrittspreise:</strong>" not in member_text:
+    raise SystemExit("Eintrittspreise-Zeile darf nicht verschwinden")
+member_again, _member_again = merge.merge_live_fields(
+    ["lindengut.oeffnung"],
+    {},
+    {"lindengut.oeffnung": member_text},
+    {},
+)
+if member_again["lindengut.oeffnung"] != member_text:
+    raise SystemExit("Umbruch wird beim zweiten Merge verdoppelt")
+member_draft = merge.merge_draft_fields(
+    ["lindengut.oeffnung"],
+    {"lindengut.oeffnung": member_text},
+    {"lindengut.oeffnung": member_price},
+    {},
+)
+if "CHF 3.–<br>für Mitglieder" not in member_draft["lindengut.oeffnung"]:
+    raise SystemExit("Entwurf behält den Mitgliederhinweis in der Preiszeile")
+
 src = (ROOT / "scripts/merge-content-json.py").read_text(encoding="utf-8")
 if "sammlung.objekt.1.image" in merge.INITIAL_SEED_FIELD_IDS:
     raise SystemExit("Sammlung darf nicht in INITIAL_SEED_FIELD_IDS stehen")
