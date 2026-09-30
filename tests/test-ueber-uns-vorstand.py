@@ -43,6 +43,20 @@ if 'href="Jahresbericht-2025.pdf"' not in html or "Jahresbericht 2025" not in ht
     raise SystemExit("PDF-Download für Jahresbericht 2025 fehlt")
 if 'href="JB_2024_final.pdf"' not in html or "Jahresbericht 2024" not in html:
     raise SystemExit("PDF-Download für Jahresbericht 2024 fehlt")
+if 'download="Jahresbericht-2025.pdf"' in html or 'download="Jahresbericht-2024.pdf"' in html:
+    raise SystemExit("Jahresberichte müssen wie Statuten im PDF-Viewer öffnen")
+if 'id="ueber-uns-statuten"' not in html:
+    raise SystemExit("Statuten-Link oben auf Über uns fehlt")
+statuten_start = html.rfind("<a ", 0, html.find('id="ueber-uns-statuten"'))
+statuten_link = html[statuten_start : html.find("</a>", html.find('id="ueber-uns-statuten"'))]
+if 'href="Statuten.pdf"' not in statuten_link:
+    raise SystemExit("Statuten-Link oben auf Über uns fehlt")
+if not (
+    html.find("<h1")
+    < html.find('id="ueber-uns-statuten"')
+    < html.find('id="kontakt-heading"')
+):
+    raise SystemExit("Statuten müssen oben rechts neben dem Intro stehen")
 if "Jahresbericht-2025.pdf" not in (ROOT / "scripts/build-hostpoint-vorschau.sh").read_text(encoding="utf-8"):
     raise SystemExit("Vorschau-Build kopiert Jahresbericht-2025.pdf nicht")
 if "JB_2024_final.pdf" not in (ROOT / "scripts/build-hostpoint-vorschau.sh").read_text(encoding="utf-8"):
