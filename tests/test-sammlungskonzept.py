@@ -15,7 +15,7 @@ pdf = (ROOT / "dokumente/Sammlungskonzept.pdf").read_bytes()
 if b"/Subtype/Image" not in pdf and b"/Subtype /Image" not in pdf:
     raise SystemExit("PDF enthält kein Logo-Bild")
 
-build = (ROOT / "scripts/build-hostpoint-vorschau.sh").read_text(encoding="utf-8")
+build = (ROOT / "scripts/build-hostpoint-edit.sh").read_text(encoding="utf-8")
 if "dokumente/${pdf}" not in build and "dokumente/" not in build:
     raise SystemExit("Vorschau-Build kopiert dokumente/ nicht")
 print("sammlungskonzept ok")

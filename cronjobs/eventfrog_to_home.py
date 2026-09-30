@@ -9,7 +9,7 @@ Attraktionen (Öffnungszeiten) werden wie im Coucou-Export weggelassen.
 Schreibt die nächsten 3 Anlässe aller HVW-Org-IDs nach:
     https://www.hvwinterthur.ch/home-events.json
     https://www.hvwinterthur.ch/data/home-events.json
-    und eine Kopie unter /vorschau/data/ für die interne Vorschau.
+    und eine Kopie unter /edit/data/ für den Bearbeitungszugang.
 
 Hostpoint-Cron (täglich, z.B. 03:10):
     cd /home/zozuhosa/cronjobs && /usr/local/bin/python eventfrog_to_home.py >/dev/null 2>&1

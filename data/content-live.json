@@ -1,7 +1,7 @@
 {
   "updatedAt": "2026-08-27T09:30:00Z",
   "updatedBy": "initial",
-  "_comment": "Git-Startwerte. Auf Hostpoint /vorschau/ behalten bestehende Felder beim Deploy den Redaktionsstand; neue Feld-IDs werden aus dieser Datei ergänzt.",
+  "_comment": "Git-Startwerte. Auf Hostpoint /edit/ behalten bestehende Felder beim Deploy den Redaktionsstand; neue Feld-IDs werden aus dieser Datei ergänzt.",
   "fields": {
     "start.hero.headline": "Geschichte erklärt die Gegenwart.",
     "start.hero.lead": "Seit 1874 verbinden wir Winterthur mit seiner Geschichte — in drei Museen, mit Vorträgen und einem klaren Programm.",

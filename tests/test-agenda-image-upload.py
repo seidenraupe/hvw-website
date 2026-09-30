@@ -72,8 +72,8 @@ if "Require all denied" not in htaccess.read_text(encoding="utf-8"):
 serve = (ROOT / "zugang/serve.php").read_text(encoding="utf-8")
 if "Cache-Control: no-store" not in serve:
     raise SystemExit("Vorschau-HTML darf nicht aus dem Browser-Cache kommen")
-vorschau_ht = (ROOT / "deploy/vorschau.htaccess").read_text(encoding="utf-8")
+vorschau_ht = (ROOT / "deploy/edit.htaccess").read_text(encoding="utf-8")
 if "Cache-Control" not in vorschau_ht:
-    raise SystemExit("vorschau.htaccess muss JS/CSS ohne Cache ausliefern")
+    raise SystemExit("edit.htaccess muss JS/CSS ohne Cache ausliefern")
 
 print("agenda image upload ok")

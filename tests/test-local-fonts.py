@@ -86,7 +86,7 @@ for rel in ("datenschutz.html", "deploy/hostpoint-soft-launch/datenschutz.html")
 soft = (ROOT / "scripts/build-hostpoint-soft-launch.sh").read_text(encoding="utf-8")
 if "css/fonts.css" not in soft or "fonts/outfit" not in soft:
     fail("Soft-Launch kopiert die lokalen Schriften nicht")
-preview = (ROOT / "scripts/build-hostpoint-vorschau.sh").read_text(encoding="utf-8")
+preview = (ROOT / "scripts/build-hostpoint-edit.sh").read_text(encoding="utf-8")
 if 'copy_dir "${ROOT}/fonts"' not in preview:
     fail("Vorschau kopiert fonts/ nicht")
 

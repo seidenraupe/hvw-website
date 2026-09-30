@@ -41,7 +41,7 @@ for rule in (
     if rule not in htaccess:
         raise SystemExit(f".htaccess fehlt Weiterleitung: {rule}")
 
-build = (ROOT / "scripts/build-hostpoint-vorschau.sh").read_text(encoding="utf-8")
+build = (ROOT / "scripts/build-hostpoint-edit.sh").read_text(encoding="utf-8")
 if "dokumente/${pdf}" not in build:
     raise SystemExit("Vorschau-Build kopiert dokumente/ nicht einheitlich")
 

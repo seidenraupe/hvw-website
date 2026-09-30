@@ -1,4 +1,4 @@
-# Interne Vorschau — Zugang per E-Mail-Code (kein HTTP-Basic).
+# Interner Bearbeitungszugang (/edit/) — E-Mail-Code (kein HTTP-Basic).
 
 DirectoryIndex index.html index.php
 
@@ -15,7 +15,7 @@ Options -Indexes
 
 <IfModule mod_rewrite.c>
   RewriteEngine On
-  RewriteBase /vorschau/
+  RewriteBase /edit/
 
   RewriteCond %{HTTPS} !=on
   RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]

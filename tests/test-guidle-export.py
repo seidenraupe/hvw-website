@@ -47,7 +47,7 @@ def main():
     expected_paths = [
         "/web/home-events.json",
         "/web/data/home-events.json",
-        "/web/vorschau/data/home-events.json",
+        "/web/edit/data/home-events.json",
     ]
     if paths != expected_paths:
         raise SystemExit("home-events paths mismatch: {0}".format(paths))
