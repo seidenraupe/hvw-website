@@ -98,6 +98,7 @@ def merge_live_fields(
     out, override_stats = apply_deploy_overrides(out, ids, seed, remote_draft)
     split_house_hours(out, remote)
     link_moersburg_tours(out)
+    ensure_moersburg_member_admission(out)
     return out, {
         "kept": kept,
         "added": added,
@@ -145,6 +146,30 @@ def link_tour_phrase(html: str, phrase: str, href: str) -> str:
         )
 
     return pattern.sub(repl, html)
+
+
+def ensure_moersburg_member_admission(fields: dict[str, str]) -> None:
+    """Kultur-Legi statt reduziertem Preis, plus Gratis-Hinweis für Mitglieder."""
+    text = fields.get("moersburg.oeffnung", "")
+    if not text:
+        return
+    text = re.sub(
+        r"reduziert\s+CHF\s*3(?:\.(?:–|-))?",
+        "mit Kultur-Legi CHF 2.50",
+        text,
+        count=1,
+        flags=re.IGNORECASE,
+    )
+    if "HVW-Mitglieder" not in text:
+        text, count = re.subn(
+            r"(CHF\s*2\.50|CHF\s*3\.(?:–|-))(?!\s*,\s*für\s+HVW-Mitglieder)",
+            r"\1, für HVW-Mitglieder gratis",
+            text,
+            count=1,
+        )
+        if not count:
+            return
+    fields["moersburg.oeffnung"] = text
 
 
 def link_moersburg_tours(fields: dict[str, str]) -> None:

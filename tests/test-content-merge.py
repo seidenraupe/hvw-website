@@ -124,4 +124,28 @@ build = (ROOT / "scripts/build-hostpoint-vorschau.sh").read_text(encoding="utf-8
 if "dokumente/historische-privat-fuehrungen.pdf" not in build or "dokumente/szenische-fuehrung-berta.pdf" not in build:
     raise SystemExit("Vorschau-Build muss die Führungs-PDFs kopieren")
 
+hours_remote = {
+    "moersburg.oeffnung": (
+        "<strong>Öffnungszeiten</strong><br>1. Mai bis 31. Oktober<br>"
+        "So und Feiertage: 13–17 Uhr<br><br><strong>Eintrittspreise</strong><br>"
+        "CHF 5.–, reduziert CHF 3.–"
+    ),
+    "moersburg.lead": "Ritterburg.",
+}
+hours_live, _hours_stats = merge.merge_live_fields(
+    tour_ids, tour_seed, hours_remote, {}
+)
+hours = hours_live["moersburg.oeffnung"]
+if "1. Mai bis 31. Oktober" not in hours or "So und Feiertage: 13–17 Uhr" not in hours:
+    raise SystemExit(f"Öffnungszeiten dürfen nicht verschwinden: {hours}")
+if "reduziert CHF 3" in hours:
+    raise SystemExit(f"reduzierter Preis bleibt stehen: {hours}")
+if "mit Kultur-Legi CHF 2.50, für HVW-Mitglieder gratis" not in hours:
+    raise SystemExit(f"Kultur-Legi oder Mitglieder-Hinweis fehlt: {hours}")
+again_hours, _ = merge.merge_live_fields(
+    tour_ids, tour_seed, {"moersburg.oeffnung": hours, "moersburg.lead": "Ritterburg."}, {}
+)
+if again_hours["moersburg.oeffnung"].count("HVW-Mitglieder") != 1:
+    raise SystemExit("Mitglieder-Hinweis wird doppelt gesetzt")
+
 print("content merge ok")
