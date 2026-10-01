@@ -24,8 +24,12 @@ if 'exclude \'edit/\'' not in deploy:
     raise SystemExit("Soft-Launch-Deploy muss edit/ ausschliessen")
 if "deploy/hostpoint-edit/" not in deploy or "target}edit/" not in deploy:
     raise SystemExit("Deploy muss nach /edit/ rsyncen")
-if "rm -rf '${target}vorschau'" not in deploy:
-    raise SystemExit("Deploy muss Legacy-Ordner vorschau entfernen")
+if "exclude 'vorschau/'" not in deploy:
+    raise SystemExit("Soft-Launch-Deploy muss vorschau/ als Server-Backup ausschliessen")
+if "restore-edit-from-vorschau.sh" not in deploy:
+    raise SystemExit("Deploy muss Redaktionsdaten aus /vorschau/ nach /edit/ kopieren")
+if "rm -rf '${target}vorschau'" in deploy:
+    raise SystemExit("Deploy darf /vorschau/ auf dem Server nicht löschen (Daten-Backup)")
 if "hostpoint-edit" not in build:
     raise SystemExit("Edit-Build-Skript fehlt Ziel hostpoint-edit")
 if "Disallow: /edit/" not in robots:

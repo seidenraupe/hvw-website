@@ -39,7 +39,6 @@ touch "${draft_local}"
 candidates=(
   "${target}edit/data/content-live.json"
   "${target}data/content-live.json"
-  "${target}vorschau/data/content-live.json"
   "${target}edit/data/content-live.seed.json"
   "${target}data/content-live.seed.json"
 )
