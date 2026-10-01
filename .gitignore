@@ -9,3 +9,6 @@ redaktion/storage/*.log
 data/uploads/*
 !data/uploads/.htaccess
 deploy/hostpoint-edit/
+deploy/hostpoint-soft-launch/
+artifacts/
+scripts/__pycache__/
