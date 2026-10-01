@@ -311,95 +311,15 @@ jobs:
             deploy/hostpoint-edit/ \
             "${SSH_USER}@${host}:${target}edit/"
 
-          echo "Redaktionstexte mergen (Server gewinnt, Git nur neue Felder)…"
-          merge_dir=$(mktemp -d)
-          rsync -avz \
-            -e "ssh -i ${keyfile} -p 22 -o IdentitiesOnly=yes -o StrictHostKeyChecking=no" \
-            "${SSH_USER}@${host}:${target}edit/data/content-live.json" \
-            "${merge_dir}/remote-live.json" || true
-          rsync -avz \
-            -e "ssh -i ${keyfile} -p 22 -o IdentitiesOnly=yes -o StrictHostKeyChecking=no" \
-            "${SSH_USER}@${host}:${target}edit/redaktion/storage/content-draft.json" \
-            "${merge_dir}/remote-draft.json" || true
+          chmod +x scripts/bootstrap-server-content.sh
+          echo "Redaktion: Merge, Bootstrap und Bild-Restore…"
+          ./scripts/bootstrap-server-content.sh "$host" "${SSH_USER}" "$target" "$keyfile"
 
-          if [ -s "${merge_dir}/remote-live.json" ]; then
-            python3 scripts/merge-content-json.py \
-              --schema data/content-schema.json \
-              --seed data/content-live.json \
-              --remote-live "${merge_dir}/remote-live.json" \
-              --remote-draft "${merge_dir}/remote-draft.json" \
-              --out-live "${merge_dir}/merged-live.json" \
-              --out-draft "${merge_dir}/merged-draft.json"
-
-            rsync -avz \
-              -e "ssh -i ${keyfile} -p 22 -o IdentitiesOnly=yes -o StrictHostKeyChecking=no" \
-              "${merge_dir}/merged-live.json" \
-              "${SSH_USER}@${host}:${target}edit/data/content-live.json"
-            rsync -avz \
-              -e "ssh -i ${keyfile} -p 22 -o IdentitiesOnly=yes -o StrictHostKeyChecking=no" \
-              "${merge_dir}/merged-draft.json" \
-              "${SSH_USER}@${host}:${target}edit/redaktion/storage/content-draft.json"
-            rsync -avz \
-              -e "ssh -i ${keyfile} -p 22 -o IdentitiesOnly=yes -o StrictHostKeyChecking=no" \
-              "${merge_dir}/merged-live.json" \
-              "${SSH_USER}@${host}:${target}data/content-live.json"
-          else
-            echo "::warning::Kein content-live.json auf dem Server — Redaktions-Merge übersprungen (Daten bleiben unangetastet)."
-          fi
-          rm -rf "${merge_dir}"
-
-          echo "Redaktions-Uploads → öffentliche Stamm-URL…"
           ssh -i "$keyfile" -p 22 \
             -o IdentitiesOnly=yes \
             -o StrictHostKeyChecking=no \
             "${SSH_USER}@${host}" \
-            "mkdir -p '${target}data/uploads' '${target}edit/data/uploads' '${target}edit/redaktion/storage' && if [ -d '${target}edit/data/uploads' ]; then rsync -a '${target}edit/data/uploads/' '${target}data/uploads/'; fi && chmod u+rwX '${target}data' '${target}data/uploads' '${target}edit/data' '${target}edit/data/uploads' '${target}edit/redaktion/storage' && chmod u+rw '${target}edit/data/content-live.json' '${target}data/content-live.json' '${target}edit/redaktion/storage/content-draft.json' '${target}edit/redaktion/storage/access-emails.json' '${target}edit/redaktion/storage/otp.json' '${target}edit/redaktion/storage/zugang-secret.txt' 2>/dev/null || true"
-
-          echo "Leere Bildpfade aus Entwurf / Upload-Ordner wiederherstellen…"
-          recover_dir=$(mktemp -d)
-          rsync -avz \
-            -e "ssh -i ${keyfile} -p 22 -o IdentitiesOnly=yes -o StrictHostKeyChecking=no" \
-            "${SSH_USER}@${host}:${target}edit/data/content-live.json" \
-            "${recover_dir}/live.json" || true
-          rsync -avz \
-            -e "ssh -i ${keyfile} -p 22 -o IdentitiesOnly=yes -o StrictHostKeyChecking=no" \
-            "${SSH_USER}@${host}:${target}edit/redaktion/storage/content-draft.json" \
-            "${recover_dir}/draft.json" || true
-          rsync -avz \
-            -e "ssh -i ${keyfile} -p 22 -o IdentitiesOnly=yes -o StrictHostKeyChecking=no" \
-            "${SSH_USER}@${host}:${target}edit/data/uploads/" \
-            "${recover_dir}/uploads-edit/" || true
-          rsync -avz \
-            -e "ssh -i ${keyfile} -p 22 -o IdentitiesOnly=yes -o StrictHostKeyChecking=no" \
-            "${SSH_USER}@${host}:${target}data/uploads/" \
-            "${recover_dir}/uploads-root/" || true
-          if [ -s "${recover_dir}/live.json" ]; then
-            python3 scripts/restore-editorial-images.py \
-              --live "${recover_dir}/live.json" \
-              --draft "${recover_dir}/draft.json" \
-              --upload-dir "${recover_dir}/uploads-edit" \
-              --upload-dir "${recover_dir}/uploads-root" \
-              --out-live "${recover_dir}/restored-live.json" \
-              --out-draft "${recover_dir}/restored-draft.json" || true
-            rsync -avz \
-              -e "ssh -i ${keyfile} -p 22 -o IdentitiesOnly=yes -o StrictHostKeyChecking=no" \
-              "${recover_dir}/restored-live.json" \
-              "${SSH_USER}@${host}:${target}edit/data/content-live.json"
-            rsync -avz \
-              -e "ssh -i ${keyfile} -p 22 -o IdentitiesOnly=yes -o StrictHostKeyChecking=no" \
-              "${recover_dir}/restored-live.json" \
-              "${SSH_USER}@${host}:${target}data/content-live.json"
-            rsync -avz \
-              -e "ssh -i ${keyfile} -p 22 -o IdentitiesOnly=yes -o StrictHostKeyChecking=no" \
-              "${recover_dir}/restored-draft.json" \
-              "${SSH_USER}@${host}:${target}edit/redaktion/storage/content-draft.json"
-            ssh -i "$keyfile" -p 22 -o IdentitiesOnly=yes -o StrictHostKeyChecking=no \
-              "${SSH_USER}@${host}" \
-              "rsync -a '${target}edit/data/uploads/' '${target}data/uploads/' 2>/dev/null || true"
-          else
-            echo "::warning::Kein Live-JSON für Bild-Restore auf dem Server."
-          fi
-          rm -rf "${recover_dir}"
+            "chmod u+rwX '${target}data' '${target}data/uploads' '${target}edit/data' '${target}edit/data/uploads' '${target}edit/redaktion/storage' 2>/dev/null || true"
 
           rm -f "$keyfile"
           echo "Deploy abgeschlossen (Stamm-URL + /edit/)."
