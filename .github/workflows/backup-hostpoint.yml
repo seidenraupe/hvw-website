@@ -74,7 +74,8 @@ jobs:
           export BACKUP_INCLUDE_CRONJOBS=$([ "${INCLUDE_CRON}" = "true" ] && echo 1 || echo 0)
           export BACKUP_GIT_ARCHIVE="${git_archive}"
           chmod +x scripts/backup-hostpoint-full.sh
-          archive=$(./scripts/backup-hostpoint-full.sh "$host" "${SSH_USER}" "$target" "$keyfile" "$work")
+          archive=$(./scripts/backup-hostpoint-full.sh "$host" "${SSH_USER}" "$target" "$keyfile" "$work" | tail -1)
+          test -f "$archive"
           cp "$archive" "${GITHUB_WORKSPACE}/hostpoint-backup-latest.tar.gz"
           echo "ARCHIVE_PATH=${archive}" >> "$GITHUB_ENV"
           rm -f "$keyfile"
