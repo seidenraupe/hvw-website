@@ -277,6 +277,7 @@ jobs:
             --exclude 'mus_export.json' \
             --exclude 'home-events.json' \
             --exclude 'edit/' \
+            --exclude 'vorschau/' \
             --exclude 'data/content-live.json' \
             --exclude 'data/uploads/*.jpg' \
             --exclude 'data/uploads/*.jpeg' \
@@ -285,13 +286,6 @@ jobs:
             -e "ssh -i ${keyfile} -p 22 -o IdentitiesOnly=yes -o StrictHostKeyChecking=no" \
             deploy/hostpoint-soft-launch/ \
             "${SSH_USER}@${host}:${target}"
-
-          echo "Legacy /vorschau/ → /edit/ migrieren (einmalig, falls Ordner noch existiert)…"
-          ssh -i "$keyfile" -p 22 \
-            -o IdentitiesOnly=yes \
-            -o StrictHostKeyChecking=no \
-            "${SSH_USER}@${host}" \
-            "if [ -d '${target}vorschau' ]; then mkdir -p '${target}edit'; rsync -a '${target}vorschau/' '${target}edit/'; rm -rf '${target}vorschau'; fi"
 
           echo "rsync Bearbeitungszugang → ${SSH_USER}@${host}:${target}edit/"
           rsync -avz --delete \
@@ -311,8 +305,10 @@ jobs:
             deploy/hostpoint-edit/ \
             "${SSH_USER}@${host}:${target}edit/"
 
-          chmod +x scripts/bootstrap-server-content.sh
-          echo "Redaktion: Merge, Bootstrap und Bild-Restore…"
+          chmod +x scripts/restore-edit-from-vorschau.sh scripts/bootstrap-server-content.sh
+          echo "Redaktionsdaten aus /vorschau/-Backup nach /edit/…"
+          ./scripts/restore-edit-from-vorschau.sh "$host" "${SSH_USER}" "$target" "$keyfile"
+          echo "Redaktion: Merge (neue Git-Felder), Bildpfade prüfen…"
           ./scripts/bootstrap-server-content.sh "$host" "${SSH_USER}" "$target" "$keyfile"
 
           ssh -i "$keyfile" -p 22 \
