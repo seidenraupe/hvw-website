@@ -28,6 +28,8 @@ if "exclude 'vorschau/'" not in deploy:
     raise SystemExit("Soft-Launch-Deploy muss vorschau/ als Server-Backup ausschliessen")
 if "restore-edit-from-vorschau.sh" not in deploy:
     raise SystemExit("Deploy muss Redaktionsdaten aus /vorschau/ nach /edit/ kopieren")
+if "data/.vorschau-restore-done" not in deploy:
+    raise SystemExit("Deploy muss Vorschau-Restore-Marker vor rsync --delete schützen")
 if "rm -rf '${target}vorschau'" in deploy:
     raise SystemExit("Deploy darf /vorschau/ auf dem Server nicht löschen (Daten-Backup)")
 if "hostpoint-edit" not in build:
