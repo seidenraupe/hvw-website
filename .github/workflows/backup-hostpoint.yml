@@ -1,0 +1,95 @@
+# Vollbackup Hostpoint (Website + Redaktion + /vorschau/-Backup) als Download-Artefakt.
+# Ablage in Teams: Kanal 02-Sekretariat → 04-Kommunikation → Website →
+# 00_Datensicherung Website HVW Code+Inhalt (siehe docs/datensicherung-hostpoint.md).
+name: Backup Hostpoint (Vollständig)
+
+on:
+  workflow_dispatch:
+    inputs:
+      include_cronjobs:
+        description: Auch ~/cronjobs/ (Eventfrog-Skripte) sichern
+        type: boolean
+        default: true
+      include_git_archive:
+        description: Git-Quellcode (main) als ZIP ins Backup packen
+        type: boolean
+        default: true
+
+concurrency:
+  group: hostpoint-full-backup
+  cancel-in-progress: false
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Code auschecken
+        uses: actions/checkout@v4
+
+      - name: Secrets prüfen
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_TARGET_DIR: ${{ secrets.SSH_TARGET_DIR }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          set -euo pipefail
+          for v in SSH_HOST SSH_USER SSH_TARGET_DIR SSH_PRIVATE_KEY; do
+            if [ -z "${!v:-}" ]; then
+              echo "::error::Secret $v fehlt"
+              exit 1
+            fi
+          done
+
+      - name: Hostpoint spiegeln und Archiv erzeugen
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_TARGET_DIR: ${{ secrets.SSH_TARGET_DIR }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          INCLUDE_CRON: ${{ inputs.include_cronjobs }}
+          INCLUDE_GIT: ${{ inputs.include_git_archive }}
+        run: |
+          set -euo pipefail
+          host="${SSH_HOST}"
+          host="${host#sftp://}"; host="${host#ssh://}"
+          host="${host#https://}"; host="${host#http://}"
+          host="${host%%/*}"; host="${host%%:*}"
+          target="${SSH_TARGET_DIR}"
+          case "$target" in */) ;; *) target="${target}/" ;; esac
+
+          mkdir -p ~/.ssh
+          keyfile=$(mktemp)
+          printf '%s\n' "$SSH_PRIVATE_KEY" | tr -d '\r' > "$keyfile"
+          chmod 600 "$keyfile"
+          ssh-keyscan -p 22 -H "$host" >> ~/.ssh/known_hosts 2>/dev/null || true
+
+          work=$(mktemp -d)
+          git_archive=""
+          if [ "${INCLUDE_GIT}" = "true" ]; then
+            git_archive="${work}/prototype-hvw-website-main.zip"
+            git archive --format=zip -o "${git_archive}" HEAD
+          fi
+
+          export BACKUP_INCLUDE_CRONJOBS=$([ "${INCLUDE_CRON}" = "true" ] && echo 1 || echo 0)
+          export BACKUP_GIT_ARCHIVE="${git_archive}"
+          chmod +x scripts/backup-hostpoint-full.sh
+          archive=$(./scripts/backup-hostpoint-full.sh "$host" "${SSH_USER}" "$target" "$keyfile" "$work")
+          cp "$archive" "${GITHUB_WORKSPACE}/hostpoint-backup-latest.tar.gz"
+          echo "ARCHIVE_PATH=${archive}" >> "$GITHUB_ENV"
+          rm -f "$keyfile"
+
+      - name: Backup-Artefakt hochladen
+        uses: actions/upload-artifact@v4
+        with:
+          name: hostpoint-vollbackup
+          path: hostpoint-backup-latest.tar.gz
+          retention-days: 90
+          if-no-files-found: error
+
+      - name: Kurzinfo
+        run: |
+          ls -lh hostpoint-backup-latest.tar.gz
+          echo ""
+          echo "Download: GitHub → Actions → dieser Lauf → Artifacts → hostpoint-vollbackup"
+          echo "Teams-Ablage: docs/datensicherung-hostpoint.md"

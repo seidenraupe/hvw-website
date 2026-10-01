@@ -62,6 +62,13 @@ Veröffentlichte Redaktionstexte in `/edit/data/content-live.json` und Entwürfe
 werden bei Deploys **nicht überschrieben**. Neue Textfelder aus Git werden nur
 **ergänzt** (Merge: Server gewinnt, Git liefert Startwerte für neue IDs).
 
+#### Datensicherung Hostpoint (Code + Live-Inhalt)
+
+Redaktionstexte und Uploads liegen auf dem Server — Git allein reicht nicht als Vollbackup.
+Workflow **Backup Hostpoint (Vollständig)** (`.github/workflows/backup-hostpoint.yml`) spiegelt
+den Document Root 1:1 und liefert ein `.tar.gz`-Artefakt zum Download. Ablage in Teams:
+siehe [`docs/datensicherung-hostpoint.md`](docs/datensicherung-hostpoint.md).
+
 #### Secrets (Repo → Settings → Secrets and variables → Actions)
 
 | Secret | Inhalt |
