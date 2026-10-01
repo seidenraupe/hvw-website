@@ -278,6 +278,7 @@ jobs:
             --exclude 'home-events.json' \
             --exclude 'edit/' \
             --exclude 'vorschau/' \
+            --exclude 'data/.vorschau-restore-done' \
             --exclude 'data/content-live.json' \
             --exclude 'data/uploads/*.jpg' \
             --exclude 'data/uploads/*.jpeg' \
@@ -289,6 +290,7 @@ jobs:
 
           echo "rsync Bearbeitungszugang → ${SSH_USER}@${host}:${target}edit/"
           rsync -avz --delete \
+            --exclude '.synced-from-vorschau-backup' \
             --exclude 'data/content-live.json' \
             --exclude 'data/home-events.json' \
             --exclude 'home-events.json' \
