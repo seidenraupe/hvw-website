@@ -1,0 +1,113 @@
+# Einmalig / bei Datenverlust: Bildpfade auf Hostpoint aus Entwurf + Upload-Ordner rekonstruieren.
+name: Recover editorial images
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: hostpoint-recover-editorial
+  cancel-in-progress: true
+
+jobs:
+  recover:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Secrets prüfen
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_TARGET_DIR: ${{ secrets.SSH_TARGET_DIR }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          set -euo pipefail
+          for v in SSH_HOST SSH_USER SSH_TARGET_DIR SSH_PRIVATE_KEY; do
+            if [ -z "${!v:-}" ]; then
+              echo "::error::$v fehlt"
+              exit 1
+            fi
+          done
+
+      - name: Server-Daten holen und wiederherstellen
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_TARGET_DIR: ${{ secrets.SSH_TARGET_DIR }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          set -euo pipefail
+          host="${SSH_HOST}"
+          host="${host#sftp://}"; host="${host#ssh://}"
+          host="${host#https://}"; host="${host#http://}"
+          host="${host%%/*}"; host="${host%%:*}"
+          target="${SSH_TARGET_DIR}"
+          case "$target" in */) ;; *) target="${target}/" ;; esac
+
+          mkdir -p ~/.ssh
+          keyfile=$(mktemp)
+          printf '%s\n' "$SSH_PRIVATE_KEY" | tr -d '\r' > "$keyfile"
+          chmod 600 "$keyfile"
+          ssh-keyscan -p 22 -H "$host" >> ~/.ssh/known_hosts 2>/dev/null || true
+
+          work=$(mktemp -d)
+          rsync -avz \
+            -e "ssh -i ${keyfile} -p 22 -o IdentitiesOnly=yes -o StrictHostKeyChecking=no" \
+            "${SSH_USER}@${host}:${target}edit/data/content-live.json" \
+            "${work}/live.json" || true
+          rsync -avz \
+            -e "ssh -i ${keyfile} -p 22 -o IdentitiesOnly=yes -o StrictHostKeyChecking=no" \
+            "${SSH_USER}@${host}:${target}edit/redaktion/storage/content-draft.json" \
+            "${work}/draft.json" || true
+          rsync -avz \
+            -e "ssh -i ${keyfile} -p 22 -o IdentitiesOnly=yes -o StrictHostKeyChecking=no" \
+            "${SSH_USER}@${host}:${target}edit/data/uploads/" \
+            "${work}/uploads-edit/" || true
+          rsync -avz \
+            -e "ssh -i ${keyfile} -p 22 -o IdentitiesOnly=yes -o StrictHostKeyChecking=no" \
+            "${SSH_USER}@${host}:${target}data/uploads/" \
+            "${work}/uploads-root/" || true
+
+          if [ ! -s "${work}/live.json" ]; then
+            echo "::error::Kein content-live.json auf dem Server."
+            exit 1
+          fi
+
+          python3 scripts/restore-editorial-images.py \
+            --live "${work}/live.json" \
+            --draft "${work}/draft.json" \
+            --upload-dir "${work}/uploads-edit" \
+            --upload-dir "${work}/uploads-root" \
+            --out-live "${work}/restored-live.json" \
+            --out-draft "${work}/restored-draft.json"
+
+          mkdir -p recovery-artifacts
+          cp "${work}/live.json" recovery-artifacts/backup-live-before.json
+          cp "${work}/draft.json" recovery-artifacts/backup-draft-before.json 2>/dev/null || true
+          cp "${work}/restored-live.json" recovery-artifacts/restored-live.json
+
+          rsync -avz \
+            -e "ssh -i ${keyfile} -p 22 -o IdentitiesOnly=yes -o StrictHostKeyChecking=no" \
+            "${work}/restored-live.json" \
+            "${SSH_USER}@${host}:${target}edit/data/content-live.json"
+          rsync -avz \
+            -e "ssh -i ${keyfile} -p 22 -o IdentitiesOnly=yes -o StrictHostKeyChecking=no" \
+            "${work}/restored-live.json" \
+            "${SSH_USER}@${host}:${target}data/content-live.json"
+          rsync -avz \
+            -e "ssh -i ${keyfile} -p 22 -o IdentitiesOnly=yes -o StrictHostKeyChecking=no" \
+            "${work}/restored-draft.json" \
+            "${SSH_USER}@${host}:${target}edit/redaktion/storage/content-draft.json"
+
+          ssh -i "$keyfile" -p 22 -o IdentitiesOnly=yes -o StrictHostKeyChecking=no \
+            "${SSH_USER}@${host}" \
+            "mkdir -p '${target}data/uploads' '${target}edit/data/uploads' && rsync -a '${target}edit/data/uploads/' '${target}data/uploads/'"
+
+          rm -f "$keyfile"
+
+      - name: Artefakt (Backup vor Restore)
+        uses: actions/upload-artifact@v4
+        with:
+          name: editorial-backup-before-restore
+          path: recovery-artifacts/
+          if-no-files-found: ignore
