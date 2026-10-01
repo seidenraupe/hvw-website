@@ -13,8 +13,8 @@ ssh_cmd() {
   ssh -i "$keyfile" -p 22 -o IdentitiesOnly=yes -o StrictHostKeyChecking=no "${user}@${host}" "$@"
 }
 
-v="${target}vorschau"
-e="${target}edit"
+v="${target}vorschau/"
+e="${target}edit/"
 marker="${e}.synced-from-vorschau-backup"
 
 if [ "${FORCE_RESTORE_FROM_VORSCHAU:-0}" != "1" ]; then
