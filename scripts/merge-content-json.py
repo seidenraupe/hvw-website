@@ -104,6 +104,7 @@ def merge_live_fields(
     ensure_moersburg_member_admission(out)
     break_lindengut_member_line(out)
     update_industriekultur_partner(out)
+    fix_partner_7_duplicate_die(out)
     return out, {
         "kept": kept,
         "added": added,
@@ -193,6 +194,12 @@ def update_industriekultur_partner(fields: dict[str, str]) -> None:
         1,
     )
     fields["partner.6.body"] = updated
+
+
+def fix_partner_7_duplicate_die(fields: dict[str, str]) -> None:
+    text = fields.get("partner.7.body", "")
+    if text.startswith("Die die vom "):
+        fields["partner.7.body"] = "Die vom " + text[len("Die die vom ") :]
 
 
 def link_moersburg_tours(fields: dict[str, str]) -> None:

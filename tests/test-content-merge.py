@@ -207,4 +207,14 @@ partner_again, _partner_again = merge.merge_live_fields(
 if partner_again["partner.6.body"] != partner_text:
     raise SystemExit("Industriekultur-Text wird beim zweiten Merge verdoppelt")
 
+sgti_typo = (
+    "Die die vom Winterthurer Industriearchäologen Hans-Peter Bärtschi initiierte "
+    "Schweizerische Gesellschaft für Technikgeschichte und Industriekultur fördert …"
+)
+sgti_live, _ = merge.merge_live_fields(["partner.7.body"], {}, {"partner.7.body": sgti_typo}, {})
+if sgti_live["partner.7.body"].startswith("Die die "):
+    raise SystemExit(f"SGTI-Doppel-die nicht korrigiert: {sgti_live['partner.7.body'][:40]}")
+if not sgti_live["partner.7.body"].startswith("Die vom Winterthurer"):
+    raise SystemExit(f"SGTI-Text unerwartet: {sgti_live['partner.7.body'][:40]}")
+
 print("content merge ok")
