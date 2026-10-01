@@ -14,7 +14,10 @@ from typing import Any
 def load_json(path: Path | None) -> dict[str, Any]:
     if path is None or not path.is_file():
         return {}
-    data = json.loads(path.read_text(encoding="utf-8"))
+    raw = path.read_text(encoding="utf-8").strip()
+    if not raw:
+        return {}
+    data = json.loads(raw)
     return data if isinstance(data, dict) else {}
 
 

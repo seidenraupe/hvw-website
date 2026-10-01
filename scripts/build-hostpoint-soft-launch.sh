@@ -30,6 +30,7 @@ cp "${ROOT}/data/analytics.json" "${OUT}/data/analytics.json"
 cp "${ROOT}/data/content-schema.json" "${OUT}/data/content-schema.json"
 cp "${ROOT}/data/content-live.json" "${OUT}/data/content-live.seed.json"
 mkdir -p "${OUT}/data/uploads"
+cp "${ROOT}/data/uploads/.htaccess" "${OUT}/data/uploads/.htaccess"
 
 PUBLIC_PDFS=(
   Statuten.pdf

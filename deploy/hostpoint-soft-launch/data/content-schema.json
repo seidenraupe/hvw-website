@@ -1,0 +1,1543 @@
+{
+  "fields": {
+    "start.hero.headline": {
+      "label": "Startseite · Hauptaussage",
+      "page": "index.html",
+      "max": 80,
+      "rich": false,
+      "multiline": false
+    },
+    "start.hero.lead": {
+      "label": "Startseite · Einleitung unter der Hauptaussage",
+      "page": "index.html",
+      "max": 240,
+      "rich": true,
+      "multiline": true
+    },
+    "start.programm.kicker": {
+      "label": "Startseite · Kleine Überschrift Programm",
+      "page": "index.html",
+      "max": 40,
+      "rich": false,
+      "multiline": false
+    },
+    "start.programm.heading": {
+      "label": "Startseite · Titel Programm",
+      "page": "index.html",
+      "max": 50,
+      "rich": false,
+      "multiline": false
+    },
+    "start.haeuser.kicker": {
+      "label": "Startseite · Kleine Überschrift Häuser",
+      "page": "index.html",
+      "max": 40,
+      "rich": false,
+      "multiline": false
+    },
+    "start.haeuser.heading": {
+      "label": "Startseite · Titel Häuser",
+      "page": "index.html",
+      "max": 50,
+      "rich": false,
+      "multiline": false
+    },
+    "start.haeuser.schaffen.teaser": {
+      "label": "Startseite · Teaser Museum Schaffen",
+      "page": "index.html",
+      "max": 140,
+      "rich": true,
+      "multiline": true
+    },
+    "start.haeuser.lindengut.teaser": {
+      "label": "Startseite · Teaser Museum Lindengut",
+      "page": "index.html",
+      "max": 140,
+      "rich": true,
+      "multiline": true
+    },
+    "start.haeuser.moersburg.teaser": {
+      "label": "Startseite · Teaser Schloss Mörsburg",
+      "page": "index.html",
+      "max": 140,
+      "rich": true,
+      "multiline": true
+    },
+    "start.stimmen.kicker": {
+      "label": "Startseite · Kleine Überschrift Stimmen",
+      "page": "index.html",
+      "max": 40,
+      "rich": false,
+      "multiline": false
+    },
+    "start.stimmen.heading": {
+      "label": "Startseite · Titel Stimmen",
+      "page": "index.html",
+      "max": 50,
+      "rich": false,
+      "multiline": false
+    },
+    "start.mitglied.kicker": {
+      "label": "Startseite · Kleine Überschrift Mitgliedschaft",
+      "page": "index.html",
+      "max": 40,
+      "rich": false,
+      "multiline": false
+    },
+    "start.mitglied.heading": {
+      "label": "Startseite · Titel Mitmachen",
+      "page": "index.html",
+      "max": 50,
+      "rich": false,
+      "multiline": false
+    },
+    "ueber-uns.intro": {
+      "label": "Über uns · Einleitung",
+      "page": "ueber-uns.html",
+      "max": 280,
+      "rich": true,
+      "multiline": true
+    },
+    "ueber-uns.seit1874.heading": {
+      "label": "Über uns · Titel Geschichte",
+      "page": "ueber-uns.html",
+      "max": 60,
+      "rich": false,
+      "multiline": false
+    },
+    "ueber-uns.seit1874.p1": {
+      "label": "Über uns · Absatz 1",
+      "page": "ueber-uns.html",
+      "max": 400,
+      "rich": true,
+      "multiline": true
+    },
+    "ueber-uns.seit1874.p2": {
+      "label": "Über uns · Absatz 2",
+      "page": "ueber-uns.html",
+      "max": 400,
+      "rich": true,
+      "multiline": true
+    },
+    "ueber-uns.vorstand.kicker": {
+      "label": "Über uns · Kleine Überschrift Vorstand",
+      "page": "ueber-uns.html",
+      "max": 40,
+      "rich": false,
+      "multiline": false
+    },
+    "ueber-uns.vorstand.caption": {
+      "label": "Über uns · Bildlegende Vorstand",
+      "page": "ueber-uns.html",
+      "max": 280,
+      "rich": true,
+      "multiline": true,
+      "optional": true
+    },
+    "ueber-uns.vorstand.person1": {
+      "label": "Über uns · Vorstand Person 1",
+      "page": "ueber-uns.html",
+      "max": 120,
+      "rich": true,
+      "multiline": false
+    },
+    "ueber-uns.vorstand.person2": {
+      "label": "Über uns · Vorstand Person 2",
+      "page": "ueber-uns.html",
+      "max": 120,
+      "rich": true,
+      "multiline": false
+    },
+    "ueber-uns.vorstand.person3": {
+      "label": "Über uns · Vorstand Person 3",
+      "page": "ueber-uns.html",
+      "max": 120,
+      "rich": true,
+      "multiline": false
+    },
+    "ueber-uns.vorstand.person4": {
+      "label": "Über uns · Vorstand Person 4",
+      "page": "ueber-uns.html",
+      "max": 120,
+      "rich": true,
+      "multiline": false
+    },
+    "ueber-uns.vorstand.person5": {
+      "label": "Über uns · Vorstand Person 5",
+      "page": "ueber-uns.html",
+      "max": 120,
+      "rich": true,
+      "multiline": false
+    },
+    "ueber-uns.vorstand.person6": {
+      "label": "Über uns · Vorstand Person 6",
+      "page": "ueber-uns.html",
+      "max": 120,
+      "rich": true,
+      "multiline": false
+    },
+    "ueber-uns.vorstand.person7": {
+      "label": "Über uns · Vorstand Person 7",
+      "page": "ueber-uns.html",
+      "max": 120,
+      "rich": true,
+      "multiline": false
+    },
+    "ueber-uns.vorstand.person8": {
+      "label": "Über uns · Vorstand Person 8",
+      "page": "ueber-uns.html",
+      "max": 120,
+      "rich": true,
+      "multiline": false
+    },
+    "ueber-uns.vorstand.person9": {
+      "label": "Über uns · Vorstand Person 9",
+      "page": "ueber-uns.html",
+      "max": 120,
+      "rich": true,
+      "multiline": false
+    },
+    "ueber-uns.vorstand.note": {
+      "label": "Über uns · Hinweis unter dem Vorstand",
+      "page": "ueber-uns.html",
+      "max": 220,
+      "rich": true,
+      "multiline": true,
+      "optional": true
+    },
+    "ueber-uns.faq.q1": {
+      "label": "Über uns · Frage 1",
+      "page": "ueber-uns.html",
+      "max": 120,
+      "rich": false,
+      "multiline": false
+    },
+    "ueber-uns.faq.a1": {
+      "label": "Über uns · Antwort 1",
+      "page": "ueber-uns.html",
+      "max": 400,
+      "rich": true,
+      "multiline": true
+    },
+    "ueber-uns.faq.q2": {
+      "label": "Über uns · Frage 2",
+      "page": "ueber-uns.html",
+      "max": 120,
+      "rich": false,
+      "multiline": false
+    },
+    "ueber-uns.faq.a2": {
+      "label": "Über uns · Antwort 2",
+      "page": "ueber-uns.html",
+      "max": 400,
+      "rich": true,
+      "multiline": true
+    },
+    "ueber-uns.faq.q3": {
+      "label": "Über uns · Frage 3",
+      "page": "ueber-uns.html",
+      "max": 120,
+      "rich": false,
+      "multiline": false
+    },
+    "ueber-uns.faq.a3": {
+      "label": "Über uns · Antwort 3",
+      "page": "ueber-uns.html",
+      "max": 400,
+      "rich": true,
+      "multiline": true
+    },
+    "museen.intro": {
+      "label": "Museen · Einleitung",
+      "page": "museen.html",
+      "max": 280,
+      "rich": true,
+      "multiline": true
+    },
+    "museen.schaffen.kicker": {
+      "label": "Museen · Kleine Überschrift Schaffen",
+      "page": "museen.html",
+      "max": 40,
+      "rich": false,
+      "multiline": false
+    },
+    "museen.schaffen.body": {
+      "label": "Museen · Text Museum Schaffen",
+      "page": "museen.html",
+      "max": 400,
+      "rich": true,
+      "multiline": true
+    },
+    "museen.lindengut.kicker": {
+      "label": "Museen · Kleine Überschrift Lindengut",
+      "page": "museen.html",
+      "max": 40,
+      "rich": false,
+      "multiline": false
+    },
+    "museen.lindengut.body": {
+      "label": "Museen · Text Museum Lindengut",
+      "page": "museen.html",
+      "max": 400,
+      "rich": true,
+      "multiline": true
+    },
+    "museen.moersburg.kicker": {
+      "label": "Museen · Kleine Überschrift Mörsburg",
+      "page": "museen.html",
+      "max": 40,
+      "rich": false,
+      "multiline": false
+    },
+    "museen.moersburg.body": {
+      "label": "Museen · Text Schloss Mörsburg",
+      "page": "museen.html",
+      "max": 400,
+      "rich": true,
+      "multiline": true
+    },
+    "lindengut.kicker": {
+      "label": "Lindengut · Kleine Überschrift",
+      "page": "lindengut.html",
+      "max": 40,
+      "rich": false,
+      "multiline": false
+    },
+    "lindengut.title": {
+      "label": "Lindengut · Titel",
+      "page": "lindengut.html",
+      "max": 80,
+      "rich": false,
+      "multiline": false
+    },
+    "lindengut.lead": {
+      "label": "Lindengut · Lead",
+      "page": "lindengut.html",
+      "max": 1000,
+      "rich": true,
+      "multiline": true
+    },
+    "lindengut.oeffnung": {
+      "label": "Lindengut · Öffnungszeiten und Eintritt",
+      "page": "lindengut.html",
+      "max": 600,
+      "rich": true,
+      "multiline": true
+    },
+    "lindengut.body": {
+      "label": "Lindengut · Text",
+      "page": "lindengut.html",
+      "max": 4000,
+      "rich": true,
+      "multiline": true
+    },
+    "lindengut.bild.1.image": {
+      "label": "Lindengut · Bild 1",
+      "page": "lindengut.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "image",
+      "optional": true
+    },
+    "lindengut.bild.1.caption": {
+      "label": "Lindengut · Bild 1 Legende",
+      "page": "lindengut.html",
+      "max": 200,
+      "rich": true,
+      "multiline": true
+    },
+    "lindengut.bild.2.image": {
+      "label": "Lindengut · Bild 2",
+      "page": "lindengut.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "image",
+      "optional": true
+    },
+    "lindengut.bild.2.caption": {
+      "label": "Lindengut · Bild 2 Legende",
+      "page": "lindengut.html",
+      "max": 200,
+      "rich": true,
+      "multiline": true
+    },
+    "lindengut.bild.3.image": {
+      "label": "Lindengut · Bild 3",
+      "page": "lindengut.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "image",
+      "optional": true
+    },
+    "lindengut.bild.3.caption": {
+      "label": "Lindengut · Bild 3 Legende",
+      "page": "lindengut.html",
+      "max": 200,
+      "rich": true,
+      "multiline": true
+    },
+    "moersburg.kicker": {
+      "label": "Mörsburg · Kleine Überschrift",
+      "page": "moersburg.html",
+      "max": 40,
+      "rich": false,
+      "multiline": false
+    },
+    "moersburg.title": {
+      "label": "Mörsburg · Titel",
+      "page": "moersburg.html",
+      "max": 80,
+      "rich": false,
+      "multiline": false
+    },
+    "moersburg.lead": {
+      "label": "Mörsburg · Lead",
+      "page": "moersburg.html",
+      "max": 1000,
+      "rich": true,
+      "multiline": true
+    },
+    "moersburg.oeffnung": {
+      "label": "Mörsburg · Öffnungszeiten und Eintritt",
+      "page": "moersburg.html",
+      "max": 600,
+      "rich": true,
+      "multiline": true
+    },
+    "moersburg.body": {
+      "label": "Mörsburg · Text",
+      "page": "moersburg.html",
+      "max": 4000,
+      "rich": true,
+      "multiline": true
+    },
+    "moersburg.bild.1.image": {
+      "label": "Mörsburg · Bild 1",
+      "page": "moersburg.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "image",
+      "optional": true
+    },
+    "moersburg.bild.1.caption": {
+      "label": "Mörsburg · Bild 1 Legende",
+      "page": "moersburg.html",
+      "max": 200,
+      "rich": true,
+      "multiline": true
+    },
+    "moersburg.bild.2.image": {
+      "label": "Mörsburg · Bild 2",
+      "page": "moersburg.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "image",
+      "optional": true
+    },
+    "moersburg.bild.2.caption": {
+      "label": "Mörsburg · Bild 2 Legende",
+      "page": "moersburg.html",
+      "max": 200,
+      "rich": true,
+      "multiline": true
+    },
+    "moersburg.bild.3.image": {
+      "label": "Mörsburg · Bild 3",
+      "page": "moersburg.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "image",
+      "optional": true
+    },
+    "moersburg.bild.3.caption": {
+      "label": "Mörsburg · Bild 3 Legende",
+      "page": "moersburg.html",
+      "max": 200,
+      "rich": true,
+      "multiline": true
+    },
+    "agenda.intro": {
+      "label": "Agenda · Einleitung",
+      "page": "agenda.html",
+      "max": 280,
+      "rich": true,
+      "multiline": true
+    },
+    "agenda.rueckblick.intro": {
+      "label": "Agenda · Rückblick Einleitung",
+      "page": "agenda.html",
+      "max": 280,
+      "rich": true,
+      "multiline": true
+    },
+    "mitmachen.intro": {
+      "label": "Mitmachen · Einleitung",
+      "page": "mitmachen.html",
+      "max": 280,
+      "rich": true,
+      "multiline": true
+    },
+    "mitmachen.anmeldung.lead": {
+      "label": "Mitmachen · Text unter Anmeldeformular",
+      "page": "mitmachen.html",
+      "max": 400,
+      "rich": true,
+      "multiline": true
+    },
+    "partner.intro": {
+      "label": "Netzwerk · Einleitung",
+      "page": "partner.html",
+      "max": 280,
+      "rich": true,
+      "multiline": true
+    },
+    "partner.15.name": {
+      "label": "Partner · IG Geschichtsstadt Winterthur · Name",
+      "page": "partner.html",
+      "max": 80,
+      "rich": false,
+      "multiline": false
+    },
+    "partner.15.body": {
+      "label": "Partner · IG Geschichtsstadt Winterthur · Text",
+      "page": "partner.html",
+      "max": 360,
+      "rich": true,
+      "multiline": true
+    },
+    "partner.15.url": {
+      "label": "Partner · IG Geschichtsstadt Winterthur · Link",
+      "page": "partner.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "url"
+    },
+    "partner.15.image": {
+      "label": "Partner · IG Geschichtsstadt Winterthur · Bild",
+      "page": "partner.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "image",
+      "optional": true
+    },
+    "partner.16.name": {
+      "label": "Partner · Gasthaus Schlosshalde · Name",
+      "page": "partner.html",
+      "max": 80,
+      "rich": false,
+      "multiline": false
+    },
+    "partner.16.body": {
+      "label": "Partner · Gasthaus Schlosshalde · Text",
+      "page": "partner.html",
+      "max": 360,
+      "rich": true,
+      "multiline": true
+    },
+    "partner.16.url": {
+      "label": "Partner · Gasthaus Schlosshalde · Link",
+      "page": "partner.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "url"
+    },
+    "partner.16.image": {
+      "label": "Partner · Gasthaus Schlosshalde · Bild",
+      "page": "partner.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "image",
+      "optional": true
+    },
+    "partner.17.name": {
+      "label": "Partner · Museum Schloss Kyburg · Name",
+      "page": "partner.html",
+      "max": 80,
+      "rich": false,
+      "multiline": false
+    },
+    "partner.17.body": {
+      "label": "Partner · Museum Schloss Kyburg · Text",
+      "page": "partner.html",
+      "max": 360,
+      "rich": true,
+      "multiline": true
+    },
+    "partner.17.url": {
+      "label": "Partner · Museum Schloss Kyburg · Link",
+      "page": "partner.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "url"
+    },
+    "partner.17.image": {
+      "label": "Partner · Museum Schloss Kyburg · Bild",
+      "page": "partner.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "image",
+      "optional": true
+    },
+    "partner.18.name": {
+      "label": "Partner · Uhrenmuseum Winterthur · Name",
+      "page": "partner.html",
+      "max": 80,
+      "rich": false,
+      "multiline": false
+    },
+    "partner.18.body": {
+      "label": "Partner · Uhrenmuseum Winterthur · Text",
+      "page": "partner.html",
+      "max": 360,
+      "rich": true,
+      "multiline": true
+    },
+    "partner.18.url": {
+      "label": "Partner · Uhrenmuseum Winterthur · Link",
+      "page": "partner.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "url"
+    },
+    "partner.18.image": {
+      "label": "Partner · Uhrenmuseum Winterthur · Bild",
+      "page": "partner.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "image",
+      "optional": true
+    },
+    "partner.19.name": {
+      "label": "Partner · Münzkabinett Winterthur · Name",
+      "page": "partner.html",
+      "max": 80,
+      "rich": false,
+      "multiline": false
+    },
+    "partner.19.body": {
+      "label": "Partner · Münzkabinett Winterthur · Text",
+      "page": "partner.html",
+      "max": 360,
+      "rich": true,
+      "multiline": true
+    },
+    "partner.19.url": {
+      "label": "Partner · Münzkabinett Winterthur · Link",
+      "page": "partner.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "url"
+    },
+    "partner.19.image": {
+      "label": "Partner · Münzkabinett Winterthur · Bild",
+      "page": "partner.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "image",
+      "optional": true
+    },
+    "partner.20.name": {
+      "label": "Netzwerk · Heimatschutz Winterthur · Name",
+      "page": "partner.html",
+      "max": 80,
+      "rich": false,
+      "multiline": false
+    },
+    "partner.20.body": {
+      "label": "Netzwerk · Heimatschutz Winterthur · Text",
+      "page": "partner.html",
+      "max": 360,
+      "rich": true,
+      "multiline": true
+    },
+    "partner.20.url": {
+      "label": "Netzwerk · Heimatschutz Winterthur · Link",
+      "page": "partner.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "url"
+    },
+    "partner.20.image": {
+      "label": "Netzwerk · Heimatschutz Winterthur · Bild",
+      "page": "partner.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "image",
+      "optional": true
+    },
+    "partner.1.name": {
+      "label": "Partner · Schloss Hegi · Name",
+      "page": "partner.html",
+      "max": 80,
+      "rich": false,
+      "multiline": false
+    },
+    "partner.1.body": {
+      "label": "Partner · Schloss Hegi · Text",
+      "page": "partner.html",
+      "max": 360,
+      "rich": true,
+      "multiline": true
+    },
+    "partner.1.url": {
+      "label": "Partner · Schloss Hegi · Link",
+      "page": "partner.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "url"
+    },
+    "partner.1.image": {
+      "label": "Partner · Schloss Hegi · Bild",
+      "page": "partner.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "image",
+      "optional": true
+    },
+    "partner.2.name": {
+      "label": "Partner · Frauenstadtrundgang Winterthur · Name",
+      "page": "partner.html",
+      "max": 80,
+      "rich": false,
+      "multiline": false
+    },
+    "partner.2.body": {
+      "label": "Partner · Frauenstadtrundgang Winterthur · Text",
+      "page": "partner.html",
+      "max": 360,
+      "rich": true,
+      "multiline": true
+    },
+    "partner.2.url": {
+      "label": "Partner · Frauenstadtrundgang Winterthur · Link",
+      "page": "partner.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "url"
+    },
+    "partner.2.image": {
+      "label": "Partner · Frauenstadtrundgang Winterthur · Bild",
+      "page": "partner.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "image",
+      "optional": true
+    },
+    "partner.3.name": {
+      "label": "Partner · Winterthur-Glossar · Name",
+      "page": "partner.html",
+      "max": 80,
+      "rich": false,
+      "multiline": false
+    },
+    "partner.3.body": {
+      "label": "Partner · Winterthur-Glossar · Text",
+      "page": "partner.html",
+      "max": 360,
+      "rich": true,
+      "multiline": true
+    },
+    "partner.3.url": {
+      "label": "Partner · Winterthur-Glossar · Link",
+      "page": "partner.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "url"
+    },
+    "partner.3.image": {
+      "label": "Partner · Winterthur-Glossar · Bild",
+      "page": "partner.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "image",
+      "optional": true
+    },
+    "partner.4.name": {
+      "label": "Partner · Bildarchiv Winterthur · Name",
+      "page": "partner.html",
+      "max": 80,
+      "rich": false,
+      "multiline": false
+    },
+    "partner.4.body": {
+      "label": "Partner · Bildarchiv Winterthur · Text",
+      "page": "partner.html",
+      "max": 360,
+      "rich": true,
+      "multiline": true
+    },
+    "partner.4.url": {
+      "label": "Partner · Bildarchiv Winterthur · Link",
+      "page": "partner.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "url"
+    },
+    "partner.4.image": {
+      "label": "Partner · Bildarchiv Winterthur · Bild",
+      "page": "partner.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "image",
+      "optional": true
+    },
+    "partner.5.name": {
+      "label": "Partner · Industriekultur Winterthur · Name",
+      "page": "partner.html",
+      "max": 80,
+      "rich": false,
+      "multiline": false
+    },
+    "partner.5.body": {
+      "label": "Partner · Industriekultur Winterthur · Text",
+      "page": "partner.html",
+      "max": 360,
+      "rich": true,
+      "multiline": true
+    },
+    "partner.5.url": {
+      "label": "Partner · Industriekultur Winterthur · Link",
+      "page": "partner.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "url"
+    },
+    "partner.5.image": {
+      "label": "Partner · Industriekultur Winterthur · Bild",
+      "page": "partner.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "image",
+      "optional": true
+    },
+    "partner.6.name": {
+      "label": "Partner · Industriekultur Schweiz · Name",
+      "page": "partner.html",
+      "max": 80,
+      "rich": false,
+      "multiline": false
+    },
+    "partner.6.body": {
+      "label": "Partner · Industriekultur Schweiz · Text",
+      "page": "partner.html",
+      "max": 360,
+      "rich": true,
+      "multiline": true
+    },
+    "partner.6.url": {
+      "label": "Partner · Industriekultur Schweiz · Link",
+      "page": "partner.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "url"
+    },
+    "partner.6.image": {
+      "label": "Partner · Industriekultur Schweiz · Bild",
+      "page": "partner.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "image",
+      "optional": true
+    },
+    "partner.7.name": {
+      "label": "Partner · SGTI · Name",
+      "page": "partner.html",
+      "max": 80,
+      "rich": false,
+      "multiline": false
+    },
+    "partner.7.body": {
+      "label": "Partner · SGTI · Text",
+      "page": "partner.html",
+      "max": 360,
+      "rich": true,
+      "multiline": true
+    },
+    "partner.7.url": {
+      "label": "Partner · SGTI · Link",
+      "page": "partner.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "url"
+    },
+    "partner.7.image": {
+      "label": "Partner · SGTI · Bild",
+      "page": "partner.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "image",
+      "optional": true
+    },
+    "partner.8.name": {
+      "label": "Partner · Dampfzentrum Winterthur · Name",
+      "page": "partner.html",
+      "max": 80,
+      "rich": false,
+      "multiline": false
+    },
+    "partner.8.body": {
+      "label": "Partner · Dampfzentrum Winterthur · Text",
+      "page": "partner.html",
+      "max": 360,
+      "rich": true,
+      "multiline": true
+    },
+    "partner.8.url": {
+      "label": "Partner · Dampfzentrum Winterthur · Link",
+      "page": "partner.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "url"
+    },
+    "partner.8.image": {
+      "label": "Partner · Dampfzentrum Winterthur · Bild",
+      "page": "partner.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "image",
+      "optional": true
+    },
+    "partner.9.name": {
+      "label": "Partner · Sagi Reismühle Hegi · Name",
+      "page": "partner.html",
+      "max": 80,
+      "rich": false,
+      "multiline": false
+    },
+    "partner.9.body": {
+      "label": "Partner · Sagi Reismühle Hegi · Text",
+      "page": "partner.html",
+      "max": 360,
+      "rich": true,
+      "multiline": true
+    },
+    "partner.9.url": {
+      "label": "Partner · Sagi Reismühle Hegi · Link",
+      "page": "partner.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "url"
+    },
+    "partner.9.image": {
+      "label": "Partner · Sagi Reismühle Hegi · Bild",
+      "page": "partner.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "image",
+      "optional": true
+    },
+    "partner.10.name": {
+      "label": "Partner · Kehrseite Winterthur · Name",
+      "page": "partner.html",
+      "max": 80,
+      "rich": false,
+      "multiline": false
+    },
+    "partner.10.body": {
+      "label": "Partner · Kehrseite Winterthur · Text",
+      "page": "partner.html",
+      "max": 360,
+      "rich": true,
+      "multiline": true
+    },
+    "partner.10.url": {
+      "label": "Partner · Kehrseite Winterthur · Link",
+      "page": "partner.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "url"
+    },
+    "partner.10.image": {
+      "label": "Partner · Kehrseite Winterthur · Bild",
+      "page": "partner.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "image",
+      "optional": true
+    },
+    "partner.11.name": {
+      "label": "Partner · Stiftung SKKG · Name",
+      "page": "partner.html",
+      "max": 80,
+      "rich": false,
+      "multiline": false
+    },
+    "partner.11.body": {
+      "label": "Partner · Stiftung SKKG · Text",
+      "page": "partner.html",
+      "max": 360,
+      "rich": true,
+      "multiline": true
+    },
+    "partner.11.url": {
+      "label": "Partner · Stiftung SKKG · Link",
+      "page": "partner.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "url"
+    },
+    "partner.11.image": {
+      "label": "Partner · Stiftung SKKG · Bild",
+      "page": "partner.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "image",
+      "optional": true
+    },
+    "partner.12.name": {
+      "label": "Partner · Dorfmuseum Wülflingen · Name",
+      "page": "partner.html",
+      "max": 80,
+      "rich": false,
+      "multiline": false
+    },
+    "partner.12.body": {
+      "label": "Partner · Dorfmuseum Wülflingen · Text",
+      "page": "partner.html",
+      "max": 360,
+      "rich": true,
+      "multiline": true
+    },
+    "partner.12.url": {
+      "label": "Partner · Dorfmuseum Wülflingen · Link",
+      "page": "partner.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "url"
+    },
+    "partner.12.image": {
+      "label": "Partner · Dorfmuseum Wülflingen · Bild",
+      "page": "partner.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "image",
+      "optional": true
+    },
+    "partner.13.name": {
+      "label": "Partner · museums.ch · Name",
+      "page": "partner.html",
+      "max": 80,
+      "rich": false,
+      "multiline": false
+    },
+    "partner.13.body": {
+      "label": "Partner · museums.ch · Text",
+      "page": "partner.html",
+      "max": 360,
+      "rich": true,
+      "multiline": true
+    },
+    "partner.13.url": {
+      "label": "Partner · museums.ch · Link",
+      "page": "partner.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "url"
+    },
+    "partner.13.image": {
+      "label": "Partner · museums.ch · Bild",
+      "page": "partner.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "image",
+      "optional": true
+    },
+    "partner.14.name": {
+      "label": "Partner · Netzwerk Kulturerbe Schweiz · Name",
+      "page": "partner.html",
+      "max": 80,
+      "rich": false,
+      "multiline": false
+    },
+    "partner.14.body": {
+      "label": "Partner · Netzwerk Kulturerbe Schweiz · Text",
+      "page": "partner.html",
+      "max": 360,
+      "rich": true,
+      "multiline": true
+    },
+    "partner.14.url": {
+      "label": "Partner · Netzwerk Kulturerbe Schweiz · Link",
+      "page": "partner.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "url"
+    },
+    "partner.14.image": {
+      "label": "Partner · Netzwerk Kulturerbe Schweiz · Bild",
+      "page": "partner.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "image",
+      "optional": true
+    },
+    "sammlung.intro": {
+      "label": "Sammlung · Einleitung",
+      "page": "sammlung.html",
+      "max": 400,
+      "rich": true,
+      "multiline": true
+    },
+    "sammlung.objekt.1.image": {
+      "label": "Sammlung · Objekt 1 · Bild",
+      "page": "sammlung.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "image",
+      "optional": true
+    },
+    "sammlung.objekt.1.title": {
+      "label": "Sammlung · Objekt 1 · Titel",
+      "page": "sammlung.html",
+      "max": 80,
+      "rich": false,
+      "multiline": false
+    },
+    "sammlung.objekt.1.body": {
+      "label": "Sammlung · Objekt 1 · Text",
+      "page": "sammlung.html",
+      "max": 400,
+      "rich": true,
+      "multiline": true
+    },
+    "sammlung.objekt.1.quelle": {
+      "label": "Sammlung · Objekt 1 · Quellen-Nachweis",
+      "page": "sammlung.html",
+      "max": 150,
+      "rich": true,
+      "multiline": true,
+      "optional": true
+    },
+    "sammlung.objekt.2.image": {
+      "label": "Sammlung · Objekt 2 · Bild",
+      "page": "sammlung.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "image",
+      "optional": true
+    },
+    "sammlung.objekt.2.title": {
+      "label": "Sammlung · Objekt 2 · Titel",
+      "page": "sammlung.html",
+      "max": 80,
+      "rich": false,
+      "multiline": false
+    },
+    "sammlung.objekt.2.body": {
+      "label": "Sammlung · Objekt 2 · Text",
+      "page": "sammlung.html",
+      "max": 400,
+      "rich": true,
+      "multiline": true
+    },
+    "sammlung.objekt.2.quelle": {
+      "label": "Sammlung · Objekt 2 · Quellen-Nachweis",
+      "page": "sammlung.html",
+      "max": 150,
+      "rich": true,
+      "multiline": true,
+      "optional": true
+    },
+    "sammlung.objekt.3.image": {
+      "label": "Sammlung · Objekt 3 · Bild",
+      "page": "sammlung.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "image",
+      "optional": true
+    },
+    "sammlung.objekt.3.title": {
+      "label": "Sammlung · Objekt 3 · Titel",
+      "page": "sammlung.html",
+      "max": 80,
+      "rich": false,
+      "multiline": false
+    },
+    "sammlung.objekt.3.body": {
+      "label": "Sammlung · Objekt 3 · Text",
+      "page": "sammlung.html",
+      "max": 400,
+      "rich": true,
+      "multiline": true
+    },
+    "sammlung.objekt.3.quelle": {
+      "label": "Sammlung · Objekt 3 · Quellen-Nachweis",
+      "page": "sammlung.html",
+      "max": 150,
+      "rich": true,
+      "multiline": true,
+      "optional": true
+    },
+    "sammlung.objekt.4.image": {
+      "label": "Sammlung · Objekt 4 · Bild",
+      "page": "sammlung.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "image",
+      "optional": true
+    },
+    "sammlung.objekt.4.title": {
+      "label": "Sammlung · Objekt 4 · Titel",
+      "page": "sammlung.html",
+      "max": 80,
+      "rich": false,
+      "multiline": false
+    },
+    "sammlung.objekt.4.body": {
+      "label": "Sammlung · Objekt 4 · Text",
+      "page": "sammlung.html",
+      "max": 400,
+      "rich": true,
+      "multiline": true
+    },
+    "sammlung.objekt.4.quelle": {
+      "label": "Sammlung · Objekt 4 · Quellen-Nachweis",
+      "page": "sammlung.html",
+      "max": 150,
+      "rich": true,
+      "multiline": true,
+      "optional": true
+    },
+    "sammlung.objekt.5.image": {
+      "label": "Sammlung · Objekt 5 · Bild",
+      "page": "sammlung.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "image",
+      "optional": true
+    },
+    "sammlung.objekt.5.title": {
+      "label": "Sammlung · Objekt 5 · Titel",
+      "page": "sammlung.html",
+      "max": 80,
+      "rich": false,
+      "multiline": false
+    },
+    "sammlung.objekt.5.body": {
+      "label": "Sammlung · Objekt 5 · Text",
+      "page": "sammlung.html",
+      "max": 400,
+      "rich": true,
+      "multiline": true
+    },
+    "sammlung.objekt.5.quelle": {
+      "label": "Sammlung · Objekt 5 · Quellen-Nachweis",
+      "page": "sammlung.html",
+      "max": 150,
+      "rich": true,
+      "multiline": true,
+      "optional": true
+    },
+    "sammlung.objekt.6.image": {
+      "label": "Sammlung · Objekt 6 · Bild",
+      "page": "sammlung.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "image",
+      "optional": true
+    },
+    "sammlung.objekt.6.title": {
+      "label": "Sammlung · Objekt 6 · Titel",
+      "page": "sammlung.html",
+      "max": 80,
+      "rich": false,
+      "multiline": false
+    },
+    "sammlung.objekt.6.body": {
+      "label": "Sammlung · Objekt 6 · Text",
+      "page": "sammlung.html",
+      "max": 400,
+      "rich": true,
+      "multiline": true
+    },
+    "sammlung.objekt.6.quelle": {
+      "label": "Sammlung · Objekt 6 · Quellen-Nachweis",
+      "page": "sammlung.html",
+      "max": 150,
+      "rich": true,
+      "multiline": true,
+      "optional": true
+    },
+    "zitate.intro": {
+      "label": "Stimmen · Einleitung",
+      "page": "zitate.html",
+      "max": 320,
+      "rich": true,
+      "multiline": true
+    },
+    "agenda.rueckblick.1.image": {
+      "label": "Agenda · Rückblick 1 · Bild",
+      "page": "agenda.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "image",
+      "optional": true
+    },
+    "agenda.rueckblick.1.kicker": {
+      "label": "Agenda · Rückblick 1 · Kategorie",
+      "page": "agenda.html",
+      "max": 60,
+      "rich": false,
+      "multiline": false
+    },
+    "agenda.rueckblick.1.title": {
+      "label": "Agenda · Rückblick 1 · Titel",
+      "page": "agenda.html",
+      "max": 80,
+      "rich": false,
+      "multiline": false
+    },
+    "agenda.rueckblick.1.body": {
+      "label": "Agenda · Rückblick 1 · Text",
+      "page": "agenda.html",
+      "max": 600,
+      "rich": true,
+      "multiline": true
+    },
+    "agenda.rueckblick.1.location": {
+      "label": "Agenda · Rückblick 1 · Ort",
+      "page": "agenda.html",
+      "max": 60,
+      "rich": false,
+      "multiline": false
+    },
+    "agenda.rueckblick.2.image": {
+      "label": "Agenda · Rückblick 2 · Bild",
+      "page": "agenda.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "image",
+      "optional": true
+    },
+    "agenda.rueckblick.2.kicker": {
+      "label": "Agenda · Rückblick 2 · Kategorie",
+      "page": "agenda.html",
+      "max": 60,
+      "rich": false,
+      "multiline": false
+    },
+    "agenda.rueckblick.2.title": {
+      "label": "Agenda · Rückblick 2 · Titel",
+      "page": "agenda.html",
+      "max": 80,
+      "rich": false,
+      "multiline": false
+    },
+    "agenda.rueckblick.2.body": {
+      "label": "Agenda · Rückblick 2 · Text",
+      "page": "agenda.html",
+      "max": 600,
+      "rich": true,
+      "multiline": true
+    },
+    "agenda.rueckblick.2.location": {
+      "label": "Agenda · Rückblick 2 · Ort",
+      "page": "agenda.html",
+      "max": 60,
+      "rich": false,
+      "multiline": false
+    },
+    "agenda.rueckblick.3.image": {
+      "label": "Agenda · Rückblick 3 · Bild",
+      "page": "agenda.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "image",
+      "optional": true
+    },
+    "agenda.rueckblick.3.kicker": {
+      "label": "Agenda · Rückblick 3 · Kategorie",
+      "page": "agenda.html",
+      "max": 60,
+      "rich": false,
+      "multiline": false
+    },
+    "agenda.rueckblick.3.title": {
+      "label": "Agenda · Rückblick 3 · Titel",
+      "page": "agenda.html",
+      "max": 80,
+      "rich": false,
+      "multiline": false
+    },
+    "agenda.rueckblick.3.body": {
+      "label": "Agenda · Rückblick 3 · Text",
+      "page": "agenda.html",
+      "max": 600,
+      "rich": true,
+      "multiline": true
+    },
+    "agenda.rueckblick.3.location": {
+      "label": "Agenda · Rückblick 3 · Ort",
+      "page": "agenda.html",
+      "max": 60,
+      "rich": false,
+      "multiline": false
+    },
+    "agenda.rueckblick.4.image": {
+      "label": "Agenda · Rückblick 4 · Bild",
+      "page": "agenda.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "image",
+      "optional": true
+    },
+    "agenda.rueckblick.4.kicker": {
+      "label": "Agenda · Rückblick 4 · Kategorie",
+      "page": "agenda.html",
+      "max": 60,
+      "rich": false,
+      "multiline": false
+    },
+    "agenda.rueckblick.4.title": {
+      "label": "Agenda · Rückblick 4 · Titel",
+      "page": "agenda.html",
+      "max": 80,
+      "rich": false,
+      "multiline": false
+    },
+    "agenda.rueckblick.4.body": {
+      "label": "Agenda · Rückblick 4 · Text",
+      "page": "agenda.html",
+      "max": 600,
+      "rich": true,
+      "multiline": true
+    },
+    "agenda.rueckblick.4.location": {
+      "label": "Agenda · Rückblick 4 · Ort",
+      "page": "agenda.html",
+      "max": 60,
+      "rich": false,
+      "multiline": false
+    },
+    "agenda.rueckblick.5.image": {
+      "label": "Agenda · Rückblick 5 · Bild",
+      "page": "agenda.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "image",
+      "optional": true
+    },
+    "agenda.rueckblick.5.kicker": {
+      "label": "Agenda · Rückblick 5 · Kategorie",
+      "page": "agenda.html",
+      "max": 60,
+      "rich": false,
+      "multiline": false
+    },
+    "agenda.rueckblick.5.title": {
+      "label": "Agenda · Rückblick 5 · Titel",
+      "page": "agenda.html",
+      "max": 80,
+      "rich": false,
+      "multiline": false
+    },
+    "agenda.rueckblick.5.body": {
+      "label": "Agenda · Rückblick 5 · Text",
+      "page": "agenda.html",
+      "max": 600,
+      "rich": true,
+      "multiline": true
+    },
+    "agenda.rueckblick.5.location": {
+      "label": "Agenda · Rückblick 5 · Ort",
+      "page": "agenda.html",
+      "max": 60,
+      "rich": false,
+      "multiline": false
+    },
+    "agenda.rueckblick.6.image": {
+      "label": "Agenda · Rückblick 6 · Bild",
+      "page": "agenda.html",
+      "max": 180,
+      "rich": false,
+      "multiline": false,
+      "type": "image",
+      "optional": true
+    },
+    "agenda.rueckblick.6.kicker": {
+      "label": "Agenda · Rückblick 6 · Kategorie",
+      "page": "agenda.html",
+      "max": 60,
+      "rich": false,
+      "multiline": false
+    },
+    "agenda.rueckblick.6.title": {
+      "label": "Agenda · Rückblick 6 · Titel",
+      "page": "agenda.html",
+      "max": 80,
+      "rich": false,
+      "multiline": false
+    },
+    "agenda.rueckblick.6.body": {
+      "label": "Agenda · Rückblick 6 · Text",
+      "page": "agenda.html",
+      "max": 600,
+      "rich": true,
+      "multiline": true
+    },
+    "agenda.rueckblick.6.location": {
+      "label": "Agenda · Rückblick 6 · Ort",
+      "page": "agenda.html",
+      "max": 60,
+      "rich": false,
+      "multiline": false
+    }
+  }
+}

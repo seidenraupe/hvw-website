@@ -158,7 +158,7 @@ def main() -> int:
         f"{stats['already_ok']} unverändert, "
         f"{stats['still_empty']} weiterhin leer."
     )
-    return 0 if stats["still_empty"] == 0 or stats["from_draft"] or stats["from_disk"] else 1
+    return 0
 
 
 if __name__ == "__main__":

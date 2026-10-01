@@ -27,6 +27,7 @@ copy_dir "${ROOT}/js" "${OUT}/js"
 copy_dir "${ROOT}/images" "${OUT}/images"
 copy_dir "${ROOT}/data" "${OUT}/data"
 mkdir -p "${OUT}/data/uploads"
+cp "${ROOT}/data/uploads/.htaccess" "${OUT}/data/uploads/.htaccess"
 rm -f "${OUT}/data/uploads/"*.jpg "${OUT}/data/uploads/"*.jpeg \
       "${OUT}/data/uploads/"*.png "${OUT}/data/uploads/"*.webp
 cp "${ROOT}/data/content-live.json" "${OUT}/data/content-live.seed.json"

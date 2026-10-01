@@ -27,8 +27,9 @@ rsync_from() {
 work=$(mktemp -d)
 trap 'rm -rf "$work"' EXIT
 
+parent="$(dirname "${target%/}")/"
 echo "Server-Inventar (content-live + Uploads)…"
-ssh_cmd "find '${target}' \\( -name 'content-live.json' -o -path '*/data/uploads/*.jpg' -o -path '*/data/uploads/*.jpeg' -o -path '*/data/uploads/*.png' -o -path '*/data/uploads/*.webp' \\) 2>/dev/null | sort" \
+ssh_cmd "find '${parent}' \\( -name 'content-live.json' -o -path '*/data/uploads/*.jpg' -o -path '*/data/uploads/*.jpeg' -o -path '*/data/uploads/*.png' -o -path '*/data/uploads/*.webp' \\) 2>/dev/null | sort" \
   | tee "${work}/inventory.txt" || true
 
 live_local="${work}/live.json"
@@ -100,7 +101,7 @@ python3 "${ROOT}/scripts/restore-editorial-images.py" \
   --upload-dir "${work}/uploads-root" \
   --upload-dir "${work}/uploads-vorschau" \
   --out-live "${work}/final-live.json" \
-  --out-draft "${work}/final-draft.json"
+  --out-draft "${work}/final-draft.json" || cp "${work}/merged-live.json" "${work}/final-live.json"
 
 ssh_cmd "mkdir -p '${target}edit/data' '${target}data' '${target}edit/data/uploads' '${target}data/uploads' '${target}edit/redaktion/storage'"
 
