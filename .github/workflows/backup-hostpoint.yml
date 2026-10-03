@@ -67,7 +67,7 @@ jobs:
           work=$(mktemp -d)
           git_archive=""
           if [ "${INCLUDE_GIT}" = "true" ]; then
-            git_archive="${work}/prototype-hvw-website-main.zip"
+            git_archive="${work}/hvw-website-main.zip"
             git archive --format=zip -o "${git_archive}" HEAD
           fi
 

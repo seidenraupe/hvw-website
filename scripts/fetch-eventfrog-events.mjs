@@ -95,7 +95,7 @@ async function fetchOgImage(eventUrl) {
     const res = await fetch(eventUrl, {
       headers: {
         Accept: 'text/html',
-        'User-Agent': 'HVW-homepage-events-bot/1.0 (+https://github.com/seidenraupe/prototype-hvw-website)',
+        'User-Agent': 'HVW-homepage-events-bot/1.0 (+https://github.com/seidenraupe/hvw-website)',
       },
       redirect: 'follow',
     });
