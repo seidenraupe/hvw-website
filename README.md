@@ -1,4 +1,6 @@
-# Historischer Verein Winterthur — Website-Prototyp
+# Historischer Verein Winterthur — Website
+
+Quellcode: [github.com/seidenraupe/hvw-website](https://github.com/seidenraupe/hvw-website) (früher `prototype-hvw-website`; GitHub leitet alte URLs weiter).
 
 Moderne HTML/CSS-Website aus den vorhandenen Wireframes/Mood-Referenzen, mit **Tailwind CSS Event-Karten** (Mobile First).
 
