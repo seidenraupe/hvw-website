@@ -136,7 +136,7 @@
         </p>
 
         <div class="mt-10 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3" data-rueckblick-grid>
-          <article class="event-card flex flex-col border border-hvw-ink bg-white">
+          <article class="event-card flex flex-col border border-hvw-ink bg-white" data-rueckblick-slot="1">
             <div class="event-card__media aspect-[4/3]" data-lightbox data-content-image="agenda.rueckblick.1.image" data-content-image-fallback="images/placeholder-event-1.svg">
               <img src="images/placeholder-event-1.svg" alt="" width="1200" height="900" loading="lazy">
               <div class="event-card__watermark" aria-hidden="true"><span>finales Bild fehlt</span></div>
@@ -156,7 +156,7 @@
             </div>
           </article>
 
-          <article class="event-card flex flex-col border border-hvw-ink bg-white">
+          <article class="event-card flex flex-col border border-hvw-ink bg-white" data-rueckblick-slot="2">
             <div class="event-card__media aspect-[4/3]" data-lightbox data-content-image="agenda.rueckblick.2.image" data-content-image-fallback="images/placeholder-event-2.svg">
               <img src="images/placeholder-event-2.svg" alt="" width="1200" height="900" loading="lazy">
               <div class="event-card__watermark" aria-hidden="true"><span>finales Bild fehlt</span></div>
@@ -176,7 +176,7 @@
             </div>
           </article>
 
-          <article class="event-card flex flex-col border border-hvw-ink bg-white">
+          <article class="event-card flex flex-col border border-hvw-ink bg-white" data-rueckblick-slot="3">
             <div class="event-card__media aspect-[4/3]" data-lightbox data-content-image="agenda.rueckblick.3.image" data-content-image-fallback="images/placeholder-event-3.svg">
               <img src="images/placeholder-event-3.svg" alt="" width="1200" height="900" loading="lazy">
               <div class="event-card__watermark" aria-hidden="true"><span>finales Bild fehlt</span></div>
@@ -196,7 +196,7 @@
             </div>
           </article>
 
-          <article class="event-card flex flex-col border border-hvw-ink bg-white">
+          <article class="event-card flex flex-col border border-hvw-ink bg-white" data-rueckblick-slot="4">
             <div class="event-card__media aspect-[4/3]" data-lightbox data-content-image="agenda.rueckblick.4.image" data-content-image-fallback="images/placeholder-event-4.svg">
               <img src="images/placeholder-event-4.svg" alt="" width="1200" height="900" loading="lazy">
               <div class="event-card__watermark" aria-hidden="true"><span>finales Bild fehlt</span></div>
@@ -216,7 +216,7 @@
             </div>
           </article>
 
-          <article class="event-card flex flex-col border border-hvw-ink bg-white">
+          <article class="event-card flex flex-col border border-hvw-ink bg-white" data-rueckblick-slot="5">
             <div class="event-card__media aspect-[4/3]" data-lightbox data-content-image="agenda.rueckblick.5.image" data-content-image-fallback="images/placeholder-event-5.svg">
               <img src="images/placeholder-event-5.svg" alt="" width="1200" height="900" loading="lazy">
               <div class="event-card__watermark" aria-hidden="true"><span>finales Bild fehlt</span></div>
@@ -236,7 +236,7 @@
             </div>
           </article>
 
-          <article class="event-card flex flex-col border border-hvw-ink bg-white">
+          <article class="event-card flex flex-col border border-hvw-ink bg-white" data-rueckblick-slot="6">
             <div class="event-card__media aspect-[4/3]" data-lightbox data-content-image="agenda.rueckblick.6.image" data-content-image-fallback="images/placeholder-event-6.svg">
               <img src="images/placeholder-event-6.svg" alt="" width="1200" height="900" loading="lazy">
               <div class="event-card__watermark" aria-hidden="true"><span>finales Bild fehlt</span></div>
@@ -256,6 +256,11 @@
             </div>
           </article>
         </div>
+        <p class="mt-8" data-rueckblick-add-wrap hidden>
+          <button type="button" class="inline-flex min-h-12 items-center border border-hvw-ink bg-white px-5 font-semibold" data-rueckblick-add>
+            Vergangene Veranstaltung hinzufügen
+          </button>
+        </p>
       </div>
     </section>
   </main>
@@ -303,6 +308,6 @@
   <script src="js/main.js" defer></script>
   <script src="js/lightbox.js?v=20260922-sammlung" defer></script>
   <script src="js/rueckblick-date.js?v=20260923-sort" defer></script>
-  <script src="js/content.js?v=20260923-sort" defer></script>
+  <script src="js/content.js?v=20261004-rueckblick-add" defer></script>
 </body>
 </html>

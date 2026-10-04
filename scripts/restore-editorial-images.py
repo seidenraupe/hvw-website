@@ -11,7 +11,7 @@ from pathlib import Path
 from typing import Any
 
 EDITORIAL_IMAGE_RE = re.compile(
-    r"^(agenda\.rueckblick\.([1-6])\.image|"
+    r"^(agenda\.rueckblick\.([1-9]|[1-3][0-9]|4[0-8])\.image|"
     r"sammlung\.objekt\.([1-6])\.image|"
     r"(lindengut|moersburg)\.bild\.([1-3])\.image|"
     r"partner\.([1-9]|1[0-9]|20)\.image)$"
@@ -19,7 +19,7 @@ EDITORIAL_IMAGE_RE = re.compile(
 
 UPLOAD_FILE_RE = re.compile(
     r"^(rueckblick|sammlung|lindengut|moersburg|partnerbild|partnerlogo)-"
-    r"([1-9]|1[0-9]|20)-[a-z0-9]+\.(?:jpe?g|png|webp)$",
+    r"([1-9]|[1-3][0-9]|4[0-8])-[a-z0-9]+\.(?:jpe?g|png|webp)$",
     re.IGNORECASE,
 )
 
@@ -42,14 +42,14 @@ def slot_key(field_id: str) -> str | None:
     m = EDITORIAL_IMAGE_RE.match(field_id)
     if not m:
         return None
+    if m.group(1):
+        return f"rueckblick-{m.group(1)}"
     if m.group(2):
-        return f"rueckblick-{m.group(2)}"
-    if m.group(3):
-        return f"sammlung-{m.group(3)}"
-    if m.group(4) and m.group(5):
-        return f"{m.group(4)}-{m.group(5)}"
-    if m.group(6):
-        return f"partnerbild-{m.group(6)}"
+        return f"sammlung-{m.group(2)}"
+    if m.group(3) and m.group(4):
+        return f"{m.group(3)}-{m.group(4)}"
+    if m.group(5):
+        return f"partnerbild-{m.group(5)}"
     return None
 
 

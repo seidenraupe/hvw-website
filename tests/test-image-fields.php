@@ -22,6 +22,14 @@ if (hvw_image_slot('agenda.rueckblick.4.image') !== 4) {
     fwrite(STDERR, "Slot-Erkennung fehlgeschlagen\n");
     exit(1);
 }
+if (hvw_image_slot('agenda.rueckblick.7.image') !== 7) {
+    fwrite(STDERR, "Rückblick-Slot 7 nicht erkannt\n");
+    exit(1);
+}
+if (hvw_sanitize_image_path('data/uploads/rueckblick-7-aabbccdd.jpg') !== 'data/uploads/rueckblick-7-aabbccdd.jpg') {
+    fwrite(STDERR, "Upload-Pfad für Rückblick 7 wurde verworfen\n");
+    exit(1);
+}
 if (hvw_image_slot('sammlung.objekt.2.image') !== 2) {
     fwrite(STDERR, "Sammlung-Slot fehlgeschlagen\n");
     exit(1);

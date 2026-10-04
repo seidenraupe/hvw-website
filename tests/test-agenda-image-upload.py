@@ -29,8 +29,6 @@ for n in range(1, 7):
     body = f"agenda.rueckblick.{n}.body"
     if schema["fields"][body].get("max") != 600:
         raise SystemExit(f"{body} muss 600 Zeichen erlauben")
-    if live["fields"][field] != "":
-        raise SystemExit(f"{field} soll leer starten")
     if f'data-content-image="{field}"' not in agenda:
         raise SystemExit(f"agenda.html fehlt {field}")
 

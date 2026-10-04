@@ -143,6 +143,163 @@
     return sanitizeRich(html).replace(/\s+/g, " ").trim();
   }
 
+  const RUECKBLICK_MAX = 48;
+
+  function rueckblickField(n, part) {
+    return "agenda.rueckblick." + n + "." + part;
+  }
+
+  function rueckblickSchema(n) {
+    const optional = n > 6;
+    const label = "Agenda · Rückblick " + n;
+    return {
+      [rueckblickField(n, "image")]: {
+        label: label + " · Bild",
+        page: "agenda.html",
+        max: 180,
+        rich: false,
+        multiline: false,
+        type: "image",
+        optional: true,
+      },
+      [rueckblickField(n, "kicker")]: {
+        label: label + " · Kategorie",
+        page: "agenda.html",
+        max: 60,
+        rich: false,
+        multiline: false,
+        optional: optional,
+      },
+      [rueckblickField(n, "title")]: {
+        label: label + " · Titel",
+        page: "agenda.html",
+        max: 80,
+        rich: false,
+        multiline: false,
+        optional: optional,
+      },
+      [rueckblickField(n, "body")]: {
+        label: label + " · Text",
+        page: "agenda.html",
+        max: 600,
+        rich: true,
+        multiline: true,
+        optional: optional,
+      },
+      [rueckblickField(n, "location")]: {
+        label: label + " · Ort",
+        page: "agenda.html",
+        max: 60,
+        rich: false,
+        multiline: false,
+        optional: optional,
+      },
+    };
+  }
+
+  function rueckblickPlain(fields, n, part) {
+    return String((fields && fields[rueckblickField(n, part)]) || "")
+      .replace(/<[^>]+>/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function rueckblickFilled(fields, n) {
+    return Boolean(
+      rueckblickPlain(fields, n, "title") ||
+        rueckblickPlain(fields, n, "body") ||
+        rueckblickPlain(fields, n, "image")
+    );
+  }
+
+  function rueckblickSlotsFrom(fields, grid) {
+    const slots = new Set();
+    Object.keys(fields || {}).forEach((id) => {
+      const m = /^agenda\.rueckblick\.(\d+)\./.exec(id);
+      if (m) {
+        const n = Number(m[1]);
+        if (n >= 1 && n <= RUECKBLICK_MAX) slots.add(n);
+      }
+    });
+    if (grid) {
+      grid.querySelectorAll("[data-rueckblick-slot]").forEach((el) => {
+        const n = Number(el.getAttribute("data-rueckblick-slot"));
+        if (n >= 1 && n <= RUECKBLICK_MAX) slots.add(n);
+      });
+    }
+    return slots;
+  }
+
+  function nextRueckblickSlot(fields) {
+    let max = 0;
+    rueckblickSlotsFrom(fields, document.querySelector("[data-rueckblick-grid]")).forEach((n) => {
+      if (n > max) max = n;
+    });
+    return max + 1;
+  }
+
+  function buildRueckblickCard(n) {
+    const ph = ((n - 1) % 6) + 1;
+    const fallback = "images/placeholder-event-" + ph + ".svg";
+    const article = document.createElement("article");
+    article.className = "event-card flex flex-col border border-hvw-ink bg-white";
+    article.setAttribute("data-rueckblick-slot", String(n));
+    article.innerHTML =
+      '<div class="event-card__media aspect-[4/3]" data-lightbox data-content-image="' +
+      rueckblickField(n, "image") +
+      '" data-content-image-fallback="' +
+      fallback +
+      '">' +
+      '<img src="' +
+      fallback +
+      '" alt="" width="1200" height="900" loading="lazy">' +
+      '<div class="event-card__watermark" aria-hidden="true"><span>finales Bild fehlt</span></div>' +
+      '<div class="hvw-image-tools">' +
+      '<label class="hvw-image-upload">Bild hochladen<input type="file" accept="image/jpeg,image/png,image/webp" hidden></label>' +
+      '<button type="button" class="hvw-image-clear">Platzhalter</button>' +
+      "</div></div>" +
+      '<div class="flex flex-1 flex-col gap-3 p-5 sm:p-6">' +
+      '<p class="text-sm font-semibold uppercase tracking-[0.08em] text-hvw-mute" data-content="' +
+      rueckblickField(n, "kicker") +
+      '" data-placeholder="Kategorie · Monat Jahr"></p>' +
+      '<h3 class="text-xl font-semibold leading-snug" data-content="' +
+      rueckblickField(n, "title") +
+      '" data-placeholder="Titel der Veranstaltung"></h3>' +
+      '<p class="text-base text-hvw-mute" data-content="' +
+      rueckblickField(n, "body") +
+      '" data-content-rich="1" data-placeholder="Kurzbeschreibung"></p>' +
+      '<p class="mt-auto pt-1 text-sm text-hvw-mute" data-content="' +
+      rueckblickField(n, "location") +
+      '" data-placeholder="Ort"></p>' +
+      "</div>";
+    return article;
+  }
+
+  function ensureRueckblickCards(fields, options) {
+    const grid = document.querySelector("[data-rueckblick-grid]");
+    if (!grid) return;
+    const keepEmpty = !!(options && options.keepEmpty);
+    const force = {};
+    ((options && options.forceSlots) || []).forEach((n) => {
+      force[Number(n)] = true;
+    });
+    const slots = rueckblickSlotsFrom(fields, grid);
+    Object.keys(force).forEach((n) => slots.add(Number(n)));
+    Array.from(slots)
+      .sort((a, b) => a - b)
+      .forEach((n) => {
+        if (n < 1 || n > RUECKBLICK_MAX) return;
+        let card = grid.querySelector('[data-rueckblick-slot="' + n + '"]');
+        const keep = n <= 6 || keepEmpty || force[n] || rueckblickFilled(fields, n);
+        if (!card && keep) {
+          grid.appendChild(buildRueckblickCard(n));
+        } else if (card && !keep) {
+          card.remove();
+        }
+      });
+    if (typeof window.hvwSortRueckblick === "function") window.hvwSortRueckblick();
+  }
+
   function applyImageFields(fields) {
     if (!fields) return;
     document.querySelectorAll("[data-content-image]").forEach((el) => {
@@ -172,8 +329,9 @@
     }
   }
 
-  function applyFields(fields) {
+  function applyFields(fields, options) {
     if (!fields) return;
+    ensureRueckblickCards(fields, options);
     document.querySelectorAll("[data-content]").forEach((el) => {
       const id = el.getAttribute("data-content");
       if (!Object.prototype.hasOwnProperty.call(fields, id)) return;
@@ -216,7 +374,7 @@
     }
   }
 
-  const EDITOR_ASSET_V = "20260929-quellen";
+  const EDITOR_ASSET_V = "20261004-rueckblick-add";
 
   function loadEditor() {
     if (!document.querySelector('link[href*="css/content-editor.css"]')) {
@@ -253,6 +411,10 @@
   }
 
   window.hvwApplyContent = applyFields;
+  window.hvwEnsureRueckblickCards = ensureRueckblickCards;
+  window.hvwNextRueckblickSlot = nextRueckblickSlot;
+  window.hvwRueckblickSchema = rueckblickSchema;
+  window.hvwRueckblickMax = RUECKBLICK_MAX;
   window.hvwSanitizeRich = sanitizeRich;
   window.hvwCanonicalRich = canonicalRich;
   window.hvwSafeRichHref = safeRichHref;
