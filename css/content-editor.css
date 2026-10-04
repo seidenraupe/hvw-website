@@ -498,6 +498,20 @@ body.hvw-editing [data-content-image] .hvw-image-tools {
   background: #f4f1ea;
 }
 
+body.hvw-editing [data-rueckblick-add-wrap] {
+  display: block;
+}
+
+[data-rueckblick-add] {
+  cursor: pointer;
+}
+
+body.hvw-editing [data-content][data-placeholder]:empty::before {
+  content: attr(data-placeholder);
+  color: #6b6b6b;
+  font-weight: 400;
+}
+
 .hvw-diff-jump {
   margin-top: 0.4rem;
   min-height: 2.25rem;

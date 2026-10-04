@@ -142,11 +142,95 @@ function hvw_write_json(string $path, array $data): void
     }
 }
 
+function hvw_rueckblick_max(): int
+{
+    return 48;
+}
+
+function hvw_rueckblick_field_defs(int $n): array
+{
+    $optional = $n > 6;
+    $label = 'Agenda · Rückblick ' . $n;
+    return [
+        "agenda.rueckblick.{$n}.image" => [
+            'label' => $label . ' · Bild',
+            'page' => 'agenda.html',
+            'max' => 180,
+            'rich' => false,
+            'multiline' => false,
+            'type' => 'image',
+            'optional' => true,
+        ],
+        "agenda.rueckblick.{$n}.kicker" => [
+            'label' => $label . ' · Kategorie',
+            'page' => 'agenda.html',
+            'max' => 60,
+            'rich' => false,
+            'multiline' => false,
+            'optional' => $optional,
+        ],
+        "agenda.rueckblick.{$n}.title" => [
+            'label' => $label . ' · Titel',
+            'page' => 'agenda.html',
+            'max' => 80,
+            'rich' => false,
+            'multiline' => false,
+            'optional' => $optional,
+        ],
+        "agenda.rueckblick.{$n}.body" => [
+            'label' => $label . ' · Text',
+            'page' => 'agenda.html',
+            'max' => 600,
+            'rich' => true,
+            'multiline' => true,
+            'optional' => $optional,
+        ],
+        "agenda.rueckblick.{$n}.location" => [
+            'label' => $label . ' · Ort',
+            'page' => 'agenda.html',
+            'max' => 60,
+            'rich' => false,
+            'multiline' => false,
+            'optional' => $optional,
+        ],
+    ];
+}
+
+function hvw_extend_schema_from_fields(array $schema, array $fields): array
+{
+    $max = hvw_rueckblick_max();
+    $slots = [];
+    foreach (array_keys($fields) as $id) {
+        if (preg_match('/^agenda\.rueckblick\.(\d+)\./', (string) $id, $m)) {
+            $n = (int) $m[1];
+            if ($n >= 1 && $n <= $max) {
+                $slots[$n] = true;
+            }
+        }
+    }
+    foreach ($slots as $n => $_keep) {
+        foreach (hvw_rueckblick_field_defs($n) as $id => $meta) {
+            if (!isset($schema[$id])) {
+                $schema[$id] = $meta;
+            }
+        }
+    }
+    return $schema;
+}
+
 function hvw_schema(): array
 {
     $data = hvw_read_json(HVW_SCHEMA);
     $fields = $data['fields'] ?? [];
-    return is_array($fields) ? $fields : [];
+    $fields = is_array($fields) ? $fields : [];
+    $extra = [];
+    if (is_file(HVW_LIVE)) {
+        $extra = array_merge($extra, hvw_live()['fields'] ?? []);
+    }
+    if (is_file(HVW_DRAFT)) {
+        $extra = array_merge($extra, hvw_draft()['fields'] ?? []);
+    }
+    return hvw_extend_schema_from_fields($fields, $extra);
 }
 
 function hvw_plain_len(string $html): int
@@ -438,7 +522,10 @@ function hvw_sanitize_image_path(string $value): string
     if (preg_match('#^images/partner/hero-(?:[1-9]|1[0-4]|1[7-9]|20|geschichtsstadt|schlosshalde)\.jpg$#', $value)) {
         return $value;
     }
-    if (preg_match('#^data/uploads/(rueckblick|sammlung|lindengut|moersburg)-[1-6]-[a-z0-9]+\.(jpe?g|png|webp)$#', $value)) {
+    if (preg_match('#^data/uploads/(sammlung|lindengut|moersburg)-[1-6]-[a-z0-9]+\.(jpe?g|png|webp)$#', $value)) {
+        return $value;
+    }
+    if (preg_match('#^data/uploads/rueckblick-([1-9]|[1-3][0-9]|4[0-8])-[a-z0-9]+\.(jpe?g|png|webp)$#', $value)) {
         return $value;
     }
     if (preg_match('#^data/uploads/(partnerlogo|partnerbild)-(?:[1-9]|1[0-9]|20)-[a-z0-9]+\.(jpe?g|png|webp)$#', $value)) {
@@ -449,7 +536,7 @@ function hvw_sanitize_image_path(string $value): string
 
 function hvw_image_info(string $id): ?array
 {
-    if (preg_match('/^agenda\.rueckblick\.([1-6])\.image$/', $id, $m)) {
+    if (preg_match('/^agenda\.rueckblick\.([1-9]|[1-3][0-9]|4[0-8])\.image$/', $id, $m)) {
         return ['prefix' => 'rueckblick', 'slot' => (int) $m[1]];
     }
     if (preg_match('/^sammlung\.objekt\.([1-6])\.image$/', $id, $m)) {
@@ -472,7 +559,12 @@ function hvw_image_filename(array $slotInfo): string
 {
     $prefix = (string) ($slotInfo['prefix'] ?? '');
     $slot = (int) ($slotInfo['slot'] ?? 0);
-    $maxSlot = str_starts_with($prefix, 'partner') ? 20 : 6;
+    $maxSlot = 6;
+    if (str_starts_with($prefix, 'partner')) {
+        $maxSlot = 20;
+    } elseif ($prefix === 'rueckblick') {
+        $maxSlot = hvw_rueckblick_max();
+    }
     if (!preg_match('/^(rueckblick|sammlung|lindengut|moersburg|partnerlogo|partnerbild)$/', $prefix) || $slot < 1 || $slot > $maxSlot) {
         return '';
     }
@@ -516,7 +608,7 @@ function hvw_fallback_fields(): array
 
 function hvw_normalize_fields(array $incoming, ?array $fallback = null): array
 {
-    $schema = hvw_schema();
+    $schema = hvw_extend_schema_from_fields(hvw_schema(), $incoming);
     $fallback = $fallback ?? hvw_fallback_fields();
     $out = [];
     $errors = [];

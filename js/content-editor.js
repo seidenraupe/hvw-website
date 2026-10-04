@@ -201,7 +201,11 @@
 
   function applyCurrent() {
     const fields = view === "live" ? liveFields : draftViewFields();
-    window.hvwApplyContent(fields);
+    if (window.hvwApplyContent) {
+      window.hvwApplyContent(fields, { keepEmpty: view === "draft" });
+    }
+    const addWrap = document.querySelector("[data-rueckblick-add-wrap]");
+    if (addWrap) addWrap.hidden = view !== "draft";
     document.body.classList.toggle("hvw-editing", view === "draft");
     document.querySelectorAll("[data-content]").forEach((el) => {
       const canEdit = view === "draft";
@@ -985,8 +989,42 @@
     }
   }
 
+  function addRueckblickCard() {
+    if (view !== "draft") return;
+    if (!window.hvwNextRueckblickSlot || !window.hvwEnsureRueckblickCards) return;
+    const n = window.hvwNextRueckblickSlot(draftViewFields());
+    const max = window.hvwRueckblickMax || 48;
+    if (n > max) {
+      toast("Es sind höchstens " + max + " Einträge möglich.", true);
+      return;
+    }
+    if (window.hvwRueckblickSchema) {
+      schema = Object.assign({}, schema, window.hvwRueckblickSchema(n));
+    }
+    ["image", "kicker", "title", "body", "location"].forEach((part) => {
+      const id = "agenda.rueckblick." + n + "." + part;
+      if (draftFields[id] == null) draftFields[id] = "";
+    });
+    window.hvwEnsureRueckblickCards(draftViewFields(), { keepEmpty: true, forceSlots: [n] });
+    bindFields();
+    applyCurrent();
+    const title = fieldEl("agenda.rueckblick." + n + ".title");
+    if (title) title.focus();
+    markDirty();
+  }
+
   function bindFields() {
+    const addBtn = document.querySelector("[data-rueckblick-add]");
+    if (addBtn && addBtn.dataset.hvwBound !== "1") {
+      addBtn.dataset.hvwBound = "1";
+      addBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        addRueckblickCard();
+      });
+    }
     document.querySelectorAll("[data-content]").forEach((el) => {
+      if (el.dataset.hvwBound === "1") return;
+      el.dataset.hvwBound = "1";
       el.addEventListener("focus", () => {
         activeEl = el;
         updateCounter();
