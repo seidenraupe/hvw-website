@@ -9,8 +9,10 @@ for path in pages:
     html = path.read_text(encoding="utf-8")
     if "<footer" not in html:
         continue
-    if URL not in html or "@hvwinterthur" not in html or "Instagram:" not in html:
+    if URL not in html or "@hvwinterthur" not in html or "Instagram" not in html:
         missing.append(path.name)
+    if 'class="hvw-ig' not in html or "<svg" not in html.split("hvw-ig", 1)[-1][:800]:
+        missing.append(path.name + " (Logo)")
 if missing:
     raise SystemExit("Instagram-Footer fehlt auf: " + ", ".join(missing))
 index = (ROOT / "index.html").read_text(encoding="utf-8")
