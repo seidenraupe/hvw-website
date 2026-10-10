@@ -96,6 +96,20 @@ if ($action === 'save' && $method === 'POST') {
     ]);
 }
 
+if ($action === 'publish-check' && $method === 'POST') {
+    $user = hvw_require_user();
+    hvw_require_csrf();
+    if ($user['role'] !== 'freigabe') {
+        hvw_json(['ok' => false, 'error' => 'Nur die Freigabe-Rolle darf live schalten.'], 403);
+    }
+    $draft = hvw_draft();
+    $fields = hvw_normalize_fields($draft['fields'] ?? []);
+    hvw_json([
+        'ok' => true,
+        'gaps' => hvw_collect_public_upload_gaps($fields),
+    ]);
+}
+
 if ($action === 'publish' && $method === 'POST') {
     $user = hvw_require_user();
     hvw_require_csrf();
@@ -104,6 +118,15 @@ if ($action === 'publish' && $method === 'POST') {
     }
     $draft = hvw_draft();
     $fields = hvw_normalize_fields($draft['fields'] ?? []);
+    hvw_sync_field_uploads_to_public($fields);
+    $uploadGaps = hvw_collect_public_upload_gaps($fields);
+    if ($uploadGaps !== []) {
+        hvw_json([
+            'ok' => false,
+            'error' => hvw_publish_upload_error_message($uploadGaps),
+            'uploadGaps' => $uploadGaps,
+        ], 409);
+    }
     $now = gmdate('Y-m-d\TH:i:s\Z');
     $live = [
         'updatedAt' => $now,
@@ -116,7 +139,6 @@ if ($action === 'publish' && $method === 'POST') {
     if (is_dir(dirname(HVW_ROOT) . '/data') && is_writable(dirname(HVW_ROOT) . '/data')) {
         hvw_write_json($publicLive, $live);
     }
-    hvw_sync_field_uploads_to_public($fields);
     $draft['status'] = 'published';
     $draft['publishedAt'] = $now;
     $draft['fields'] = $fields;

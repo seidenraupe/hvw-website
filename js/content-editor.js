@@ -691,7 +691,32 @@
 
   async function publish() {
     if (dirty) await saveDraft();
-    if (!confirm("Entwurf jetzt öffentlich schalten?")) return;
+    let gaps = [];
+    try {
+      const check = await api("publish-check", { method: "POST", headers: csrfHeaders(), body: "{}" });
+      gaps = Array.isArray(check.gaps) ? check.gaps : [];
+    } catch (err) {
+      toast(err.message, true);
+      return;
+    }
+    const broken = gaps.filter((g) => !g.editAvailable);
+    if (broken.length) {
+      toast(
+        "Live schalten nicht möglich: " +
+          broken.map((g) => g.label || g.field).join("; ") +
+          " — Bilddatei fehlt. Bitte erneut hochladen.",
+        true
+      );
+      return;
+    }
+    let confirmMsg = "Entwurf jetzt öffentlich schalten?";
+    const pending = gaps.filter((g) => g.editAvailable);
+    if (pending.length) {
+      confirmMsg +=
+        "\n\nHinweis: Diese Bilder liegen noch nicht öffentlich ab und werden beim Schalten mitkopiert:\n" +
+        pending.map((g) => "• " + (g.label || g.field)).join("\n");
+    }
+    if (!confirm(confirmMsg)) return;
     try {
       await api("publish", { method: "POST", headers: csrfHeaders(), body: "{}" });
       liveFields = Object.assign({}, draftFields);

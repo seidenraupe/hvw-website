@@ -654,6 +654,79 @@ function hvw_sync_field_uploads_to_public(array $fields): void
     }
 }
 
+function hvw_public_upload_is_missing(string $rel): bool
+{
+    $path = hvw_sanitize_image_path($rel);
+    if ($path === '' || !str_starts_with($path, 'data/uploads/')) {
+        return false;
+    }
+    $base = hvw_upload_basename($path);
+    if ($base === '') {
+        return false;
+    }
+    $destDir = hvw_public_uploads_dir();
+    if ($destDir === null) {
+        return true;
+    }
+    return !is_file($destDir . '/' . $base);
+}
+
+/** Bilder, die in Feldern stehen, aber unter /data/uploads/ noch fehlen. */
+function hvw_collect_public_upload_gaps(array $fields): array
+{
+    $schema = hvw_extend_schema_from_fields(hvw_schema(), $fields);
+    $gaps = [];
+    foreach ($fields as $id => $value) {
+        if (!is_string($value) || $value === '') {
+            continue;
+        }
+        $path = hvw_sanitize_image_path($value);
+        if ($path === '' || !str_starts_with($path, 'data/uploads/')) {
+            continue;
+        }
+        if (!hvw_public_upload_is_missing($path)) {
+            continue;
+        }
+        $base = hvw_upload_basename($path);
+        $editAvailable = $base !== '' && is_file(HVW_UPLOADS . '/' . $base);
+        $label = $id;
+        if (isset($schema[$id]) && is_array($schema[$id]) && isset($schema[$id]['label'])) {
+            $label = (string) $schema[$id]['label'];
+        }
+        $gaps[] = [
+            'field' => $id,
+            'label' => $label,
+            'path' => $path,
+            'editAvailable' => $editAvailable,
+        ];
+    }
+    return $gaps;
+}
+
+function hvw_publish_upload_error_message(array $gaps): string
+{
+    $missingFile = [];
+    $copyFailed = [];
+    foreach ($gaps as $gap) {
+        if (!empty($gap['editAvailable'])) {
+            $copyFailed[] = (string) ($gap['label'] ?? $gap['field'] ?? 'Bild');
+        } else {
+            $missingFile[] = (string) ($gap['label'] ?? $gap['field'] ?? 'Bild');
+        }
+    }
+    if ($missingFile !== []) {
+        return 'Live schalten nicht möglich: Bilddatei fehlt für «'
+            . implode('», «', $missingFile)
+            . '». Bitte im Entwurf erneut hochladen.';
+    }
+    if ($copyFailed !== []) {
+        return 'Bilder konnten nicht ins öffentliche Verzeichnis kopiert werden ('
+            . implode(', ', $copyFailed)
+            . '). Bitte Deploy/Support prüfen oder erneut versuchen.';
+    }
+    return 'Bilder für die Live-Seite fehlen.';
+}
+
 function hvw_seed_fields(): array
 {
     $path = HVW_ROOT . '/data/content-live.seed.json';
