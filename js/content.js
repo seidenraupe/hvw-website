@@ -374,7 +374,7 @@
     }
   }
 
-  const EDITOR_ASSET_V = "20261004-rueckblick-add";
+  const EDITOR_ASSET_V = "20261010-publish-upload";
 
   function loadEditor() {
     if (!document.querySelector('link[href*="css/content-editor.css"]')) {
