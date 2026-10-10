@@ -116,6 +116,7 @@ if ($action === 'publish' && $method === 'POST') {
     if (is_dir(dirname(HVW_ROOT) . '/data') && is_writable(dirname(HVW_ROOT) . '/data')) {
         hvw_write_json($publicLive, $live);
     }
+    hvw_sync_field_uploads_to_public($fields);
     $draft['status'] = 'published';
     $draft['publishedAt'] = $now;
     $draft['fields'] = $fields;
@@ -225,6 +226,7 @@ if ($action === 'upload-image' && $method === 'POST') {
     if (!$ok || !is_file($abs)) {
         hvw_json(['ok' => false, 'error' => 'Das Bild konnte nicht gespeichert werden.'], 500);
     }
+    hvw_mirror_upload_to_public($name);
 
     $rel = 'data/uploads/' . $name;
     $draft = hvw_draft();

@@ -583,6 +583,77 @@ function hvw_image_public_url(string $rel): string
     return $rel;
 }
 
+/** Öffentliches /data/ neben dem Bearbeitungszugang (/edit/). */
+function hvw_public_data_dir(): ?string
+{
+    $dir = dirname(HVW_ROOT) . '/data';
+    if (!is_dir($dir) || !is_writable($dir)) {
+        return null;
+    }
+    return $dir;
+}
+
+function hvw_public_uploads_dir(): ?string
+{
+    $data = hvw_public_data_dir();
+    if ($data === null) {
+        return null;
+    }
+    $uploads = $data . '/uploads';
+    if (!is_dir($uploads) && !mkdir($uploads, 0775, true) && !is_dir($uploads)) {
+        return null;
+    }
+    if (!is_writable($uploads)) {
+        return null;
+    }
+    return $uploads;
+}
+
+function hvw_upload_basename(string $rel): string
+{
+    $rel = str_replace('\\', '/', $rel);
+    if (!preg_match('#^data/uploads/([^/]+)$#', $rel, $m)) {
+        return '';
+    }
+    $base = basename($m[1]);
+    return $base === $m[1] ? $base : '';
+}
+
+/** Kopiert eine Datei aus /edit/data/uploads/ ins öffentliche /data/uploads/. */
+function hvw_mirror_upload_to_public(string $basename): bool
+{
+    if ($basename === '' || str_contains($basename, '/') || str_contains($basename, '..')) {
+        return false;
+    }
+    $src = HVW_UPLOADS . '/' . $basename;
+    if (!is_file($src)) {
+        return false;
+    }
+    $destDir = hvw_public_uploads_dir();
+    if ($destDir === null) {
+        return false;
+    }
+    return copy($src, $destDir . '/' . $basename);
+}
+
+/** Alle in Feldern referenzierten Upload-Bilder für die Live-Seite spiegeln. */
+function hvw_sync_field_uploads_to_public(array $fields): void
+{
+    foreach ($fields as $value) {
+        if (!is_string($value) || $value === '') {
+            continue;
+        }
+        $path = hvw_sanitize_image_path($value);
+        if ($path === '' || !str_starts_with($path, 'data/uploads/')) {
+            continue;
+        }
+        $base = hvw_upload_basename($path);
+        if ($base !== '') {
+            hvw_mirror_upload_to_public($base);
+        }
+    }
+}
+
 function hvw_seed_fields(): array
 {
     $path = HVW_ROOT . '/data/content-live.seed.json';
