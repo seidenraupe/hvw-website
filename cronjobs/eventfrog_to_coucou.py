@@ -54,8 +54,9 @@ Beschreibung in beiden Exporten (coucou_export.json und mus_export.json):
     https://www.hvwinterthur.ch/data/home-events.json
 
 Bekannte Einschränkungen (siehe Kommentare weiter unten im Code):
-    - "category" wird über den Rubrik-NAMEN auf die Coucou-Kategorie-IDs
-      gemappt (Best-Effort, bitte kurz stichprobenartig prüfen/anpassen).
+    - "category" wird über den Rubrik-NAMEN auf Coucou-Kategorie-IDs gemappt
+      (Best-Effort) und als Array exportiert: Primärkategorie plus immer
+      «Historisches» (ID 308, Coucou-Schnittstelle v1.5).
     - "location_id" (Coucous eigene interne Orts-ID) kann nicht automatisch
       ermittelt werden. Stattdessen werden die Adressfelder
       (location_name/_street/_zip/_city/_website) befüllt - das ist laut
@@ -110,9 +111,12 @@ RUBRIC_NAME_TO_COUCOU_CATEGORY = [
     ("führung", 280),
     ("fuehrung", 280),
     ("vortrag", 281),
+    ("histor", 308),
 ]
 # Fallback-Kategorie, falls kein Rubrikname zugeordnet werden kann
 DEFAULT_COUCOU_CATEGORY = 15  # "Diverses"
+# Coucou-Schnittstelle v1.5 (29.05.2026) — zusätzlich bei allen HVW-Events
+COUCOU_CATEGORY_HISTORISCHES = 308
 
 # Titelseite hvwinterthur.ch: kompakter Auszug der nächsten Events
 HVW_HOME_EVENT_LIMIT = 3
@@ -727,6 +731,16 @@ def map_rubric_to_category(rubric_id, rubrics_by_id):
     return DEFAULT_COUCOU_CATEGORY
 
 
+def coucou_event_categories(rubric_id, rubrics_by_id):
+    """Primärkategorie (Rubrik) plus «Historisches» (308) für jeden Export."""
+    primary = map_rubric_to_category(rubric_id, rubrics_by_id)
+    categories = []
+    for category_id in (primary, COUCOU_CATEGORY_HISTORISCHES):
+        if category_id not in categories:
+            categories.append(category_id)
+    return categories
+
+
 def build_coucou_event(event, rubrics_by_id, locations_by_id):
     """Baut aus einem Eventfrog-Event-Objekt ein Dict im Coucou-Schema.
 
@@ -760,7 +774,7 @@ def build_coucou_event(event, rubrics_by_id, locations_by_id):
         "time_end": iso_to_time_str(end),
         "fee": event.get("lowestTicketPrice"),
         "presale": event.get("presaleLink"),
-        "category": map_rubric_to_category(event.get("rubricId"), rubrics_by_id),
+        "category": coucou_event_categories(event.get("rubricId"), rubrics_by_id),
     }
 
     if description_long:

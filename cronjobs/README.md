@@ -15,6 +15,9 @@ Beide JSON-Exports nutzen **dasselbe Coucou-Record-Layout**, inkl. Kurz- und
 Langbeschreibung (`description`, `description_long`, `description_html`).
 `mus_export.json` holt die Agentur von museumschaffen.ch von hvwinterthur.ch ab.
 
+**Coucou-Kategorien:** `category` ist ein Array: automatisch gemappte
+Primärkategorie (Rubrik) plus immer **Historisches** (Coucou-ID **308**).
+
 **Keine Attraktionen:** Eventfrog-Einträge vom Typ Attraktion (Öffnungszeiten,
 z.B. Ausstellung «Erinnerungstank Haldengut» an jedem Werktag) gehören nicht
 ins Coucou-/Guidle-/MuS-JSON und auch nicht auf die Titelseite. Der Export

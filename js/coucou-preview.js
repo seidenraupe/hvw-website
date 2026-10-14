@@ -100,6 +100,15 @@
     return extras.length ? extras.join("") : "<p class=\"text-hvw-mute\">—</p>";
   }
 
+  function formatCategory(value) {
+    if (value == null || value === "") return "—";
+    if (Array.isArray(value)) {
+      const parts = value.filter((item) => item != null && item !== "");
+      return parts.length ? parts.join(", ") : "—";
+    }
+    return String(value);
+  }
+
   function locationCell(event) {
     const parts = [event.location_name, event.location_street, [event.location_zip, event.location_city].filter(Boolean).join(" ")]
       .map((part) => String(part || "").trim())
@@ -152,7 +161,7 @@
           locationCell(event) +
           "</td>" +
           "<td>" +
-          escapeHtml(event.category == null ? "—" : String(event.category)) +
+          escapeHtml(formatCategory(event.category)) +
           "</td>" +
           "<td>" +
           escapeHtml(clip(event.description, 140) || "—") +
