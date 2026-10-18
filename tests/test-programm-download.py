@@ -7,6 +7,10 @@ agenda = (ROOT / "agenda.html").read_text(encoding="utf-8")
 htaccess = (ROOT / ".htaccess").read_text(encoding="utf-8")
 vorschau = (ROOT / "deploy/edit.htaccess").read_text(encoding="utf-8")
 deploy = (ROOT / ".github/workflows/deploy.yml").read_text(encoding="utf-8")
+deploy_cron = (ROOT / ".github/workflows/deploy-cronjobs.yml").read_text(
+    encoding="utf-8"
+)
+cron_readme = (ROOT / "cronjobs/README.md").read_text(encoding="utf-8")
 preview = (ROOT / "scripts/build-hostpoint-edit.sh").read_text(encoding="utf-8")
 
 if "Alle Anlässe zum Herunterladen oder Ausdrucken" not in agenda:
@@ -25,6 +29,12 @@ if not (ROOT / "programm/Programm.json").is_file():
     raise SystemExit("programm/Programm.json fehlt")
 if "generate-programm-pdf.py" not in deploy:
     raise SystemExit("Deploy muss das Programm-PDF erzeugen")
+if "eventfrog_to_programm_pdf.py" not in deploy_cron:
+    raise SystemExit("deploy-cronjobs muss Programm-PDF-Cron testen")
+if "eventfrog_to_programm_pdf.py" not in cron_readme:
+    raise SystemExit("cronjobs/README muss Programm-PDF-Cron dokumentieren")
+if not (ROOT / "cronjobs/eventfrog_to_programm_pdf.py").is_file():
+    raise SystemExit("cronjobs/eventfrog_to_programm_pdf.py fehlt")
 if 'copy_dir "${ROOT}/programm"' not in preview:
     raise SystemExit("Vorschau-Build muss programm/ kopieren")
 if "RewriteRule ^programm/ - [G,L]" in htaccess:

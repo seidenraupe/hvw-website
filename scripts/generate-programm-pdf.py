@@ -53,8 +53,29 @@ from reportlab.platypus import (
 )
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-ROOT_DIR = os.path.dirname(SCRIPT_DIR)
-sys.path.insert(0, os.path.join(ROOT_DIR, "cronjobs"))
+
+
+def resolve_site_root():
+    """Repo-Root lokal; auf Hostpoint der Document Root (httpdocs)."""
+    env_dir = os.environ.get("HVW_HTTPDOCS_DIR", "").strip()
+    if env_dir:
+        return os.path.abspath(env_dir)
+    if os.path.basename(SCRIPT_DIR) == "cronjobs":
+        candidate = os.path.normpath(
+            os.path.join(SCRIPT_DIR, "..", "www", "hvwinterthur.ch")
+        )
+        if os.path.isdir(candidate):
+            return candidate
+    return os.path.dirname(SCRIPT_DIR)
+
+
+ROOT_DIR = resolve_site_root()
+_CRONJOBS_DIR = (
+    SCRIPT_DIR
+    if os.path.basename(SCRIPT_DIR) == "cronjobs"
+    else os.path.join(ROOT_DIR, "cronjobs")
+)
+sys.path.insert(0, _CRONJOBS_DIR)
 from eventfrog_to_coucou import filter_attraction_events  # noqa: E402
 DEFAULT_OUTPUT = os.path.join(ROOT_DIR, "dokumente", "Programm.pdf")
 PROGRAMM_META = os.path.join(ROOT_DIR, "programm", "Programm.json")
@@ -165,8 +186,9 @@ def load_api_key():
     if env_key:
         return env_key
     candidates = [
-        os.path.join(ROOT_DIR, "cronjobs", "eventfrog_api_key"),
+        os.path.join(_CRONJOBS_DIR, "eventfrog_api_key"),
         os.path.join(SCRIPT_DIR, "eventfrog_api_key"),
+        os.path.join(ROOT_DIR, "cronjobs", "eventfrog_api_key"),
     ]
     for path in candidates:
         try:

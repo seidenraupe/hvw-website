@@ -12,6 +12,7 @@ on:
       - main
     paths:
       - 'cronjobs/**'
+      - 'scripts/generate-programm-pdf.py'
       - '.github/workflows/deploy-cronjobs.yml'
 
 concurrency:
@@ -67,6 +68,11 @@ jobs:
             cronjobs/ \
             "${SSH_USER}@${host}:cronjobs/"
 
+          rsync -avz \
+            -e "ssh -i ${keyfile} -p 22 -o IdentitiesOnly=yes -o StrictHostKeyChecking=no" \
+            scripts/generate-programm-pdf.py \
+            "${SSH_USER}@${host}:cronjobs/generate-programm-pdf.py"
+
           # Key nur auf dem Server, nie im Git
           printf '%s\n' "$EVENTFROG_API_KEY" | "${ssh_base[@]}" "${SSH_USER}@${host}" \
             'cat > "$HOME/cronjobs/eventfrog_api_key" && chmod 600 "$HOME/cronjobs/eventfrog_api_key"'
@@ -85,11 +91,15 @@ jobs:
             /usr/local/bin/python eventfrog_to_home.py
             echo "--- einmaliger Testlauf Museum Schaffen ---"
             /usr/local/bin/python eventfrog_to_mus.py
+            echo "--- einmaliger Testlauf Programm-PDF ---"
+            /usr/local/bin/python eventfrog_to_programm_pdf.py
             ls -la "$HOME/www/hvwinterthur.ch/coucou_export.json" \
                    "$HOME/www/hvwinterthur.ch/guidle_export.json" \
                    "$HOME/www/hvwinterthur.ch/home-events.json" \
                    "$HOME/www/hvwinterthur.ch/data/home-events.json" \
-                   "$HOME/www/hvwinterthur.ch/mus_export.json" 2>/dev/null || true
+                   "$HOME/www/hvwinterthur.ch/mus_export.json" \
+                   "$HOME/www/hvwinterthur.ch/dokumente/Programm.pdf" \
+                   "$HOME/www/hvwinterthur.ch/programm/Programm.json" 2>/dev/null || true
           '
 
           rm -f "$keyfile"
@@ -98,3 +108,4 @@ jobs:
           echo "  Coucou:     cd /home/${SSH_USER}/cronjobs && /usr/local/bin/python eventfrog_to_coucou.py >/dev/null 2>&1"
           echo "  Titelseite: cd /home/${SSH_USER}/cronjobs && /usr/local/bin/python eventfrog_to_home.py >/dev/null 2>&1"
           echo "  Museum:     cd /home/${SSH_USER}/cronjobs && /usr/local/bin/python eventfrog_to_mus.py >/dev/null 2>&1"
+          echo "  Programm:   cd /home/${SSH_USER}/cronjobs && /usr/local/bin/python eventfrog_to_programm_pdf.py >/dev/null 2>&1"
