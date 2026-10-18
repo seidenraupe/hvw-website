@@ -808,19 +808,23 @@ def build_coucou_event(event, rubrics_by_id, locations_by_id):
 
 
 def select_upcoming_events(events, limit=HVW_HOME_EVENT_LIMIT):
-    """Wählt die nächsten kommenden Events (ab heute), chronologisch sortiert."""
-    today = datetime.now().strftime("%Y-%m-%d")
+    """Wählt die nächsten kommenden Events (ab heute), chronologisch sortiert.
+
+    limit=None: alle kommenden Anlässe (Programm-PDF), sonst Titelseiten-Limit.
+    """
+    today = datetime.now().date()
     upcoming = []
 
     for event in events:
         if event.get("cancelled"):
             continue
-        begin = event.get("begin") or ""
-        date_part = str(begin)[:10]
-        if len(date_part) == 10 and date_part >= today:
+        begin_date = _event_begin_date(event)
+        if begin_date and begin_date >= today:
             upcoming.append(event)
 
-    upcoming.sort(key=lambda e: e.get("begin") or "")
+    upcoming.sort(key=lambda e: e.get("begin") or str(e.get("date") or ""))
+    if limit is None:
+        return upcoming
     return upcoming[:limit]
 
 
