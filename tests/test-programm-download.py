@@ -17,6 +17,11 @@ if "Alle Anlässe zum Herunterladen oder Ausdrucken" not in agenda:
     raise SystemExit("Download-Button-Text fehlt")
 if 'href="dokumente/Programm.pdf"' not in agenda:
     raise SystemExit("Button muss auf dokumente/Programm.pdf zeigen")
+programm_anchor = agenda.split('href="dokumente/Programm.pdf"', 1)[-1].split("</a>", 1)[0]
+if 'target="_blank"' not in programm_anchor:
+    raise SystemExit("Programm-PDF muss in neuem Tab/Fenster öffnen (target=_blank)")
+if "noopener noreferrer" not in programm_anchor:
+    raise SystemExit("Programm-PDF-Link braucht rel=noopener noreferrer")
 if "download=" in agenda.split('href="dokumente/Programm.pdf"', 1)[-1].split("</a>", 1)[0]:
     raise SystemExit("Programm-PDF darf kein download-Attribut haben (wie Statuten im Viewer öffnen)")
 if "data-programm-download" in agenda:
