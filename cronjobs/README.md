@@ -10,6 +10,7 @@ Migriert von Kreativ Media (`giger-straehl.ch` / Plesk).
 | Guidle-Kopie | *(dieselbe Coucou-Datei)* | `https://www.hvwinterthur.ch/guidle_export.json` |
 | Titelseite | `eventfrog_to_home.py` | `https://www.hvwinterthur.ch/home-events.json` (nächste 3 Anlässe) |
 | Museum Schaffen | `eventfrog_to_mus.py` | `https://www.hvwinterthur.ch/mus_export.json` (nur OrgID `5116588`) |
+| Programm-PDF | `eventfrog_to_programm_pdf.py` | `https://www.hvwinterthur.ch/dokumente/Programm.pdf` + `programm/Programm.json` |
 
 Beide JSON-Exports nutzen **dasselbe Coucou-Record-Layout**, inkl. Kurz- und
 Langbeschreibung (`description`, `description_long`, `description_html`).
@@ -24,8 +25,10 @@ ins Coucou-/Guidle-/MuS-JSON und auch nicht auf die Titelseite. Der Export
 behält nur Veranstaltungen (Führungen, Käfele, Vorträge, AfterWork, …).
 
 Die früheren GitHub-Crons (Coucou-Export und Homepage-Events im Repo) sind
-entfernt. Alle vier JSON-Dateien entstehen **nur** auf Hostpoint, je als
-eigener Cron (Coucou inkl. Guidle-Kopie, Titelseite, Museum Schaffen).
+entfernt. Alle vier JSON-Dateien und das Agenda-Programm-PDF entstehen **nur**
+auf Hostpoint (je eigener Cron). Das PDF nutzt dieselben Org-IDs und denselben
+Attraktions-Filter wie Coucou/Titelseite; Logo und Museumsfotos liegen im
+bereits deployten Webroot (`images/`).
 
 ## Hostpoint-Einrichtung
 
@@ -42,6 +45,8 @@ Inhalt:
 - `eventfrog_to_coucou.py`
 - `eventfrog_to_home.py`
 - `eventfrog_to_mus.py`
+- `eventfrog_to_programm_pdf.py`
+- `generate-programm-pdf.py` (via Deploy-Action aus `scripts/`, nicht im Git unter `cronjobs/`)
 - `requirements.txt`
 - `eventfrog_api_key` (lokal aus `.example` erzeugen, **nicht** committen)
 
@@ -102,6 +107,23 @@ Befehl:
 cd /home/zozuhosa/cronjobs && /usr/local/bin/python eventfrog_to_home.py >/dev/null 2>&1
 ```
 
+#### Programm-PDF (`dokumente/Programm.pdf`)
+
+| Feld | Wert |
+|---|---|
+| Minute | `15` |
+| Hour | `3` |
+| Day / Month / Weekday | `*` |
+
+Befehl:
+
+```bash
+cd /home/zozuhosa/cronjobs && /usr/local/bin/python eventfrog_to_programm_pdf.py >/dev/null 2>&1
+```
+
+Nach dem ersten Deploy: `pip install --user -r requirements.txt` (enthält
+reportlab/Pillow für das PDF).
+
 ### 4. Abnehmer-URLs
 
 | Abnehmer | URL |
@@ -112,6 +134,7 @@ cd /home/zozuhosa/cronjobs && /usr/local/bin/python eventfrog_to_home.py >/dev/n
 | Titelseite | `https://www.hvwinterthur.ch/home-events.json` |
 | museumschaffen.ch (Agentur) | `https://www.hvwinterthur.ch/mus_export.json` |
 | MuS-Kontrolle | `https://www.hvwinterthur.ch/mus` |
+| Agenda-Programm | `https://www.hvwinterthur.ch/dokumente/Programm.pdf` |
 
 Alten Cron auf Kreativ Media deaktivieren, sobald Coucou umgestellt ist.
 
@@ -122,17 +145,21 @@ cd ~/cronjobs
 /usr/local/bin/python eventfrog_to_coucou.py
 /usr/local/bin/python eventfrog_to_home.py
 /usr/local/bin/python eventfrog_to_mus.py
+/usr/local/bin/python eventfrog_to_programm_pdf.py
 curl -sI https://www.hvwinterthur.ch/coucou_export.json
 curl -sI https://www.hvwinterthur.ch/guidle_export.json
 curl -sI https://www.hvwinterthur.ch/home-events.json
 curl -sI https://www.hvwinterthur.ch/mus_export.json
+curl -sI https://www.hvwinterthur.ch/dokumente/Programm.pdf
 ```
 
 ## Hinweis
 
-Die Exporte laufen **nur** über den Hostpoint-Cronjobs Manager, nicht über
-GitHub Actions. Soft-Launch-Deploy (`Deploy via rsync`) löscht
-`coucou_export.json`, `guidle_export.json`, `mus_export.json` und `home-events.json` nicht (`rsync --exclude`).
+Die Exporte und das Programm-PDF laufen **täglich** über den Hostpoint-Cronjobs
+Manager, nicht über GitHub Actions. Soft-Launch-Deploy (`Deploy via rsync`)
+löscht `coucou_export.json`, `guidle_export.json`, `mus_export.json` und
+`home-events.json` nicht (`rsync --exclude`). Beim Deploy wird das PDF zusätzlich
+in GitHub Actions erzeugt; der Hostpoint-Cron hält es zwischen Deploys aktuell.
 
 Skript-Änderungen im Repo werden mit der Action
 `deploy-cronjobs.yml` nach `~/cronjobs/` synchronisiert (bei Push auf `main`

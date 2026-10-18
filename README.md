@@ -123,6 +123,7 @@ Der frühere Plesk-Cron auf `giger-straehl.ch`
   - `https://www.hvwinterthur.ch/mus_export.json` (Museum Schaffen, OrgID 5116588)
   - `https://www.hvwinterthur.ch/mus` (tabellarische Kontrolle des MuS-Exports)
   - `https://www.hvwinterthur.ch/home-events.json` (Titelseite, nächste 3 Anlässe; eigener Cron)
+  - `https://www.hvwinterthur.ch/dokumente/Programm.pdf` (Agenda-Download; eigener Cron)
 - Täglich nur auf Hostpoint (Cronjobs Manager), nicht über GitHub Actions
 - Soft-Launch-Deploy löscht die Export-JSONs nicht (`rsync --exclude`)
 - Skript-Updates nach Hostpoint: Action `deploy-cronjobs.yml` (bei Änderungen an `cronjobs/`)
@@ -147,9 +148,14 @@ pip install -r scripts/requirements-pdf.txt
 EVENTFROG_API_KEY=… python3 scripts/generate-programm-pdf.py
 ```
 
-Beim Soft-Launch-Deploy wird das PDF in GitHub Actions frisch erzeugt,
+**Live-Aktualisierung:** täglich auf Hostpoint via
+`cronjobs/eventfrog_to_programm_pdf.py` (Cronjobs Manager, siehe
+`cronjobs/README.md`, typisch 03:15 Uhr).
+
+Beim Soft-Launch-Deploy wird das PDF zusätzlich in GitHub Actions erzeugt,
 sofern die Eventfrog-API von GitHub aus antwortet. Schlägt der Abruf
-fehl (z. B. HTTP 403), bleibt das PDF aus dem Repository.
+fehl (z. B. HTTP 403), bleibt das PDF aus dem Repository — der Hostpoint-Cron
+gleicht es am nächsten Lauf aus.
 
 ### Google Analytics 4
 
