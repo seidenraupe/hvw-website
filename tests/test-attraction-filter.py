@@ -208,6 +208,12 @@ def main():
     ).read_text(encoding="utf-8")
     if "filter_attraction_events" not in pdf_source:
         raise SystemExit("Programm-PDF filtert Öffnungszeiten nicht")
+    if "get_all_events" not in pdf_source or "date_from" in pdf_source:
+        raise SystemExit(
+            "Programm-PDF muss get_all_events wie Coucou nutzen (ohne API-from-Filter)"
+        )
+    if "select_upcoming_events(events, limit=None)" not in pdf_source:
+        raise SystemExit("Programm-PDF muss alle kommenden Anlässe übernehmen")
 
     print("attraction filter ok")
 

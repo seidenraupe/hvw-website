@@ -76,7 +76,12 @@ _CRONJOBS_DIR = (
     else os.path.join(ROOT_DIR, "cronjobs")
 )
 sys.path.insert(0, _CRONJOBS_DIR)
-from eventfrog_to_coucou import filter_attraction_events  # noqa: E402
+from eventfrog_to_coucou import (  # noqa: E402
+    filter_attraction_events,
+    get_all_events,
+    get_locations,
+    select_upcoming_events,
+)
 DEFAULT_OUTPUT = os.path.join(ROOT_DIR, "dokumente", "Programm.pdf")
 PROGRAMM_META = os.path.join(ROOT_DIR, "programm", "Programm.json")
 DEFAULT_LOGO = os.path.join(ROOT_DIR, "images", "hvw-logo.png")
@@ -208,52 +213,6 @@ def load_api_key():
     return None
 
 
-def api_get(path, params, api_key, timeout=60):
-    url = "{0}{1}".format(API_BASE, path)
-    query = dict(params)
-    query["apiKey"] = api_key
-    response = requests.get(url, params=query, timeout=timeout)
-    if response.status_code != 200:
-        raise RuntimeError(
-            "Eventfrog API {0}: HTTP {1}\n{2}".format(
-                path, response.status_code, response.text[:500]
-            )
-        )
-    return response.json()
-
-
-def get_all_events(org_ids, api_key, date_from=None):
-    all_events = []
-    page = 1
-    per_page = 100
-    while True:
-        params = {"orgId": org_ids, "page": page, "perPage": per_page}
-        if date_from:
-            params["from"] = date_from
-        data = api_get("/public/v1/events", params, api_key)
-        events = data.get("events", [])
-        all_events.extend(events)
-        total = data.get("totalNumberOfResources", len(all_events))
-        if len(all_events) >= total or not events:
-            break
-        page += 1
-    return all_events
-
-
-def get_locations(api_key, location_ids):
-    location_ids = [lid for lid in location_ids if lid]
-    by_id = {}
-    if not location_ids:
-        return by_id
-    batch_size = 20
-    for i in range(0, len(location_ids), batch_size):
-        batch = location_ids[i : i + batch_size]
-        data = api_get("/public/v1/locations", {"id": batch}, api_key)
-        for loc in data.get("locations", []):
-            by_id[loc["id"]] = loc
-    return by_id
-
-
 def parse_iso(iso_string):
     if not iso_string:
         return None
@@ -321,22 +280,6 @@ def last_event_date(events, fallback):
         if begin_dt and begin_dt.date() > latest:
             latest = begin_dt.date()
     return latest
-
-
-def select_upcoming_events(events, today=None):
-    """Alle nicht abgesagten Anlässe ab Druckdatum, ohne Halbjahres-Schnitt."""
-    today = today or date.today()
-    selected = []
-    for event in events:
-        if event.get("cancelled"):
-            continue
-        begin_dt = parse_iso(event.get("begin"))
-        if not begin_dt:
-            continue
-        if begin_dt.date() >= today:
-            selected.append(event)
-    selected.sort(key=lambda e: e.get("begin") or "")
-    return selected
 
 
 def format_location(location):
@@ -768,13 +711,14 @@ def main(argv=None):
         )
     )
 
-    events = get_all_events(org_ids, api_key, date_from=print_on.isoformat())
+    # Gleiche Eventfrog-Abfrage wie Coucou/Titelseite (ohne API-Parameter «from»).
+    events = get_all_events(org_ids, api_key)
     events, skipped_openings = filter_attraction_events(events)
     if skipped_openings:
         print(
             "{0} Öffnungszeit(en)/Attraktion(en) entfernt.".format(skipped_openings)
         )
-    events = select_upcoming_events(events, print_on)
+    events = select_upcoming_events(events, limit=None)
     last_on = last_event_date(events, print_on)
     period_label = format_period_label(print_on, last_on)
     year_label = program_year_label(print_on, last_on)
