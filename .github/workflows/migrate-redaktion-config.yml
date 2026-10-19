@@ -1,0 +1,65 @@
+# Passt edit/redaktion/config.local.php auf Hostpoint an (ein Login redaktion).
+# Nur manuell starten. Erstellt vorher ein .bak-migrate-* Backup auf dem Server.
+#
+# Secrets: wie Deploy via rsync (SSH_*)
+
+name: Migrate redaktion config.local.php (Hostpoint)
+
+on:
+  workflow_dispatch: {}
+
+concurrency:
+  group: migrate-redaktion-config-hostpoint
+  cancel-in-progress: false
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Migration auf Hostpoint ausführen
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_TARGET_DIR: ${{ secrets.SSH_TARGET_DIR }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          set -euo pipefail
+
+          host="${SSH_HOST}"
+          host="${host#"${host%%[![:space:]]*}"}"
+          host="${host%"${host##*[![:space:]]}"}"
+          host="${host#sftp://}"; host="${host#ssh://}"
+          host="${host#https://}"; host="${host#http://}"
+          host="${host%%/*}"; host="${host%%:*}"
+
+          target="${SSH_TARGET_DIR}"
+          case "$target" in
+            */) ;;
+            *) target="${target}/" ;;
+          esac
+
+          config_path="${target}edit/redaktion/config.local.php"
+
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          keyfile=$(mktemp)
+          printf '%s\n' "$SSH_PRIVATE_KEY" | tr -d '\r' > "$keyfile"
+          [ -n "$(tail -c1 "$keyfile")" ] && echo >> "$keyfile"
+          chmod 600 "$keyfile"
+          ssh-keyscan -p 22 -H "$host" >> ~/.ssh/known_hosts 2>/dev/null || true
+
+          ssh_base=(ssh -i "$keyfile" -p 22 -o IdentitiesOnly=yes -o StrictHostKeyChecking=no)
+
+          rsync -avz \
+            -e "ssh -i ${keyfile} -p 22 -o IdentitiesOnly=yes -o StrictHostKeyChecking=no" \
+            scripts/migrate-redaktion-config-local.php \
+            "${SSH_USER}@${host}:/tmp/hvw-migrate-redaktion-config.php"
+
+          echo "Ziel: ${config_path}"
+          "${ssh_base[@]}" "${SSH_USER}@${host}" \
+            "/usr/local/bin/php /tmp/hvw-migrate-redaktion-config.php '${config_path}'"
+
+          rm -f "$keyfile"
