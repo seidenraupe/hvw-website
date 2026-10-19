@@ -9,14 +9,14 @@ if (!$user) {
     header('Location: index.php?next=' . rawurlencode('zugang.php'), true, 302);
     exit;
 }
-if ($user['role'] !== 'freigabe') {
+if (!hvw_can_publish($user)) {
     http_response_code(403);
 }
 
 $error = '';
 $notice = '';
 
-if ($user['role'] === 'freigabe' && ($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
+if (hvw_can_publish($user) && ($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     if (!hash_equals((string) ($_SESSION['csrf'] ?? ''), (string) ($_POST['csrf'] ?? ''))) {
         $error = 'Sitzung abgelaufen. Bitte neu laden.';
     } else {
@@ -62,8 +62,8 @@ $esc = static fn (string $s): string => htmlspecialchars($s, ENT_QUOTES, 'UTF-8'
     <p class="text-sm font-semibold uppercase tracking-[0.08em] text-hvw-mute">Änderungsmodus</p>
     <h1 class="mt-2 text-3xl font-semibold">Zugelassene E-Mail-Adressen</h1>
     <p class="mt-3 text-hvw-mute">
-      Wer hier steht, kann auf der Vorschau einen Code per Mail anfordern und danach die Seiten ansehen.
-      Texte ändern weiterhin nur <strong>Redaktion</strong> und <strong>Freigabe</strong> mit ihrem Login.
+      Wer hier steht, kann im Redaktions-Modus einen Code per Mail anfordern und danach die Seiten ansehen.
+      Texte bearbeiten Sie mit dem Login <strong>Redaktion</strong> (Benutzername <strong>redaktion</strong>).
     </p>
     <p class="mt-4">
       <a href="../index.html" class="underline underline-offset-2">Zur Vorschau</a>
@@ -71,8 +71,8 @@ $esc = static fn (string $s): string => htmlspecialchars($s, ENT_QUOTES, 'UTF-8'
       <a href="index.php" class="underline underline-offset-2">Redaktions-Login</a>
     </p>
 
-    <?php if ($user['role'] !== 'freigabe'): ?>
-      <p class="mt-8 border border-hvw-ink bg-white px-5 py-4">Nur die Rolle Freigabe darf Adressen ändern. Sie sind als <?php echo $esc($user['name']); ?> angemeldet.</p>
+    <?php if (!hvw_can_publish($user)): ?>
+      <p class="mt-8 border border-hvw-ink bg-white px-5 py-4">Nur die Redaktion darf Adressen ändern. Sie sind als <?php echo $esc($user['name']); ?> angemeldet.</p>
     <?php endif; ?>
 
     <?php if ($error): ?>
@@ -89,7 +89,7 @@ $esc = static fn (string $s): string => htmlspecialchars($s, ENT_QUOTES, 'UTF-8'
       <?php foreach ($emails as $item): ?>
         <li class="flex flex-wrap items-center justify-between gap-3 border-b border-hvw-ink/15 px-5 py-3 last:border-b-0">
           <span><?php echo $esc($item); ?></span>
-          <?php if ($user['role'] === 'freigabe'): ?>
+          <?php if (hvw_can_publish($user)): ?>
             <form method="post">
               <input type="hidden" name="csrf" value="<?php echo $esc((string) ($_SESSION['csrf'] ?? '')); ?>">
               <input type="hidden" name="action" value="remove">
@@ -101,7 +101,7 @@ $esc = static fn (string $s): string => htmlspecialchars($s, ENT_QUOTES, 'UTF-8'
       <?php endforeach; ?>
     </ul>
 
-    <?php if ($user['role'] === 'freigabe'): ?>
+    <?php if (hvw_can_publish($user)): ?>
       <form method="post" class="mt-8 border border-hvw-ink bg-white p-6">
         <input type="hidden" name="csrf" value="<?php echo $esc((string) ($_SESSION['csrf'] ?? '')); ?>">
         <input type="hidden" name="action" value="add">

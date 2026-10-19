@@ -36,8 +36,8 @@ function hvw_zugang_form(string $error, string $step, string $email): void
 {
     $esc = static fn (string $s): string => htmlspecialchars($s, ENT_QUOTES, 'UTF-8');
     $inner = '<p class="text-sm font-semibold uppercase tracking-[0.08em] text-hvw-mute">Historischer Verein Winterthur</p>';
-    $inner .= '<h1 class="mt-2 text-3xl font-semibold">Interne Vorschau</h1>';
-    $inner .= '<p class="mt-3 text-hvw-mute">Nur hinterlegte E-Mail-Adressen erhalten einen Code. Der Zugang gilt bis Mitternacht; am nächsten Tag ist ein neuer Code nötig. Für das Bearbeiten von Texten bleiben die Logins Redaktion und Freigabe.</p>';
+    $inner .= '<h1 class="mt-2 text-3xl font-semibold">Redaktions-Modus</h1>';
+    $inner .= '<p class="mt-3 text-hvw-mute">Nur hinterlegte E-Mail-Adressen erhalten einen Code. Der Zugang gilt bis Mitternacht; am nächsten Tag ist ein neuer Code nötig. Texte bearbeiten Sie zusätzlich mit dem Login <strong>Redaktion</strong> (Benutzername <strong>redaktion</strong>).</p>';
     if ($error !== '') {
         $inner .= '<p class="mt-6 border border-red-700 bg-red-50 px-4 py-3 text-red-800" role="alert">' . $esc($error) . '</p>';
     }
@@ -57,7 +57,7 @@ function hvw_zugang_form(string $error, string $step, string $email): void
         $inner .= '<button class="mt-6 min-h-12 w-full bg-hvw-ink font-semibold text-white hover:bg-hvw-charcoal" type="submit">Code senden</button>';
     }
     $inner .= '</form>';
-    hvw_zugang_layout('Vorschau — Historischer Verein Winterthur', $inner);
+    hvw_zugang_layout('Redaktions-Modus — Historischer Verein Winterthur', $inner);
 }
 
 function hvw_zugang_dispatch(): void

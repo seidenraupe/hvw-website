@@ -171,8 +171,8 @@
       el.setAttribute("title", "Angenommen — wird mit «Live schalten» öffentlich");
       el.setAttribute("data-change-hint", "Angenommen");
     } else if (changed) {
-      el.setAttribute("title", "Geändert — noch nicht öffentlich, wartet auf Freigabe");
-      el.setAttribute("data-change-hint", "Geändert — zur Freigabe");
+      el.setAttribute("title", "Geändert — noch nicht öffentlich");
+      el.setAttribute("data-change-hint", "Geändert — noch nicht live");
     } else {
       el.removeAttribute("title");
       el.removeAttribute("data-change-hint");
@@ -249,7 +249,7 @@
     const bar = $("#hvw-editor-bar");
     if (!bar) return;
     const changes = diffCount();
-    $("#hvw-role-label").textContent = session.name + " (" + (session.role === "freigabe" ? "Freigabe" : "Redaktion") + ")";
+    $("#hvw-role-label").textContent = session.name;
     $("#hvw-status").textContent =
       view === "live"
         ? "Sie sehen die Live-Seite"

@@ -99,8 +99,8 @@ if ($action === 'save' && $method === 'POST') {
 if ($action === 'publish-check' && $method === 'POST') {
     $user = hvw_require_user();
     hvw_require_csrf();
-    if ($user['role'] !== 'freigabe') {
-        hvw_json(['ok' => false, 'error' => 'Nur die Freigabe-Rolle darf live schalten.'], 403);
+    if (!hvw_can_publish($user)) {
+        hvw_json(['ok' => false, 'error' => 'Nur die Redaktion darf live schalten.'], 403);
     }
     $draft = hvw_draft();
     $fields = hvw_normalize_fields($draft['fields'] ?? []);
@@ -113,8 +113,8 @@ if ($action === 'publish-check' && $method === 'POST') {
 if ($action === 'publish' && $method === 'POST') {
     $user = hvw_require_user();
     hvw_require_csrf();
-    if ($user['role'] !== 'freigabe') {
-        hvw_json(['ok' => false, 'error' => 'Nur die Freigabe-Rolle darf live schalten.'], 403);
+    if (!hvw_can_publish($user)) {
+        hvw_json(['ok' => false, 'error' => 'Nur die Redaktion darf live schalten.'], 403);
     }
     $draft = hvw_draft();
     $fields = hvw_normalize_fields($draft['fields'] ?? []);

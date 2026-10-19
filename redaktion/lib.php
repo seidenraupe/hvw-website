@@ -44,18 +44,18 @@ function hvw_boot_session(): void
     }
 }
 
+function hvw_can_publish(?array $user): bool
+{
+    return $user !== null && ($user['role'] ?? '') === 'freigabe';
+}
+
 function hvw_users(): array
 {
     $users = [
         'redaktion' => [
-            'role' => 'redaktion',
+            'role' => 'freigabe',
             'name' => 'Redaktion',
             'hash' => '$2y$10$JsbUkaA9zXuQnZLCk2IFbuuEf7FQD3yqf4yvqhFGz.3AXHEqqg/fW',
-        ],
-        'freigabe' => [
-            'role' => 'freigabe',
-            'name' => 'Freigabe',
-            'hash' => '$2y$10$7BnB6ia5KzRATNupk9pUx.vV3B/LWCqqIknLFyScwBMVNWC5jR7Ge',
         ],
     ];
     $local = __DIR__ . '/config.local.php';
