@@ -282,6 +282,12 @@ Standard-Zugang (sofort ändern, z. B. via `redaktion/config.local.php`):
 |-------------|----------------------|
 | `redaktion` | `Redaktion-HVW-2026` |
 
+Auf Hostpoint liegt oft eine eigene `edit/redaktion/config.local.php` (wird beim Deploy
+**nicht** überschrieben). Nach dem Wechsel auf ein Redaktions-Login einmal die Action
+**Migrate redaktion config.local.php (Hostpoint)** starten — migriert nur, wenn noch
+`freigabe` existiert oder `redaktion` nicht `role => freigabe` hat; legt vorher ein
+`.bak-migrate-*` Backup an.
+
 PHP muss in `data/` und `redaktion/storage/` schreiben dürfen.
 
 ### Redaktion im Web, ohne öffentliche Website

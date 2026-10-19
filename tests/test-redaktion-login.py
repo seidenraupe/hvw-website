@@ -26,4 +26,11 @@ if "Redaktions-Modus" not in index:
 if "20261019-redaktion-login" not in content:
     raise SystemExit("Editor-Asset-Version für Cache-Bust fehlt")
 
+migrate = (ROOT / "scripts/migrate-redaktion-config-local.php").read_text(encoding="utf-8")
+workflow = (ROOT / ".github/workflows/migrate-redaktion-config.yml").read_text(encoding="utf-8")
+if "unset($users['freigabe'])" not in migrate:
+    raise SystemExit("Migrations-Skript muss freigabe entfernen")
+if "migrate-redaktion-config-local.php" not in workflow:
+    raise SystemExit("Workflow migrate-redaktion-config fehlt")
+
 print("ok")
