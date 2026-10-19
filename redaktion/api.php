@@ -150,7 +150,10 @@ if ($action === 'upload-image' && $method === 'POST') {
     $user = hvw_require_user();
     hvw_require_csrf();
     $fieldId = trim((string) ($_POST['field'] ?? ''));
-    $schema = hvw_schema();
+    $draft = hvw_draft();
+    $fieldsProbe = is_array($draft['fields'] ?? null) ? $draft['fields'] : [];
+    $fieldsProbe[$fieldId] = $fieldsProbe[$fieldId] ?? '';
+    $schema = hvw_schema_for_fields($fieldsProbe);
     $meta = $schema[$fieldId] ?? null;
     $slotInfo = hvw_image_info($fieldId);
     if (!$meta || !hvw_is_image_field($meta) || $slotInfo === null) {
@@ -251,7 +254,6 @@ if ($action === 'upload-image' && $method === 'POST') {
     hvw_mirror_upload_to_public($name);
 
     $rel = 'data/uploads/' . $name;
-    $draft = hvw_draft();
     $fields = is_array($draft['fields'] ?? null) ? $draft['fields'] : [];
     $fields[$fieldId] = $rel;
     $normalized = hvw_normalize_fields($fields);
