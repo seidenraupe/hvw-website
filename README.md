@@ -266,23 +266,21 @@ einschliesslich der Einleitungen unter den Titeln und der Rückblick-Karten
 auf der Agenda. Layout, Navigation, Eventfrog-Embed und das Webling-Formular
 bleiben fest.
 
-Ablauf: **anmelden → auf der echten Seite klicken → Entwurf speichern → Freigabe
-schaut die Seite an → live schalten.**
+Ablauf: **anmelden → auf der echten Seite klicken → Entwurf speichern → prüfen → live schalten.**
 
 - Anmeldung: `/redaktion/` (PHP, Hostpoint oder `php -S localhost:8080`)
 - Live-Texte: `data/content-live.json` (öffentlich)
 - Entwurf: `redaktion/storage/content-draft.json` (nicht öffentlich)
 - Erlaubt: fett, kursiv, unterstrichen. Keine Farben, keine neuen Blöcke.
-- Rollen: `redaktion` speichert Entwürfe; `freigabe` darf live schalten.
-- Freigabe: von Änderung zu Änderung springen, einzeln **annehmen**, **ändern**
-  oder **rückgängig** machen, danach die Seite live schalten.
+- Ein Login **Redaktion** (`redaktion`): Entwürfe, Live schalten, E-Mail-Zugang verwalten.
+- Optional: von Änderung zu Änderung springen, einzeln **annehmen**, **ändern**
+  oder **rückgängig** machen, danach live schalten.
 
-Standard-Zugänge (sofort ändern, z. B. via `redaktion/config.local.php`):
+Standard-Zugang (sofort ändern, z. B. via `redaktion/config.local.php`):
 
-| Benutzer   | Passwort            | Rolle    |
-|------------|---------------------|----------|
-| `redaktion` | `Redaktion-HVW-2026` | Entwurf  |
-| `freigabe`  | `Freigabe-HVW-2026`  | Freigabe |
+| Benutzer    | Passwort             |
+|-------------|----------------------|
+| `redaktion` | `Redaktion-HVW-2026` |
 
 PHP muss in `data/` und `redaktion/storage/` schreiben dürfen.
 
@@ -298,17 +296,17 @@ Ordner**, der nicht verlinkt und nicht indexiert ist:
    — E-Mail (Allowlist) + Code, der an diese Adresse geht.
    Der Zugang gilt bis Mitternacht (Schweizer Zeit); am nächsten Tag
    braucht man einen neuen Code.
-3. **Texte ändern:** Oben «Änderungsmodus — Anmelden»,
+3. **Texte ändern:** Oben «Redaktions-Modus — Anmelden»,
    oder `https://www.hvwinterthur.ch/edit/redaktion/`
-   — Login `redaktion` oder `freigabe` (kein zweiter Mail-Code).
-4. **E-Mail-Liste pflegen:** als Freigabe unter
+   — Login **Redaktion** / Benutzername `redaktion` (kein zweiter Mail-Code).
+4. **E-Mail-Liste pflegen:** als Redaktion unter
    `https://www.hvwinterthur.ch/edit/redaktion/zugang.php`
 5. Erst beim Launch wandert die Website an die Stamm-URL, der Mail-Code
    entfällt.
 
 Start-Adressen (Code per Mail): `thomas.giger@hvwinterthur.ch`,
 `christian.huggenberg@hvwinterthur.ch`, `gioia.joehri@hvwinterthur.ch`.
-Weitere Adressen legt die Freigabe in der Vorschau an. SMTP-Passwort als
+Weitere Adressen legt die Redaktion im Redaktions-Modus an. SMTP-Passwort als
 `MAIL_SMTP_PASSWORD` setzen — ohne SMTP kommt kein Code an.
 
 Die Redaktionsleiste ist dunkelgrün, damit sie sich von der schwarzen Website unterscheidet.

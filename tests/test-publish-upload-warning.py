@@ -23,7 +23,7 @@ if "hvw_sync_field_uploads_to_public($fields);" not in api:
 if "publish-check" not in editor or "editAvailable" not in editor:
     raise SystemExit("Editor muss publish-check und editAvailable auswerten")
 
-if "20261010-publish-upload" not in content:
+if "20261019-redaktion-login" not in content:
     raise SystemExit("Editor-Asset-Version muss für Cache-Bust erhöht sein")
 
 print("ok")

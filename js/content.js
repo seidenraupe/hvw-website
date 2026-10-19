@@ -374,7 +374,7 @@
     }
   }
 
-  const EDITOR_ASSET_V = "20261010-publish-upload";
+  const EDITOR_ASSET_V = "20261019-redaktion-login";
 
   function loadEditor() {
     if (!document.querySelector('link[href*="css/content-editor.css"]')) {
@@ -402,7 +402,7 @@
     bar.style.color = "#fff";
     bar.style.borderBottom = "3px solid #c9a227";
     bar.innerHTML =
-      "<p><strong>Änderungsmodus</strong> — Texte bearbeiten oder freigeben?</p>" +
+      "<p><strong>Redaktions-Modus</strong> — Texte bearbeiten?</p>" +
       "<a href=\"redaktion/index.php?next=" +
       encodeURIComponent(next) +
       "\">Anmelden</a>";

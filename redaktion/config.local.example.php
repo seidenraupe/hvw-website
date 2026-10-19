@@ -5,13 +5,8 @@
  *
  * return [
  *   'redaktion' => [
- *     'role' => 'redaktion',
- *     'name' => 'Redaktion',
- *     'hash' => '$2y$10$…',
- *   ],
- *   'freigabe' => [
  *     'role' => 'freigabe',
- *     'name' => 'Freigabe',
+ *     'name' => 'Redaktion',
  *     'hash' => '$2y$10$…',
  *   ],
  * ];
