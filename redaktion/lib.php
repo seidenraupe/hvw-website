@@ -488,6 +488,23 @@ function hvw_is_optional_field(array $meta): bool
     return !empty($meta['optional']) || hvw_is_image_field($meta);
 }
 
+function hvw_field_is_optional(string $id, array $meta): bool
+{
+    if (hvw_is_optional_field($meta)) {
+        return true;
+    }
+    // Rückblick-Karten dürfen schrittweise befüllt werden (z. B. zuerst Bild).
+    return (bool) preg_match(
+        '/^agenda\.rueckblick\.(?:[1-9]|[1-3][0-9]|4[0-8])\.(?:kicker|title|body|location)$/',
+        $id
+    );
+}
+
+function hvw_schema_for_fields(array $fields): array
+{
+    return hvw_extend_schema_from_fields(hvw_schema(), $fields);
+}
+
 function hvw_sanitize_image_path(string $value): string
 {
     $value = hvw_sanitize_plain($value);
@@ -782,7 +799,7 @@ function hvw_normalize_fields(array $incoming, ?array $fallback = null): array
         }
         $len = hvw_plain_len($value);
         $max = (int) ($meta['max'] ?? 400);
-        if ($len < 1 && !hvw_is_optional_field($meta)) {
+        if ($len < 1 && !hvw_field_is_optional($id, $meta)) {
             $errors[] = ($meta['label'] ?? $id) . ' darf nicht leer sein.';
         } elseif ($len > $max) {
             $errors[] = ($meta['label'] ?? $id) . " ist zu lang ({$len} von {$max} Zeichen).";

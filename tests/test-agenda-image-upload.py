@@ -56,6 +56,10 @@ if "imagecopyresampled" not in api or "targetW = 1200" not in api or "targetH = 
     raise SystemExit("API schneidet nicht zentriert auf 4:3 / 1200×900")
 if "hvw_sanitize_image_path" not in lib or "hvw_is_optional_field" not in lib:
     raise SystemExit("lib.php fehlt Bild-Sanitisierung")
+if "function hvw_field_is_optional" not in lib or "rueckblick" not in lib.split("hvw_field_is_optional", 1)[1][:400]:
+    raise SystemExit("Rückblick-Textfelder müssen beim schrittweisen Befüllen optional sein")
+if "hvw_schema_for_fields" not in api:
+    raise SystemExit("upload-image muss Schema für neue Rückblick-Slots auflösen")
 if "data/uploads/*.jpg" not in deploy:
     raise SystemExit("Deploy darf hochgeladene Bilder nicht löschen")
 if "agenda.rueckblick." not in merge:
