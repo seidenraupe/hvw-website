@@ -268,7 +268,8 @@ bleiben fest.
 
 Ablauf: **anmelden → auf der echten Seite klicken → Entwurf speichern → prüfen → live schalten.**
 
-- Anmeldung: `/redaktion/` (PHP, Hostpoint oder `php -S localhost:8080`)
+- Auf Hostpoint `/edit/`: nach E-Mail-Code direkt Texte bearbeiten (kein separates Passwort).
+- Lokale Entwicklung: `/redaktion/` (PHP, `php -S localhost:8080`) mit Passwort-Login.
 - Live-Texte: `data/content-live.json` (öffentlich)
 - Entwurf: `redaktion/storage/content-draft.json` (nicht öffentlich)
 - Erlaubt: fett, kursiv, unterstrichen. Keine Farben, keine neuen Blöcke.
@@ -302,10 +303,9 @@ Ordner**, der nicht verlinkt und nicht indexiert ist:
    — E-Mail (Allowlist) + Code, der an diese Adresse geht.
    Der Zugang gilt bis Mitternacht (Schweizer Zeit); am nächsten Tag
    braucht man einen neuen Code.
-3. **Texte ändern:** Oben «Redaktions-Modus — Anmelden»,
-   oder `https://www.hvwinterthur.ch/edit/redaktion/`
-   — Login **Redaktion** / Benutzername `redaktion` (kein zweiter Mail-Code).
-4. **E-Mail-Liste pflegen:** als Redaktion unter
+3. **Texte ändern:** Nach dem Code erscheint die dunkelgrüne Redaktionsleiste;
+   auf der Seite in einen Text klicken, Entwurf speichern, bei Bedarf live schalten.
+4. **E-Mail-Liste pflegen:** im Redaktions-Modus unter
    `https://www.hvwinterthur.ch/edit/redaktion/zugang.php`
 5. Erst beim Launch wandert die Website an die Stamm-URL, der Mail-Code
    entfällt.

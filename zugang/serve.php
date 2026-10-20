@@ -37,7 +37,7 @@ function hvw_zugang_form(string $error, string $step, string $email): void
     $esc = static fn (string $s): string => htmlspecialchars($s, ENT_QUOTES, 'UTF-8');
     $inner = '<p class="text-sm font-semibold uppercase tracking-[0.08em] text-hvw-mute">Historischer Verein Winterthur</p>';
     $inner .= '<h1 class="mt-2 text-3xl font-semibold">Redaktions-Modus</h1>';
-    $inner .= '<p class="mt-3 text-hvw-mute">Nur hinterlegte E-Mail-Adressen erhalten einen Code. Der Zugang gilt bis Mitternacht; am nächsten Tag ist ein neuer Code nötig. Texte bearbeiten Sie zusätzlich mit dem Login <strong>Redaktion</strong> (Benutzername <strong>redaktion</strong>).</p>';
+    $inner .= '<p class="mt-3 text-hvw-mute">Nur hinterlegte E-Mail-Adressen erhalten einen Code. Der Zugang gilt bis Mitternacht; am nächsten Tag ist ein neuer Code nötig. Danach können Sie direkt Texte bearbeiten und live schalten.</p>';
     if ($error !== '') {
         $inner .= '<p class="mt-6 border border-red-700 bg-red-50 px-4 py-3 text-red-800" role="alert">' . $esc($error) . '</p>';
     }
@@ -154,6 +154,7 @@ if (($_GET['logout'] ?? '') === '1' || ($_POST['hvw_step'] ?? '') === 'logout') 
 }
 
 if (hvw_zugang_ok()) {
+    hvw_redaktion_session_from_zugang();
     hvw_zugang_dispatch();
     exit;
 }
@@ -182,6 +183,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
         $code = (string) ($_POST['code'] ?? '');
         if (hvw_email_allowed($email) && hvw_otp_verify($email, $code)) {
             hvw_zugang_set_cookie($email);
+            hvw_redaktion_session_from_zugang();
             $uri = $_SERVER['REQUEST_URI'] ?? '/';
             $uri = preg_replace('/[?&]email=[^&]*/', '', $uri) ?? $uri;
             header('Location: ' . $uri, true, 302);
