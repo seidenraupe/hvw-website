@@ -2,8 +2,10 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/lib.php';
+require_once dirname(__DIR__) . '/zugang/lib.php';
 
 hvw_boot_session();
+hvw_redaktion_session_from_zugang();
 
 $action = $_GET['action'] ?? $_POST['action'] ?? '';
 $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
@@ -37,6 +39,7 @@ if ($action === 'login' && $method === 'POST') {
 
 if ($action === 'logout' && $method === 'POST') {
     hvw_require_csrf();
+    hvw_zugang_clear_cookie();
     $_SESSION = [];
     if (ini_get('session.use_cookies')) {
         $p = session_get_cookie_params();

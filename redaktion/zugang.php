@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 require_once dirname(__DIR__) . '/zugang/lib.php';
 hvw_boot_session();
+hvw_redaktion_session_from_zugang();
 
 $user = hvw_user();
 if (!$user) {
@@ -62,13 +63,10 @@ $esc = static fn (string $s): string => htmlspecialchars($s, ENT_QUOTES, 'UTF-8'
     <p class="text-sm font-semibold uppercase tracking-[0.08em] text-hvw-mute">Änderungsmodus</p>
     <h1 class="mt-2 text-3xl font-semibold">Zugelassene E-Mail-Adressen</h1>
     <p class="mt-3 text-hvw-mute">
-      Wer hier steht, kann im Redaktions-Modus einen Code per Mail anfordern und danach die Seiten ansehen.
-      Texte bearbeiten Sie mit dem Login <strong>Redaktion</strong> (Benutzername <strong>redaktion</strong>).
+      Wer hier steht, kann im Redaktions-Modus einen Code per Mail anfordern und danach direkt Texte bearbeiten und live schalten.
     </p>
     <p class="mt-4">
-      <a href="../index.html" class="underline underline-offset-2">Zur Vorschau</a>
-      ·
-      <a href="index.php" class="underline underline-offset-2">Redaktions-Login</a>
+      <a href="../index.html" class="underline underline-offset-2">Zur Website im Änderungsmodus</a>
     </p>
 
     <?php if (!hvw_can_publish($user)): ?>

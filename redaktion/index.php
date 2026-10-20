@@ -2,7 +2,18 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/lib.php';
+require_once dirname(__DIR__) . '/zugang/lib.php';
 hvw_boot_session();
+
+$next = (string) ($_GET['next'] ?? '../index.html');
+if (str_contains($next, '://') || str_starts_with($next, '//')) {
+    $next = '../index.html';
+}
+if (hvw_zugang_ok()) {
+    hvw_redaktion_session_from_zugang();
+    header('Location: ' . $next, true, 302);
+    exit;
+}
 
 $user = hvw_user();
 $error = '';
@@ -26,10 +37,6 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     $error = 'Benutzername oder Passwort stimmt nicht.';
 }
 
-$next = (string) ($_GET['next'] ?? '../index.html');
-if (str_contains($next, '://') || str_starts_with($next, '//')) {
-    $next = '../index.html';
-}
 ?>
 <!DOCTYPE html>
 <html lang="de-CH">
@@ -48,7 +55,8 @@ if (str_contains($next, '://') || str_starts_with($next, '//')) {
     <p class="text-sm font-semibold uppercase tracking-[0.08em] text-hvw-mute">Historischer Verein Winterthur</p>
     <h1 class="mt-2 text-3xl font-semibold">Redaktions-Modus</h1>
     <p class="mt-3 text-hvw-mute">
-      Anmelden als <strong>Redaktion</strong>, auf der Website in einen Text klicken, Entwurf speichern und bei Bedarf live schalten.
+      Nur für lokale Entwicklung ohne E-Mail-Code: Passwort-Login. Auf Hostpoint unter
+      <strong>/edit/</strong> reicht der E-Mail-Code — dort werden Sie direkt zur Bearbeitung weitergeleitet.
     </p>
 
     <?php if ($user): ?>

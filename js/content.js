@@ -366,15 +366,13 @@
       const data = await res.json();
       if (data && data.user) {
         loadEditor();
-        return;
       }
-      showLoginInvite();
     } catch (_err) {
       /* PHP-Redaktion nicht erreichbar (z. B. reiner Datei-Server) */
     }
   }
 
-  const EDITOR_ASSET_V = "20261019-redaktion-login";
+  const EDITOR_ASSET_V = "20261020-edit-auto-redaktion";
 
   function loadEditor() {
     if (!document.querySelector('link[href*="css/content-editor.css"]')) {
@@ -388,26 +386,6 @@
       script.src = "js/content-editor.js?v=" + EDITOR_ASSET_V;
       document.body.appendChild(script);
     }
-  }
-
-  function showLoginInvite() {
-    if (document.getElementById("hvw-login-invite")) return;
-    const page = (location.pathname.split("/").pop() || "index.html");
-    const next = "../" + (page.includes(".") ? page : "index.html");
-    const bar = document.createElement("div");
-    bar.id = "hvw-login-invite";
-    bar.setAttribute("role", "region");
-    bar.setAttribute("aria-label", "Änderungsmodus");
-    bar.style.background = "#146b54";
-    bar.style.color = "#fff";
-    bar.style.borderBottom = "3px solid #c9a227";
-    bar.innerHTML =
-      "<p><strong>Redaktions-Modus</strong> — Texte bearbeiten?</p>" +
-      "<a href=\"redaktion/index.php?next=" +
-      encodeURIComponent(next) +
-      "\">Anmelden</a>";
-    document.body.appendChild(bar);
-    document.body.classList.add("hvw-has-login-invite");
   }
 
   window.hvwApplyContent = applyFields;

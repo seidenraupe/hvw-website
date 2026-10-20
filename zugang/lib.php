@@ -214,6 +214,27 @@ function hvw_zugang_clear_cookie(): void
     ]);
 }
 
+/** Nach gültigem E-Mail-Code: Redaktions-Session ohne separates Passwort-Login. */
+function hvw_redaktion_session_from_zugang(): void
+{
+    if (!hvw_zugang_ok()) {
+        return;
+    }
+    hvw_boot_session();
+    if (!empty($_SESSION['user'])) {
+        return;
+    }
+    $users = hvw_users();
+    if (!isset($users['redaktion'])) {
+        return;
+    }
+    session_regenerate_id(true);
+    $_SESSION['user'] = 'redaktion';
+    if (empty($_SESSION['csrf'])) {
+        $_SESSION['csrf'] = bin2hex(random_bytes(16));
+    }
+}
+
 function hvw_zugang_ok(): bool
 {
     $raw = $_COOKIE[hvw_zugang_cookie_name()] ?? '';
