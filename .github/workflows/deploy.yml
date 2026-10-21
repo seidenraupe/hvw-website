@@ -10,12 +10,12 @@
 #   SSH_TARGET_DIR   – Document Root, z. B. /home/BENUTZER/www/hvwinterthur.ch/
 #                      (mit abschliessendem /)
 #
-# Für den E-Mail-Code (Vorschau-Zugang):
-#   MAIL_SMTP_HOST       – z. B. smtp.mail.hostpoint.ch
-#   MAIL_SMTP_PORT       – meist 587
-#   MAIL_SMTP_USER       – SMTP-Benutzer (oft die Absenderadresse)
-#   MAIL_SMTP_PASSWORD   – SMTP-Passwort (Hostpoint-Postfach)
-#   MAIL_FROM            – Absender, z. B. noreply@hvwinterthur.ch
+# Für den E-Mail-Code (Redaktions-Modus /edit/), Versand über Microsoft 365:
+#   MAIL_SMTP_HOST       – optional, Default smtp.office365.com
+#   MAIL_SMTP_PORT       – optional, Default 587
+#   MAIL_SMTP_USER       – optional, Default noreply@hvwinterthur.ch
+#   MAIL_SMTP_PASSWORD   – Passwort (oder App-Passwort) des Postfachs noreply@…
+#   MAIL_FROM            – optional, Default noreply@hvwinterthur.ch (Absender)
 #   VORSCHAU_ALLOWED_EMAILS – optional, weitere Start-Adressen (die drei HVW-Adressen sind bereits im Code)
 #
 # Hostpoint: SSH muss im Control Panel aktiviert und der öffentliche Key
@@ -74,6 +74,7 @@ jobs:
           echo "Soft-Launch enthält dokumente/Statuten.pdf ($(wc -c < deploy/hostpoint-soft-launch/dokumente/Statuten.pdf) Bytes)"
 
       - name: Bearbeitungszugang /edit/ bauen
+        id: edit_build
         env:
           MAIL_SMTP_HOST: ${{ secrets.MAIL_SMTP_HOST }}
           MAIL_SMTP_PORT: ${{ secrets.MAIL_SMTP_PORT }}
@@ -89,11 +90,11 @@ jobs:
           echo "Edit-Paket enthält dokumente/Statuten.pdf → Hostpoint /edit/dokumente/Statuten.pdf"
           python3 - <<'PY'
           import json, os, pathlib
-          host = os.environ.get("MAIL_SMTP_HOST") or "smtp.mail.hostpoint.ch"
+          host = os.environ.get("MAIL_SMTP_HOST") or "smtp.office365.com"
           port = int(os.environ.get("MAIL_SMTP_PORT") or "587")
-          user = os.environ.get("MAIL_SMTP_USER") or ""
-          password = os.environ.get("MAIL_SMTP_PASSWORD") or ""
           mail_from = os.environ.get("MAIL_FROM") or "noreply@hvwinterthur.ch"
+          user = os.environ.get("MAIL_SMTP_USER") or mail_from
+          password = os.environ.get("MAIL_SMTP_PASSWORD") or ""
           raw = os.environ.get("VORSCHAU_ALLOWED_EMAILS") or ""
           emails = [
               "thomas.giger@hvwinterthur.ch",
@@ -116,16 +117,20 @@ jobs:
               f"  'pass' => {php_str(password)},",
               "  'secure' => 'tls',",
               f"  'from' => {php_str(mail_from)},",
-              "  'from_name' => 'HVW Edit',",
+              "  'from_name' => 'Historischer Verein Winterthur',",
               "  'allowed_emails' => [",
           ]
           for email in emails:
               lines.append(f"    {php_str(email)},")
           lines += ["  ],", "];", ""]
-          out.write_text("\n".join(lines), encoding="utf-8")
-          print("config.mail.php geschrieben; Start-Adressen:", len(emails))
-          if not user or not password:
-              print("::warning::MAIL_SMTP_USER oder MAIL_SMTP_PASSWORD fehlt — Codes können nicht per SMTP gesendet werden.")
+          sync_mail = "1" if password else "0"
+          if password:
+              out.write_text("\n".join(lines), encoding="utf-8")
+              print("config.mail.php geschrieben (Microsoft 365 /", mail_from, "); Start-Adressen:", len(emails))
+          else:
+              out.unlink(missing_ok=True)
+              print("::warning::MAIL_SMTP_PASSWORD fehlt — config.mail.php wird nicht deployed (bestehende Server-Datei bleibt).")
+          pathlib.Path("deploy/hostpoint-edit/.mail-config-sync").write_text(sync_mail + "\n", encoding="utf-8")
           PY
 
       - name: Secrets und SSH-Host prüfen
@@ -289,8 +294,19 @@ jobs:
             "${SSH_USER}@${host}:${target}"
 
           echo "rsync Bearbeitungszugang → ${SSH_USER}@${host}:${target}edit/"
+          mail_sync="1"
+          if [ -f deploy/hostpoint-edit/.mail-config-sync ]; then
+            mail_sync="$(tr -d '\n\r' < deploy/hostpoint-edit/.mail-config-sync)"
+          fi
+          mail_exclude=()
+          if [ "$mail_sync" != "1" ]; then
+            mail_exclude+=(--exclude 'redaktion/config.mail.php')
+            echo "Ohne MAIL_SMTP_PASSWORD: bestehende edit/redaktion/config.mail.php auf dem Server bleibt unverändert."
+          fi
           rsync -avz --delete \
+            "${mail_exclude[@]}" \
             --exclude '.synced-from-vorschau-backup' \
+            --exclude '.mail-config-sync' \
             --exclude 'data/content-live.json' \
             --exclude 'data/home-events.json' \
             --exclude 'home-events.json' \
