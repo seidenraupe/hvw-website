@@ -79,11 +79,11 @@ siehe [`docs/datensicherung-hostpoint.md`](docs/datensicherung-hostpoint.md).
 | `SSH_HOST` | Server-Hostname aus Hostpoint «Server Übersicht», z. B. `sl45.web.hostpoint.ch` |
 | `SSH_USER` | Hosting-Account exakt wie im Control Panel, z. B. `zozuhosa` |
 | `SSH_TARGET_DIR` | Document Root mit `/` am Ende, z. B. `/home/zozuhosa/www/hvwinterthur.ch/` |
-| `MAIL_SMTP_HOST` | SMTP-Server, z. B. `smtp.mail.hostpoint.ch` |
-| `MAIL_SMTP_PORT` | Meist `587` |
-| `MAIL_SMTP_USER` | SMTP-Benutzer (Postfach) |
-| `MAIL_SMTP_PASSWORD` | SMTP-Passwort des Postfachs |
-| `MAIL_FROM` | Absender, z. B. `noreply@hvwinterthur.ch` |
+| `MAIL_SMTP_PASSWORD` | **Pflicht** für Codes per Mail: Passwort (oder App-Passwort) von `noreply@hvwinterthur.ch` |
+| `MAIL_SMTP_HOST` | Optional, Default `smtp.office365.com` (Microsoft 365) |
+| `MAIL_SMTP_PORT` | Optional, Default `587` |
+| `MAIL_SMTP_USER` | Optional, Default `noreply@hvwinterthur.ch` |
+| `MAIL_FROM` | Optional, Default `noreply@hvwinterthur.ch` (Absender im Posteingang) |
 | `VORSCHAU_ALLOWED_EMAILS` | Optional: weitere Start-Adressen (die drei HVW-Adressen stehen bereits im Code) |
 
 #### SSH bei Hostpoint vorbereiten
@@ -312,8 +312,13 @@ Ordner**, der nicht verlinkt und nicht indexiert ist:
 
 Start-Adressen (Code per Mail): `thomas.giger@hvwinterthur.ch`,
 `christian.huggenberg@hvwinterthur.ch`, `gioia.joehri@hvwinterthur.ch`.
-Weitere Adressen legt die Redaktion im Redaktions-Modus an. SMTP-Passwort als
-`MAIL_SMTP_PASSWORD` setzen — ohne SMTP kommt kein Code an.
+Weitere Adressen legt die Redaktion im Redaktions-Modus an.
+
+**Zugangscodes per Mail (Microsoft 365):** Repository → **Settings** → **Secrets and variables** → **Actions** → **New repository secret**:
+
+- `MAIL_SMTP_PASSWORD` = Passwort oder App-Passwort des Postfachs `noreply@hvwinterthur.ch` (SMTP AUTH muss im M365-Admin erlaubt sein)
+
+Optional dieselben Secrets anpassen: `MAIL_SMTP_HOST`, `MAIL_SMTP_USER`, `MAIL_FROM`. Nach dem Speichern einmal **Deploy via rsync** ausführen (Push auf `main` oder manuell unter Actions), damit `edit/redaktion/config.mail.php` auf Hostpoint aktualisiert wird. Ohne `MAIL_SMTP_PASSWORD` wird diese Datei beim Deploy **nicht** überschrieben.
 
 Die Redaktionsleiste ist dunkelgrün, damit sie sich von der schwarzen Website unterscheidet.
 

@@ -84,7 +84,7 @@ function hvw_mail_config(): array
         'pass' => '',
         'secure' => 'tls',
         'from' => 'noreply@hvwinterthur.ch',
-        'from_name' => 'HVW Vorschau',
+        'from_name' => 'Historischer Verein Winterthur',
         'allowed_emails' => hvw_default_access_emails(),
     ];
     if (!is_file(HVW_MAIL_CONFIG)) {
@@ -327,8 +327,8 @@ function hvw_otp_verify(string $email, string $code): bool
 function hvw_send_access_code(string $email, string $code): void
 {
     $cfg = hvw_mail_config();
-    $subject = 'Ihr Zugangscode für die HVW-Vorschau';
-    $body = "Guten Tag\n\nIhr Code für die interne Vorschau des Historischen Vereins Winterthur lautet:\n\n  {$code}\n\nEr gilt bis Mitternacht (Schweizer Zeit) und kann nur einmal verwendet werden. Am nächsten Tag brauchen Sie einen neuen Code.\n\nWenn Sie diesen Code nicht angefordert haben, können Sie die Nachricht ignorieren.\n\nHistorischer Verein Winterthur\n";
+    $subject = 'Ihr Zugangscode — Historischer Verein Winterthur';
+    $body = "Guten Tag\n\nIhr Code für den Redaktions-Modus (Website-Bearbeitung) lautet:\n\n  {$code}\n\nEr gilt bis Mitternacht (Schweizer Zeit) und kann nur einmal verwendet werden. Am nächsten Tag brauchen Sie einen neuen Code.\n\nWenn Sie diesen Code nicht angefordert haben, können Sie die Nachricht ignorieren.\n\nHistorischer Verein Winterthur\n";
     $from = (string) $cfg['from'];
     $fromName = (string) $cfg['from_name'];
     if ((string) $cfg['host'] !== '' && (string) $cfg['user'] !== '' && (string) $cfg['pass'] !== '') {

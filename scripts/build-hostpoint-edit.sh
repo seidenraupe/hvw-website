@@ -84,7 +84,7 @@ E-Mail-Liste: https://www.hvwinterthur.ch/edit/redaktion/zugang.php (Rolle Freig
 
 Alte URL /vorschau/ leitet per 301 auf /edit/ um (kein Ordner /vorschau/ mehr).
 
-SMTP: GitHub-Secrets MAIL_SMTP_*. Start-Adressen im Code (Giger, Huggenberg, Jöhri).
+SMTP: GitHub Secret MAIL_SMTP_PASSWORD (noreply@ via smtp.office365.com). Deploy schreibt config.mail.php.
 
 Bevorzugt: GitHub Action «Deploy via rsync» (siehe README).
 TXT
