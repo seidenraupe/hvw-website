@@ -836,27 +836,51 @@ def build_home_event(event, locations_by_id):
     """
     location_label = ""
     location_ids = event.get("locationIds") or []
-    if location_ids and isinstance(location_ids, list):
-        location = locations_by_id.get(location_ids[0])
-        if location:
-            parts = [
-                pick_lang(location.get("title")),
-                location.get("city"),
-            ]
-            location_label = ", ".join([p for p in parts if p])
+    location = locations_by_id.get(location_ids[0]) if location_ids else None
+    if location:
+        parts = [
+            pick_lang(location.get("title")),
+            location.get("city"),
+        ]
+        location_label = ", ".join([p for p in parts if p])
 
     if not location_label:
         location_label = event.get("organizerName") or ""
 
-    return {
+    street_address = ""
+    postal_code = ""
+    address_locality = "Winterthur"
+    if location:
+        street_address = (location.get("addressLine") or "").strip()
+        postal_code = (location.get("zip") or "").strip()
+        if location.get("city"):
+            address_locality = location.get("city")
+
+    short_description = pick_lang(event.get("shortDescription")) or ""
+    if not short_description:
+        description_html = pick_lang(event.get("descriptionAsHTML"))
+        if description_html:
+            short_description = strip_html(description_html)[:500]
+
+    item = {
         "id": str(event.get("id") or ""),
         "title": pick_lang(event.get("title")) or "",
         "begin": event.get("begin") or "",
+        "end": event.get("end") or "",
         "url": event.get("url") or "",
         "organizerName": event.get("organizerName") or "",
         "location": location_label,
         "image": pick_event_image(event),
     }
+    if short_description:
+        item["description"] = short_description
+    if street_address:
+        item["streetAddress"] = street_address
+    if postal_code:
+        item["postalCode"] = postal_code
+    if address_locality:
+        item["addressLocality"] = address_locality
+    return item
 
 
 def build_home_events_payload(events, locations_by_id, limit=HVW_HOME_EVENT_LIMIT):

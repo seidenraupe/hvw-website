@@ -151,15 +151,24 @@ async function main() {
       if (image) enrichedImages += 1;
     }
 
-    result.push({
+    const locId = event.locationIds?.[0];
+    const locationObj = locId ? locationsById[locId] : null;
+    const shortDescription = pickLang(event.shortDescription) || '';
+    const entry = {
       id: String(event.id),
       title: pickLang(event.title),
       begin: event.begin,
+      end: event.end || '',
       url: event.url,
       organizerName: event.organizerName || '',
       location: locationLabel,
+      ...(shortDescription ? { description: shortDescription.slice(0, 500) } : {}),
+      ...(locationObj?.addressLine ? { streetAddress: String(locationObj.addressLine).trim() } : {}),
+      ...(locationObj?.zip ? { postalCode: String(locationObj.zip).trim() } : {}),
+      ...(locationObj?.city ? { addressLocality: String(locationObj.city).trim() } : {}),
       ...(image ? { image } : {}),
-    });
+    };
+    result.push(entry);
   }
 
   const payload = {
