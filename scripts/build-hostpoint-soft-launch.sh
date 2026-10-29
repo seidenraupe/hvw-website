@@ -56,6 +56,7 @@ copy_dir "${ROOT}/mus" "${OUT}/mus"
 
 cp "${ROOT}/.htaccess" "${OUT}/.htaccess"
 cp "${ROOT}/robots.txt" "${OUT}/robots.txt"
+cp "${ROOT}/sitemap.xml" "${OUT}/sitemap.xml"
 
 cat > "${OUT}/UPLOAD.txt" <<'TXT'
 Hostpoint — öffentliche Website (Document Root)

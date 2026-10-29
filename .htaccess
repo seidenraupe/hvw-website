@@ -18,6 +18,14 @@ Options -Indexes
   RewriteCond %{HTTP_HOST} ^(www\.)?historischer-verein-winterthur\.ch$ [NC]
   RewriteRule ^ https://www.hvwinterthur.ch%{REQUEST_URI} [L,R=301]
 
+  # Non-www → kanonische www-Domain
+  RewriteCond %{HTTP_HOST} ^hvwinterthur\.ch$ [NC]
+  RewriteRule ^ https://www.hvwinterthur.ch%{REQUEST_URI} [L,R=301]
+
+  # /index.html → kanonische Stamm-URL /
+  RewriteCond %{THE_REQUEST} \s/+index\.html[\s?] [NC]
+  RewriteRule ^index\.html$ https://www.hvwinterthur.ch/ [L,R=301]
+
   # Legacy: /vorschau/ → /edit/ (Go-Live-Vorbereitung)
   RewriteRule ^vorschau/?$ /edit/ [L,R=301]
   RewriteRule ^vorschau/(.+)$ /edit/$1 [L,R=301]
