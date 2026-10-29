@@ -31,7 +31,7 @@ Datenquelle Titelseite: `/home-events.json` (eigener Hostpoint-Cron, wie Coucou/
 - Geo-Meta (`geo.region`, `geo.placename`, Position Winterthur)
 - JSON-LD: `NonprofitOrganization`, `WebSite`, `Event`, `FAQPage`, `Museum`
 - `sameAs` zu museumschaffen.ch
-- Semantische Event-Karten (`itemscope` Event / Place / `time`)
+- Event-Structured-Data: JSON-LD auf der Startseite (`js/main.js`, Felder laut schema.org/Event)
 
 ## Lokal ansehen
 

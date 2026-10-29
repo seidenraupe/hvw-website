@@ -276,7 +276,7 @@ function renderEventCard(event, index = 0) {
     : '';
 
   return `
-    <article class="event-card group flex flex-col border border-hvw-ink bg-white transition-colors duration-200 hover:bg-hvw-fog focus-within:bg-hvw-fog" itemscope itemtype="https://schema.org/Event">
+    <article class="event-card group flex flex-col border border-hvw-ink bg-white transition-colors duration-200 hover:bg-hvw-fog focus-within:bg-hvw-fog">
       <a href="${escapeHtml(href)}" class="flex h-full flex-col text-inherit no-underline outline-none"${targetAttrs} aria-label="${escapeHtml(event.title || 'Veranstaltung')}: Details öffnen">
         <div class="event-card__media aspect-[4/3]">
           <img
@@ -285,25 +285,21 @@ function renderEventCard(event, index = 0) {
             width="1200"
             height="900"
             loading="lazy"
-            decoding="async"
-            itemprop="image">
+            decoding="async">
           ${watermark}
         </div>
         <div class="flex flex-1 flex-col gap-3 p-5 sm:p-6">
           <time
             class="text-sm font-semibold uppercase tracking-[0.08em] text-hvw-mute"
-            datetime="${escapeHtml(iso)}"
-            itemprop="startDate">
+            datetime="${escapeHtml(iso)}">
             ${escapeHtml(date)}
           </time>
-          <h3 class="text-xl font-semibold leading-snug text-hvw-ink sm:text-2xl" itemprop="name">
+          <h3 class="text-xl font-semibold leading-snug text-hvw-ink sm:text-2xl">
             ${escapeHtml(event.title || '')}
           </h3>
-          <p class="text-base text-hvw-mute" itemprop="location" itemscope itemtype="https://schema.org/Place">
-            <span itemprop="name">${escapeHtml(location)}</span>
+          <p class="text-base text-hvw-mute">
+            ${escapeHtml(location)}
           </p>
-          <meta itemprop="eventAttendanceMode" content="https://schema.org/OfflineEventAttendanceMode">
-          <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
           <span class="mt-auto inline-flex min-h-12 items-center pt-2 text-base font-semibold text-hvw-ink underline decoration-transparent underline-offset-4 transition group-hover:decoration-hvw-ink group-focus-within:decoration-hvw-ink">
             Details &amp; Tickets
             <span aria-hidden="true" class="ml-2 transition-transform duration-200 group-hover:translate-x-1">→</span>
@@ -335,34 +331,95 @@ function formatEventDate(isoString) {
   return `${datePart} · ${timePart}`;
 }
 
+function defaultEventEndDate(beginIso) {
+  if (!beginIso) return undefined;
+  const start = new Date(beginIso);
+  if (Number.isNaN(start.getTime())) return undefined;
+  const end = new Date(start.getTime());
+  end.setHours(end.getHours() + 2);
+  return end.toISOString();
+}
+
+function eventDescriptionText(event) {
+  const raw = String(event.description || '').replace(/\s+/g, ' ').trim();
+  if (raw) return raw.slice(0, 500);
+  const location = event.location || event.organizerName || 'Winterthur';
+  const title = String(event.title || 'Veranstaltung').trim();
+  return `${title} — ${location}, Historischer Verein Winterthur`.slice(0, 500);
+}
+
+function organizerUrl(organizerName) {
+  const name = String(organizerName || '').toLowerCase();
+  if (name.includes('schaffen')) return 'https://www.museumschaffen.ch/';
+  return 'https://www.hvwinterthur.ch/';
+}
+
+function eventLocationJsonLd(event) {
+  const name = event.location || event.organizerName || 'Winterthur';
+  const address = {
+    '@type': 'PostalAddress',
+    addressLocality: event.addressLocality || 'Winterthur',
+    addressRegion: 'ZH',
+    addressCountry: 'CH',
+  };
+  if (event.streetAddress) {
+    address.streetAddress = event.streetAddress;
+  }
+  if (event.postalCode) {
+    address.postalCode = event.postalCode;
+  }
+  return {
+    '@type': 'Place',
+    name,
+    address,
+  };
+}
+
+/** Schema.org Event für JSON-LD (Google Search Console / Rich Results). */
+function buildEventJsonLd(event) {
+  const organizerName = event.organizerName || 'Historischer Verein Winterthur';
+  const ticketUrl = event.url || 'https://www.hvwinterthur.ch/agenda.html';
+  const endDate = event.end || defaultEventEndDate(event.begin);
+
+  const item = {
+    '@type': 'Event',
+    name: event.title,
+    description: eventDescriptionText(event),
+    startDate: event.begin,
+    endDate,
+    url: ticketUrl,
+    image: event.image || undefined,
+    eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+    eventStatus: 'https://schema.org/EventScheduled',
+    location: eventLocationJsonLd(event),
+    organizer: {
+      '@type': 'Organization',
+      name: organizerName,
+      url: organizerUrl(organizerName),
+    },
+    performer: {
+      '@type': 'Organization',
+      name: organizerName,
+    },
+    offers: {
+      '@type': 'Offer',
+      url: ticketUrl,
+      availability: 'https://schema.org/InStock',
+      validFrom: event.begin,
+    },
+  };
+
+  Object.keys(item).forEach((key) => {
+    if (item[key] === undefined) delete item[key];
+  });
+  return item;
+}
+
 function injectEventJsonLd(events) {
   const existing = document.getElementById('events-jsonld');
   if (existing) existing.remove();
 
-  const graph = events.map((event) => ({
-    '@type': 'Event',
-    name: event.title,
-    startDate: event.begin,
-    url: event.url || undefined,
-    image: event.image || undefined,
-    eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
-    eventStatus: 'https://schema.org/EventScheduled',
-    location: {
-      '@type': 'Place',
-      name: event.location || event.organizerName || 'Winterthur',
-      address: {
-        '@type': 'PostalAddress',
-        addressLocality: 'Winterthur',
-        addressRegion: 'ZH',
-        addressCountry: 'CH',
-      },
-    },
-    organizer: {
-      '@type': 'Organization',
-      name: event.organizerName || 'Historischer Verein Winterthur',
-      url: 'https://www.museumschaffen.ch/',
-    },
-  }));
+  const graph = events.map((event) => buildEventJsonLd(event));
 
   const script = document.createElement('script');
   script.type = 'application/ld+json';
@@ -406,6 +463,7 @@ if (typeof module !== 'undefined' && module.exports) {
     upcomingEvents,
     tickerLabel,
     formatEventDate,
+    buildEventJsonLd,
     isOpeningHoursListing,
     nextHeroIndex,
     shuffleHeroOrder,
