@@ -258,6 +258,30 @@ Die Seite `mitmachen.html` bettet das Webling-Mitgliedschaftsformular als **ifra
 - Referenz auch in `data/webling-form.json`
 - Nach dem Absenden bleibt die Besucherin/der Besucher auf der HVW-Website
 
+### Wichtig: E-Mails bei Neuanmeldungen
+
+Die **Website (Hostpoint/GitHub) verschickt keine Benachrichtigung** an Vorstand oder
+Kassier, wenn sich jemand anmeldet. Das Formular wird **direkt bei Webling** abgeschickt;
+es gibt im Repository **keinen** Webhook, kein PHP und kein Cron dafür.
+
+| Was | Wo konfiguriert |
+|---|---|
+| Neues Mitglied in Webling erfassen | Webling-Formular (öffentlicher Link oben) |
+| **E-Mail an Vorstand/Kassier** bei neuer Anmeldung | **Webling** → Formulare → dieses Formular → Tab **Benachrichtigung** (Empfänger-Adressen, mehrere mit Komma) |
+| Bestätigungsmail an die anmeldende Person | dieselbe Webling-Formular-Einstellung (optional) |
+| SMTP `noreply@…` / GitHub Secret `MAIL_SMTP_PASSWORD` | nur **Redaktions-Modus** `/edit/` (Zugangscode), **nicht** Webling |
+
+Derselbe Anmeldeprozess läuft auch, wenn jemand den **Webling-Link direkt** nutzt (ohne
+`mitmachen.html`). Ein neuer Datensatz in Webling **ohne** Mail an den Vorstand bedeutet
+in der Regel: Benachrichtigung in Webling fehlt, ist deaktiviert, landet im Spam — **nicht**
+ein Fehler am Website-Deploy.
+
+Anleitung Webling: [Anmeldeformulare (Beitrittserklärung / Neumitglieder)](https://support.webling.ch/hc/de/articles/360048426091-Anmeldeformulare-Beitrittserkl%C3%A4rung-Neumitglieder)
+(Abschnitt «Benachrichtigung bei Neumitglied»).
+
+**Google Analytics:** `webling_form_start` / `webling_form_complete` in `js/ga-events.js`
+messen Start und Abschluss im iframe — das ersetzt **keine** E-Mail-Benachrichtigung.
+
 ## Texte redigieren (ohne Layout zu ändern)
 
 Auf Startseite, Agenda, Museen, Über uns, Mitmachen, Publikationen, Sammlung
