@@ -11,8 +11,18 @@ if "placeholder-vorstand" in html:
     raise SystemExit("Vorstand-Platzhalterbild muss fehlen")
 if "ueber-uns.vorstand.note" in html:
     raise SystemExit("Hinweis unter dem Vorstand muss entfernt sein")
-if "ueber-uns.vorstand.caption" in html:
-    raise SystemExit("Bildlegende ohne Foto nicht im HTML")
+if 'src="images/vorstand.jpg"' not in html:
+    raise SystemExit("Vorstandsfoto images/vorstand.jpg fehlt im HTML")
+jpg = ROOT / "images/vorstand.jpg"
+if not jpg.is_file():
+    raise SystemExit("images/vorstand.jpg fehlt")
+if jpg.stat().st_size > 400_000:
+    raise SystemExit("vorstand.jpg soll web-tauglich komprimiert sein (< 400 KB)")
+vorstand_pos = html.find('id="vorstand-heading"')
+photo_pos = html.find('images/vorstand.jpg')
+list_pos = html.find("ueber-uns.vorstand.person1")
+if not (vorstand_pos < photo_pos < list_pos):
+    raise SystemExit("Vorstandsfoto muss vor der Namensliste stehen")
 if "<strong>Rita Borner</strong>" not in html:
     raise SystemExit("Rita Borner muss fett im HTML stehen")
 if live["fields"]["ueber-uns.vorstand.person9"] != "<strong>Tobias Wanzenried</strong> — Veranstaltungen":
