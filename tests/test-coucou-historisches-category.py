@@ -12,6 +12,7 @@ sys.path.insert(0, os.path.join(ROOT, "cronjobs"))
 
 from eventfrog_to_coucou import (  # noqa: E402
     COUCOU_CATEGORY_HISTORISCHES,
+    COUCOU_LOCATION_WEBSITE,
     coucou_event_categories,
     build_coucou_event,
 )
@@ -43,6 +44,23 @@ event = {
 built = build_coucou_event(event, rubrics, {})
 if built.get("category") != [280, 308]:
     raise SystemExit("build_coucou_event category mismatch: {0}".format(built.get("category")))
+if built.get("location_website") != COUCOU_LOCATION_WEBSITE:
+    raise SystemExit("location_website muss HVW-Agenda sein: {0}".format(built.get("location_website")))
+
+event_with_loc = {
+    **event,
+    "locationIds": ["loc-1"],
+}
+locations = {
+    "loc-1": {
+        "id": "loc-1",
+        "title": {"de": "Museum Schaffen"},
+        "websiteUrl": "https://www.museumschaffen.ch/",
+    },
+}
+built_loc = build_coucou_event(event_with_loc, rubrics, locations)
+if built_loc.get("location_website") != COUCOU_LOCATION_WEBSITE:
+    raise SystemExit("location_website darf nicht Eventfrog websiteUrl sein")
 
 coucou_js = open(os.path.join(ROOT, "js/coucou-preview.js"), encoding="utf-8").read()
 if "formatCategory" not in coucou_js or "Array.isArray" not in coucou_js:

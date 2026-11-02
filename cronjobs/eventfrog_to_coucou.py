@@ -61,6 +61,8 @@ Bekannte Einschränkungen (siehe Kommentare weiter unten im Code):
       ermittelt werden. Stattdessen werden die Adressfelder
       (location_name/_street/_zip/_city/_website) befüllt - das ist laut
       Coucou-Doku die zulässige Alternative.
+    - "location_website" ist immer https://hvwinterthur.ch (Vereins-Agenda),
+      nicht die Eventfrog-Standort-URL (Museumsseiten listen nicht alle Events).
     - "weekdays", "fee_options" und "attachments" liefert die Eventfrog
       Public API in diesem Schema nicht und bleiben daher leer.
     - Eventfrog-Attraktionen (Öffnungszeiten, z.B. Museum täglich) werden
@@ -117,6 +119,8 @@ RUBRIC_NAME_TO_COUCOU_CATEGORY = [
 DEFAULT_COUCOU_CATEGORY = 15  # "Diverses"
 # Coucou-Schnittstelle v1.5 (29.05.2026) — zusätzlich bei allen HVW-Events
 COUCOU_CATEGORY_HISTORISCHES = 308
+# Coucou-Feld location_website: einheitlich Vereins-Agenda (nicht Eventfrog websiteUrl)
+COUCOU_LOCATION_WEBSITE = "https://hvwinterthur.ch"
 
 # Titelseite hvwinterthur.ch: kompakter Auszug der nächsten Events
 HVW_HOME_EVENT_LIMIT = 3
@@ -798,7 +802,7 @@ def build_coucou_event(event, rubrics_by_id, locations_by_id):
         coucou_event["location_street"] = location.get("addressLine")
         coucou_event["location_zip"] = location.get("zip")
         coucou_event["location_city"] = location.get("city")
-        coucou_event["location_website"] = location.get("websiteUrl")
+    coucou_event["location_website"] = COUCOU_LOCATION_WEBSITE
 
     # Nicht verfügbare Felder (siehe Hinweis am Dateianfang):
     # "weekdays", "fee_options", "attachments" -> von Eventfrog nicht geliefert
