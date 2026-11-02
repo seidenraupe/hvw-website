@@ -27,8 +27,8 @@ if 'event-card__media aspect-[3/2]" data-lightbox' not in html:
     raise SystemExit("Vorstandsfoto braucht aspect-Ratio am Media-Container")
 if "<strong>Rita Borner</strong>" not in html:
     raise SystemExit("Rita Borner muss fett im HTML stehen")
-if live["fields"]["ueber-uns.vorstand.person9"] != "<strong>Tobias Wanzenried</strong> — Veranstaltungen":
-    raise SystemExit("person9 ohne Leerzeile in live.json")
+if "nicht im Bild" not in live["fields"]["ueber-uns.vorstand.person9"]:
+    raise SystemExit("person9 braucht Hinweis «nicht im Bild» in live.json")
 if live["fields"]["ueber-uns.vorstand.note"] != "":
     raise SystemExit("note muss leer sein")
 for n in range(1, 10):
