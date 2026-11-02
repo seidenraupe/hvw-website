@@ -23,6 +23,8 @@ photo_pos = html.find('images/vorstand.jpg')
 list_pos = html.find("ueber-uns.vorstand.person1")
 if not (vorstand_pos < photo_pos < list_pos):
     raise SystemExit("Vorstandsfoto muss vor der Namensliste stehen")
+if 'event-card__media aspect-[3/2]" data-lightbox' not in html:
+    raise SystemExit("Vorstandsfoto braucht aspect-Ratio am Media-Container")
 if "<strong>Rita Borner</strong>" not in html:
     raise SystemExit("Rita Borner muss fett im HTML stehen")
 if live["fields"]["ueber-uns.vorstand.person9"] != "<strong>Tobias Wanzenried</strong> — Veranstaltungen":
