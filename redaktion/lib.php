@@ -196,6 +196,29 @@ function hvw_rueckblick_field_defs(int $n): array
     ];
 }
 
+/** Fehlende Text-/Bild-Felder pro Rückblick-Slot ergänzen (Upload vor Entwurf-Speichern). */
+function hvw_pad_rueckblick_fields(array $fields): array
+{
+    $max = hvw_rueckblick_max();
+    $slots = [];
+    foreach (array_keys($fields) as $id) {
+        if (preg_match('/^agenda\.rueckblick\.(\d+)\./', (string) $id, $m)) {
+            $n = (int) $m[1];
+            if ($n >= 1 && $n <= $max) {
+                $slots[$n] = true;
+            }
+        }
+    }
+    foreach ($slots as $n => $_keep) {
+        foreach (hvw_rueckblick_field_defs($n) as $id => $_meta) {
+            if (!array_key_exists($id, $fields)) {
+                $fields[$id] = '';
+            }
+        }
+    }
+    return $fields;
+}
+
 function hvw_extend_schema_from_fields(array $schema, array $fields): array
 {
     $max = hvw_rueckblick_max();
@@ -769,6 +792,7 @@ function hvw_fallback_fields(): array
 
 function hvw_normalize_fields(array $incoming, ?array $fallback = null): array
 {
+    $incoming = hvw_pad_rueckblick_fields($incoming);
     $schema = hvw_extend_schema_from_fields(hvw_schema(), $incoming);
     $fallback = $fallback ?? hvw_fallback_fields();
     $out = [];

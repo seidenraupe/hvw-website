@@ -60,6 +60,10 @@ if "function hvw_field_is_optional" not in lib or "rueckblick" not in lib.split(
     raise SystemExit("Rückblick-Textfelder müssen beim schrittweisen Befüllen optional sein")
 if "hvw_schema_for_fields" not in api:
     raise SystemExit("upload-image muss Schema für neue Rückblick-Slots auflösen")
+if "hvw_pad_rueckblick_fields" not in lib:
+    raise SystemExit("Rückblick-Slots müssen vor Normalize ergänzt werden")
+if "if (dirty)" not in editor_js.split("async function uploadImage", 1)[1][:800]:
+    raise SystemExit("Bild-Upload muss ungespeicherte Texte vorher im Entwurf sichern")
 if "data/uploads/*.jpg" not in deploy:
     raise SystemExit("Deploy darf hochgeladene Bilder nicht löschen")
 if "agenda.rueckblick." not in merge:

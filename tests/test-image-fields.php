@@ -26,6 +26,12 @@ if (hvw_image_slot('agenda.rueckblick.7.image') !== 7) {
     fwrite(STDERR, "Rückblick-Slot 7 nicht erkannt\n");
     exit(1);
 }
+$padded = hvw_pad_rueckblick_fields(['agenda.rueckblick.9.image' => '']);
+if (!array_key_exists('agenda.rueckblick.9.title', $padded)
+    || !array_key_exists('agenda.rueckblick.9.body', $padded)) {
+    fwrite(STDERR, "Rückblick-Slot muss vor Normalize aufgefüllt werden\n");
+    exit(1);
+}
 if (hvw_sanitize_image_path('data/uploads/rueckblick-7-aabbccdd.jpg') !== 'data/uploads/rueckblick-7-aabbccdd.jpg') {
     fwrite(STDERR, "Upload-Pfad für Rückblick 7 wurde verworfen\n");
     exit(1);

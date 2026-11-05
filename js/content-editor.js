@@ -992,6 +992,13 @@
       toast("Das Bild darf höchstens 8 MB haben.", true);
       return;
     }
+    if (dirty) {
+      try {
+        await saveDraft(true);
+      } catch (_err) {
+        return;
+      }
+    }
     const body = new FormData();
     body.append("field", id);
     body.append("file", file);
