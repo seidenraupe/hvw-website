@@ -4,6 +4,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 agenda = (ROOT / "agenda.html").read_text(encoding="utf-8")
+site_css = (ROOT / "css/site.css").read_text(encoding="utf-8")
 htaccess = (ROOT / ".htaccess").read_text(encoding="utf-8")
 vorschau = (ROOT / "deploy/edit.htaccess").read_text(encoding="utf-8")
 deploy = (ROOT / ".github/workflows/deploy.yml").read_text(encoding="utf-8")
@@ -46,4 +47,8 @@ if "RewriteRule ^programm/ - [G,L]" in htaccess:
     raise SystemExit("Root-.htaccess darf das PDF nicht mit 410 blockieren")
 if "RewriteRule ^programm(/|$) - [G,L]" in vorschau:
     raise SystemExit("Vorschau-.htaccess darf /programm nicht mit 410 blockieren")
+if "min-h-[700px]" in agenda:
+    raise SystemExit("Eventfrog-Embed darf kein fixes min-h-[700px] haben")
+if ".eventfrog-wrapper" not in site_css or "min-height: 0" not in site_css.split(".eventfrog-wrapper", 1)[1][:220]:
+    raise SystemExit("Eventfrog-Wrapper muss ohne feste Desktop-Mindesthöhe sein")
 print("programm download ok")

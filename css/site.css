@@ -389,6 +389,29 @@ input:focus-visible {
   outline-offset: 3px;
 }
 
+/* Eventfrog-Programm (Agenda): Höhe per iframe-resizer, kein fixes Minimum */
+.eventfrog-wrapper {
+  min-height: 0;
+  overflow: hidden;
+  background: #fff;
+}
+
+.eventfrog-wrapper iframe,
+.eventfrog-embed {
+  display: block;
+  width: 100%;
+  min-height: 12rem;
+  border: 0;
+  vertical-align: top;
+}
+
+@media (min-width: 768px) {
+  .eventfrog-wrapper iframe,
+  .eventfrog-embed {
+    min-height: 0;
+  }
+}
+
 /* Webling-Anmeldeformular (iframe-Embed) — wie in den Wireframes */
 #anmeldeformular {
   scroll-margin-top: 5.5rem;
