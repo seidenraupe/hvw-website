@@ -375,11 +375,21 @@ function eventLocationJsonLd(event) {
   };
 }
 
+function eventOfferPrice(event) {
+  const raw = event.fee ?? event.price ?? event.lowestTicketPrice;
+  if (raw === null || raw === undefined || raw === '') {
+    return 0;
+  }
+  const n = Number(raw);
+  return Number.isFinite(n) && n >= 0 ? n : 0;
+}
+
 /** Schema.org Event für JSON-LD (Google Search Console / Rich Results). */
 function buildEventJsonLd(event) {
   const organizerName = event.organizerName || 'Historischer Verein Winterthur';
   const ticketUrl = event.url || 'https://www.hvwinterthur.ch/agenda.html';
   const endDate = event.end || defaultEventEndDate(event.begin);
+  const price = eventOfferPrice(event);
 
   const item = {
     '@type': 'Event',
@@ -404,6 +414,8 @@ function buildEventJsonLd(event) {
     offers: {
       '@type': 'Offer',
       url: ticketUrl,
+      price,
+      priceCurrency: 'CHF',
       availability: 'https://schema.org/InStock',
       validFrom: event.begin,
     },

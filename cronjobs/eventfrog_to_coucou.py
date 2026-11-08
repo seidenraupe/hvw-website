@@ -884,6 +884,12 @@ def build_home_event(event, locations_by_id):
         item["postalCode"] = postal_code
     if address_locality:
         item["addressLocality"] = address_locality
+    fee = event.get("lowestTicketPrice")
+    if fee is not None and fee != "":
+        try:
+            item["fee"] = float(fee)
+        except (TypeError, ValueError):
+            pass
     return item
 
 

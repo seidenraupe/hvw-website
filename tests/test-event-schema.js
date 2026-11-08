@@ -24,6 +24,16 @@ assert.strictEqual(sample['@type'], 'Event');
 assert.ok(sample.endDate, 'endDate');
 assert.ok(sample.description, 'description');
 assert.ok(sample.offers && sample.offers.url, 'offers');
+assert.strictEqual(sample.offers.price, 0);
+assert.strictEqual(sample.offers.priceCurrency, 'CHF');
+const paid = buildEventJsonLd({
+  title: 'Konzert',
+  begin: '2026-12-01T19:00:00+01:00',
+  fee: 35,
+  location: 'Museum Schaffen',
+});
+assert.strictEqual(paid.offers.price, 35);
+assert.strictEqual(paid.offers.priceCurrency, 'CHF');
 assert.ok(sample.performer && sample.performer.name, 'performer');
 assert.ok(sample.organizer && sample.organizer.name, 'organizer');
 assert.ok(sample.location.address.streetAddress, 'location.address');
