@@ -32,10 +32,24 @@ expected_urls = [
 for url in expected_urls:
     if url not in locs:
         raise SystemExit(f"sitemap.xml fehlt URL: {url}")
+if len(locs) != len(expected_urls):
+    raise SystemExit(f"sitemap.xml: {len(locs)} URLs, erwartet {len(expected_urls)} (keine Duplikate)")
 
 robots = (ROOT / "robots.txt").read_text(encoding="utf-8")
 if f"Sitemap: {SITE}/sitemap.xml" not in robots:
     raise SystemExit("robots.txt muss Sitemap referenzieren")
+for path in (
+    "/coucou_export.json",
+    "/guidle_export.json",
+    "/mus_export.json",
+    "/home-events.json",
+):
+    if f"Disallow: {path}" not in robots:
+        raise SystemExit(f"robots.txt muss {path} blockieren")
+
+for url_el in tree.findall(".//sm:url", ns):
+    if url_el.find("sm:lastmod", ns) is None:
+        raise SystemExit("sitemap.xml: jedes url braucht lastmod")
 
 htaccess = (ROOT / ".htaccess").read_text(encoding="utf-8")
 if "RewriteCond %{HTTP_HOST} ^hvwinterthur\\.ch$ [NC]" not in htaccess:
@@ -59,6 +73,12 @@ JSONLD_PAGES = [
     "mitmachen.html",
     "zitate.html",
 ]
+
+PUBLIC_PAGES = JSONLD_PAGES + ["impressum.html", "datenschutz.html"]
+for page in PUBLIC_PAGES:
+    html = (ROOT / page).read_text(encoding="utf-8")
+    if 'href="index.html"' in html:
+        raise SystemExit(f"{page}: Start-Links müssen auf / zeigen, nicht index.html")
 
 for page in JSONLD_PAGES:
     html = (ROOT / page).read_text(encoding="utf-8")
@@ -88,5 +108,18 @@ if '"Mörsburgstrasse 30"' not in moersburg or '"GeoCoordinates"' not in moersbu
 mitmachen = (ROOT / "mitmachen.html").read_text(encoding="utf-8")
 if '"OfferCatalog"' not in mitmachen or '"priceCurrency": "CHF"' not in mitmachen:
     raise SystemExit("mitmachen.html braucht OfferCatalog für Mitgliedschaften im JSON-LD")
+
+for rel, want in (
+    ("coucou/index.html", f"{SITE}/coucou/"),
+    ("mus/index.html", f"{SITE}/mus/"),
+):
+    html = (ROOT / rel).read_text(encoding="utf-8")
+    match = re.search(r'<link rel="canonical" href="([^"]+)"', html)
+    if not match or match.group(1) != want:
+        raise SystemExit(f"{rel}: canonical muss {want} sein")
+
+htaccess_json_noindex = "coucou_export|guidle_export|mus_export|home-events"
+if htaccess_json_noindex not in htaccess or "X-Robots-Tag" not in htaccess:
+    raise SystemExit(".htaccess muss X-Robots-Tag noindex für JSON-Exporte setzen")
 
 print("seo-geo ok")

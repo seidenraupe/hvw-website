@@ -3,6 +3,13 @@ User-agent: *
 Disallow: /edit/
 Disallow: /edit
 Disallow: /coucou/
+Disallow: /coucou
 Disallow: /mus/
+Disallow: /mus
+Disallow: /coucou_export.json
+Disallow: /guidle_export.json
+Disallow: /mus_export.json
+Disallow: /home-events.json
+Disallow: /programm/
 
 Sitemap: https://www.hvwinterthur.ch/sitemap.xml
