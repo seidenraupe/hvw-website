@@ -79,6 +79,8 @@ for page in PUBLIC_PAGES:
     html = (ROOT / page).read_text(encoding="utf-8")
     if 'href="index.html"' in html:
         raise SystemExit(f"{page}: Start-Links müssen auf / zeigen, nicht index.html")
+    if 'rel="sitemap"' not in html or 'href="/sitemap.xml"' not in html:
+        raise SystemExit(f"{page}: Sitemap-Hinweis (link rel=sitemap) fehlt")
 
 for page in JSONLD_PAGES:
     html = (ROOT / page).read_text(encoding="utf-8")
@@ -121,5 +123,7 @@ for rel, want in (
 htaccess_json_noindex = "coucou_export|guidle_export|mus_export|home-events"
 if htaccess_json_noindex not in htaccess or "X-Robots-Tag" not in htaccess:
     raise SystemExit(".htaccess muss X-Robots-Tag noindex für JSON-Exporte setzen")
+if 'Files "sitemap.xml"' not in htaccess or "application/xml" not in htaccess:
+    raise SystemExit(".htaccess muss sitemap.xml als application/xml ausliefern")
 
 print("seo-geo ok")

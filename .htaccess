@@ -58,4 +58,7 @@ Options -Indexes
   <FilesMatch "^(coucou_export|guidle_export|mus_export|home-events)\.json$">
     Header set X-Robots-Tag "noindex"
   </FilesMatch>
+  <Files "sitemap.xml">
+    Header set Content-Type "application/xml; charset=UTF-8"
+  </Files>
 </IfModule>
